@@ -1,0 +1,137 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_general">
+        <Preference
+            android:icon="@drawable/ic_palette"
+            android:key="@string/settings_key_theme_config"
+            android:summary="Set light or dark theme for the app."
+            android:title="@string/settings_label_theme"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_data_management">
+        <Preference
+            android:icon="@drawable/ic_delete"
+            android:key="@string/settings_key_clear_all"
+            android:summary="Remove all activities."
+            android:title="@string/settings_label_clear_all"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_tune"
+            android:key="@string/settings_key_category"
+            android:summary="Add, rename or delete categories."
+            android:title="@string/settings_manage_categories"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_filter"
+            android:key="@string/settings_key_tags"
+            android:summary="Add, rename or delete tags."
+            android:title="@string/settings_manage_tags"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_refresh"
+            android:key="@string/settings_key_reset"
+            android:summary="Revert to the default state of the app."
+            android:title="@string/settings_reset"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_security">
+
+        <SwitchPreferenceCompat
+            android:key="@string/settings_key_app_pin"
+            android:summary="Password or PIN to protect the whole application."
+            android:title="@string/settings_label_set_app_pin"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_backup">
+        <Preference
+            android:icon="@drawable/ic_restore"
+            android:key="@string/settings_key_import_backup"
+            android:summary="Load activities from a backup file."
+            android:title="@string/settings_label_import_backup" />
+
+        <Preference
+            android:icon="@drawable/ic_backup"
+            android:key="@string/settings_key_export_backup"
+            android:summary="Create a backup by exporting all activities to a file."
+            android:title="@string/settings_label_export_backup" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_about">
+
+        <Preference
+            android:icon="@drawable/ic_privacy_policy"
+            android:key="@string/settings_key_privacy_policy"
+            android:summary="View in-app privacy policy."
+            android:title="@string/settings_label_privacy_policy"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_licence"
+            android:key="@string/settings_key_licence"
+            android:summary="View in-app licence."
+            android:title="Licence"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_system_update"
+            android:key="@string/settings_key_app_updater"
+            android:summary="Update Daymark to the latest version."
+            android:title="@string/settings_label_app_updater"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_info"
+            android:key="@string/settings_key_app_version"
+            android:summary="The current build and version of the application."
+            android:title="@string/settings_label_app_version"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_history"
+            android:key="@string/settings_key_app_changelog"
+            android:summary="Changes made in the application."
+            android:title="Changelog"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
+        android:title="@string/settings_category_support">
+
+        <Preference
+            android:icon="@drawable/ic_donation"
+            android:key="@string/settings_key_donate"
+            android:summary="View how to donate to Daymark\'s lead app developer"
+            android:title="Donation"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_open_external"
+            android:key="@string/settings_key_app_source_code"
+            android:summary="View Daymark's source code on GitHub."
+            android:title="Source code"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:layout="@layout/spacer_bottom"
+            android:selectable="false"
+            android:shouldDisableView="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

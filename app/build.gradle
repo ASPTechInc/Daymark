@@ -1,0 +1,88 @@
+import java.text.SimpleDateFormat
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.ktlint)
+    alias(libs.plugins.ben.manes.versions)
+}
+
+android {
+    namespace = "com.asptechinc.daymark"
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "com.asptechinc.daymark"
+        minSdk = 26
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+        buildConfigField 'String', 'BUILD_TIME', '"' + new SimpleDateFormat("MM.dd.yy HH:mm", Locale.UK).format(new Date(System.currentTimeMillis())) + '"'
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    packaging {
+        resources {
+            resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    sourceSets {
+        getByName("main") {
+            assets.srcDirs("src/generated/assets")
+        }
+    }
+}
+
+tasks.register('copyChangelog', Copy) {
+    from("${project.rootDir}/CHANGELOG.md")
+    into("${project.projectDir}/src/generated/assets")
+}
+
+preBuild.dependsOn(copyChangelog)
+
+//To update dependencies run, ./gradlew dependencyUpdates
+dependencies {
+    // AndroidX Core & UI
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
+    implementation(libs.material)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.gson)
+    implementation(libs.joda.time)
+    implementation(libs.gson.joda.time.serializers)
+    implementation(libs.kotson)
+    implementation(libs.koi.core) {
+        exclude group: 'com.android.support'
+    }
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.androidx.fragment.ktx)
+
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+
+
+    // About Page
+    implementation libs.android.about.page
+
+    // Testing
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.espresso.core
+}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:paddingLeft="@dimen/padding_16"
+    android:paddingTop="@dimen/padding_10"
+    android:paddingRight="@dimen/padding_16"
+    android:paddingBottom="@dimen/padding_10">
+
+    <ImageView
+        android:id="@+id/drag_handle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:contentDescription="@string/menu_drag"
+        android:padding="8dp"
+        android:src="@drawable/ic_menu"
+        app:tint="?attr/colorOnSurfaceVariant" />
+
+    <!-- Activity details -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/activity_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_name_hint"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold" />
+
+        <!-- Notes is hidden from the screen -->
+        <TextView
+            android:id="@+id/notes_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_notes_hint"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16"
+            android:visibility="gone" />
+
+        <!-- Archived is hidden from the screen -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/archived_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_archived_hint"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16"
+            android:visibility="gone" />
+
+        <!-- Category is hidden from the screen -->
+        <TextView
+            android:id="@+id/category_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_category_hint"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16"
+            android:visibility="gone" />
+
+        <!-- Tags are hidden from the screen -->
+        <TextView
+            android:id="@+id/tag_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_tags_hint"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/relative_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/start_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/activity_start_date_hint"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/end_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/activity_end_date_hint"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="@dimen/text_size_14" />
+
+    </LinearLayout>
+
+    <!-- Ellipsis button -->
+    <ImageButton
+        android:id="@+id/item_menu_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/menu_more"
+        android:src="@drawable/ic_vertical_ellipsis" />
+</LinearLayout>

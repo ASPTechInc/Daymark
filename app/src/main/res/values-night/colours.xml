@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Brand colours (dark theme) -->
+	<color name="primary">#F9B1DC</color>
+	<color name="on_primary">#EEDDE4</color>
+
+	<color name="primary_container">#6A3458</color>
+	<color name="on_primary_container">#FFD8EC</color>
+
+	<!-- Secondary -->
+	<color name="secondary">#FFFFFF</color>
+	<color name="on_secondary">#CFB1BF</color>
+
+	<color name="secondary_container">#181015</color>
+	<color name="on_secondary_container">#CD92B6</color>
+	<color name="secondary_btn_icon">#FFD8EC</color>
+
+	<!-- Tertiary -->
+	<color name="tertiary">#D3C1C9</color>
+	<color name="on_tertiary">#F9B1DC</color>
+
+	<!-- Surfaces -->
+	<color name="surface">#181015</color>
+	<color name="on_surface">#EBDDE1</color>
+
+	<color name="surface_variant">#E7E0EC</color>
+	<color name="on_surface_variant">#49454F</color>
+
+	<!-- Navigation / App bar -->
+	<color name="surface_container">#251E21</color>
+	<color name="on_surface_container">#EDDDE3</color>
+	<color name="navbar_icon">#D3C1C9</color>
+
+	<!-- Outline -->
+	<color name="outline">#795569</color>
+
+	<!-- Status -->
+	<color name="error">#BA1A1A</color>
+	<color name="on_error">#FFFFFF</color>
+
+	<!-- Menu -->
+	<color name="menu_container">#251E21</color>
+	<color name="on_menu_container">#E6D7DD</color>
+</resources>

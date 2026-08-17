@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:id="@+id/menu_group_edit">
+        <item
+            android:id="@+id/edit"
+            android:icon="@drawable/ic_edit"
+            android:title="@string/menu_edit"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </group>
+
+    <group android:id="@+id/menu_group_duplicate">
+        <item
+            android:id="@+id/duplicate"
+            android:icon="@drawable/ic_copy"
+            android:title="@string/menu_duplicate"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </group>
+
+    <group android:id="@+id/menu_group_share">
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/menu_share"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </group>
+
+    <group android:id="@+id/menu_group_archive">
+        <item
+            android:id="@+id/archive"
+            android:icon="@drawable/ic_archive"
+            android:title="@string/menu_archive"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </group>
+
+    <group android:id="@+id/menu_group_delete">
+        <item
+            android:id="@+id/delete"
+            android:icon="@drawable/ic_delete"
+            android:title="@string/menu_delete"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </group>
+</menu>

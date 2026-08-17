@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--    <style name="AppToolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurfaceContainer</item>
+        <item name="titleTextColor">?attr/colorOnSurfaceContainer</item>
+    </style>-->
+</resources>
+
+    <!--<resources>
+        &lt;!&ndash; Base application theme. &ndash;&gt;
+        <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+            &lt;!&ndash; Customise your theme here. &ndash;&gt;
+    &lt;!&ndash;        &lt;!&ndash;    Colours&ndash;&gt;&ndash;&gt;
+    &lt;!&ndash;        <item name="colour_primary">@color/primary</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="colour_primary_dark">@color/primary_dark</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="colour_accent">@color/accent</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="colour_secondary">@color/secondary</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="colour_tertiary">@color/tertiary</item>&ndash;&gt;
+
+    &lt;!&ndash;        &lt;!&ndash;    App related attributes&ndash;&gt;&ndash;&gt;
+    &lt;!&ndash;&lt;!&ndash;        <item name="android:navigationBarColor">@color/navbar</item>&ndash;&gt;&ndash;&gt;
+    &lt;!&ndash;        <item name="app_background">@color/background</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_navbar">@color/navbar</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_navbar_text">@color/navbar_text</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_navbar_icon">@color/navbar_icon</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_surface">@color/surface</item>&ndash;&gt;
+
+    &lt;!&ndash;        <item name="app_text_primary">@color/text_primary</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_text_secondary">@color/text_secondary</item>&ndash;&gt;
+
+
+    &lt;!&ndash;        <item name="app_divider">@color/divider</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_error">@color/error</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_warning">@color/warning</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_success">@color/success</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="app_info">@color/info</item>&ndash;&gt;
+
+    &lt;!&ndash;        &lt;!&ndash;    Buttons&ndash;&gt;&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_primary_bg">@color/primary_btn</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_primary_icon">@color/primary_btn_icon</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_primary_text">@color/primary_btn_text</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_secondary_bg">@color/secondary_btn</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_secondary_icon">@color/secondary_btn_icon</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_secondary_text">@color/secondary_btn_text</item>&ndash;&gt;
+    &lt;!&ndash;        <item name="btn_secondary_border">@color/secondary_border</item>&ndash;&gt;
+        </style>
+
+        <style name="AppTheme.NoActionBar">
+            <item name="windowActionBar">false</item>
+            <item name="windowNoTitle">true</item>
+        </style>
+
+        <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+        <style name="ToolbarTheme">
+            <item name="colorControlNormal">?attr/app_navbar_icon</item>
+        </style>
+
+    </resources>-->

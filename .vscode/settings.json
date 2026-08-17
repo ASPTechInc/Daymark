@@ -1,0 +1,6 @@
+{
+  "go.diagnostic.vulncheck": "Imports",
+  "java.import.gradle.enabled": true,
+  "java.import.gradle.java.home": "/snap/android-studio/current/jbr",
+  "java.configuration.updateBuildConfiguration": "automatic"
+}
