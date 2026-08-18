@@ -1,98 +1,60 @@
 package com.asptechinc.daymark.repository
 
+import com.asptechinc.daymark.data.ActivityDao
 import com.asptechinc.daymark.models.Activity
-import org.joda.time.DateTime
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
+import java.time.LocalDateTime
 
 class ActivityRepositoryTest {
-    @Test
-    fun `add activity should increase list size`() {
-        val repository = ActivityRepository()
-        val activity = Activity("Test Activity", "Notes", DateTime.now())
+    private lateinit var activityDao: ActivityDao
+    private lateinit var repository: ActivityRepository
 
-        repository.add(activity)
-
-        assertEquals(1, repository.activities.size)
-        assertEquals("Test Activity", repository.activities[0].activityName)
+    @Before
+    fun setup() {
+        activityDao = mock()
+        repository = ActivityRepository(activityDao)
     }
 
     @Test
-    fun `edit activity should update details`() {
-        val repository = ActivityRepository()
-        val activity = Activity("Original", "Notes", DateTime.now())
-        repository.add(activity)
-
-        val updated = activity.copy(activityName = "Updated", notes = "New Notes")
-        repository.update(0, updated)
-
-        assertEquals("Updated", repository.activities[0].activityName)
-        assertEquals("New Notes", repository.activities[0].notes)
-    }
+    fun `add activity should call dao insert`() =
+        runTest {
+            val activity = Activity(activityName = "Test Activity", notes = "Notes", startDateTime = LocalDateTime.now())
+            repository.add(activity)
+            verify(activityDao).insert(activity)
+        }
 
     @Test
-    fun `rename activity should only change name`() {
-        val repository = ActivityRepository()
-        val activity = Activity("Old Name", "Notes", DateTime.now())
-        repository.add(activity)
-
-        repository.rename(0, "New Name")
-
-        assertEquals("New Name", repository.activities[0].activityName)
-        assertEquals("Notes", repository.activities[0].notes)
-    }
+    fun `edit activity should call dao update`() =
+        runTest {
+            val activity = Activity(activityName = "Original", notes = "Notes", startDateTime = LocalDateTime.now())
+            repository.update(activity)
+            verify(activityDao).update(activity)
+        }
 
     @Test
-    fun `delete activity should remove it from list`() {
-        val repository = ActivityRepository()
-        val activity = Activity("To Delete", "Notes", DateTime.now())
-        repository.add(activity)
-
-        repository.removeAt(0)
-
-        assertTrue(repository.activities.isEmpty())
-    }
+    fun `delete activity should call dao delete`() =
+        runTest {
+            val activity = Activity(activityName = "To Delete", notes = "Notes", startDateTime = LocalDateTime.now())
+            repository.remove(activity)
+            verify(activityDao).delete(activity)
+        }
 
     @Test
-    fun `archive activity should set archived flag to true`() {
-        val repository = ActivityRepository()
-        val activity = Activity("Test", "Notes", DateTime.now(), archived = false)
-        repository.add(activity)
-
-        repository.archive(0)
-
-        assertEquals(true, repository.activities[0].archived)
-    }
+    fun `archive activity should set archived flag to true and update`() =
+        runTest {
+            val activity = Activity(activityName = "Test", notes = "Notes", startDateTime = LocalDateTime.now(), archived = false)
+            repository.archive(activity)
+            verify(activityDao).update(activity.copy(archived = true))
+        }
 
     @Test
-    fun `reset activity should update start date and clear end date`() {
-        val repository = ActivityRepository()
-        val oldDate = DateTime.now().minusDays(5)
-        val endDate = DateTime.now().plusDays(2)
-        val activity = Activity("Test", "Notes", oldDate, endDateTime = endDate)
-        repository.add(activity)
-
-        repository.reset(0)
-
-        assertNotEquals(oldDate, repository.activities[0].startDateTime)
-        assertNull(repository.activities[0].endDateTime)
-    }
-
-    @Test
-    fun `clear should empty the repository`() {
-        val repository =
-            ActivityRepository(
-                listOf(
-                    Activity("A", "Notes", DateTime.now()),
-                    Activity("B", "Notes", DateTime.now()),
-                ),
-            )
-
-        repository.clear()
-
-        assertTrue(repository.activities.isEmpty())
-    }
+    fun `clear should call dao deleteAll`() =
+        runTest {
+            repository.clear()
+            verify(activityDao).deleteAll()
+        }
 }

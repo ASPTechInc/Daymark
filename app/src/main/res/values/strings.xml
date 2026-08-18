@@ -107,6 +107,7 @@
     <string name="activity_end_date_hint">Select a date when the activity has ended or will end. Leave blank if ongoing.</string>
 
     <string name="activity_item_menu">Item menu</string>
+    <string name="empty_state_no_activities">No activities found.</string>
 
     <!-- Toast -->>
     <string name="toast_settings_imported">App data has been restored</string>
@@ -139,12 +140,16 @@
     <string name="settings_key_app_version">view_app_version</string>
     <string name="settings_key_app_changelog">view_app_changelog</string>
     <string name="settings_key_app_updater">app_updater</string>
+    <string name="settings_key_date_calculator">date_calculator</string>
+    <string name="settings_key_days_calculator">days_calculator</string>
 
     <string name="settings_label_export_backup">Create backup</string>
     <string name="settings_label_import_backup">Restore backup</string>
     <string name="settings_label_set_app_pin">Set app PIN</string>
     <string name="settings_label_app_updater">Updater</string>
     <string name="settings_label_app_version">App version</string>
+    <string name="settings_label_date_calculator">Add to or subtract from a date</string>
+    <string name="settings_label_days_calculator">Days between two dates</string>
 
     <string name="updater_status_checking">Checking for updates…</string>
     <string name="updater_status_up_to_date">App is up to date</string>
@@ -160,6 +165,7 @@
     <string name="settings_label_clear_all">Clear all</string>
 
     <string name="settings_category_general">General</string>
+    <string name="settings_category_date_calculators">Date calculators</string>
     <string name="settings_category_data_management">Data management</string>
     <string name="settings_category_security">Security</string>
     <string name="settings_category_backup">Backup</string>
@@ -172,6 +178,7 @@
         <item>Dark</item>
         <item>Light</item>
     </string-array>
+
 
     <string name="settings_manage_categories">Manage categories</string>
     <string name="settings_manage_tags">Manage tags</string>
@@ -216,6 +223,33 @@
     <string name="btn_end_date">End date</string>
 
 
+    <!-- Dialogue: Days Calculator -->
+    <string name="calculator_start_date">Start date</string>
+    <string name="calculator_end_date">End date</string>
+    <string name="calculator_day">Day</string>
+    <string name="calculator_month">Month</string>
+    <string name="calculator_year">Year</string>
+    <string name="calculator_include_end_date">Include end date in calculation</string>
+    <string name="calculator_btn_calculate">Calculate</string>
+    <string name="calculator_result_title">Results</string>
+    <string name="calculator_error_invalid_date">Please enter a valid date</string>
+    <string name="calculator_error_end_before_start">End date must be after start date</string>
+    <string name="calculator_result_breakdown">Breakdown: %1$s</string>
+    <string name="calculator_result_weeks">Total weeks: %1$d</string>
+    <string name="calculator_result_business_days">Business days: %1$d</string>
+    <string name="calculator_result_weekends">Weekend days: %1$d (Sat: %2$d, Sun: %3$d)</string>
+    <string name="calculator_result_total_days">Total days: %1$d</string>
+
+    <!-- Dialogue: Date Calculator -->
+    <string name="calculator_op_label">Operation</string>
+    <string name="calculator_op_add">Add (+)</string>
+    <string name="calculator_op_subtract">Subtract (-)</string>
+    <string name="calculator_years">Years</string>
+    <string name="calculator_months">Months</string>
+    <string name="calculator_weeks">Weeks</string>
+    <string name="calculator_days">Days</string>
+    <string name="calculator_result_new_date">New date: %1$s</string>
+
     <!-- App lock -->
     <string name="app_lock_title">Enter PIN</string>
     <string name="keypad_num_0">0</string>
@@ -230,4 +264,5 @@
     <string name="keypad_num_9">9</string>
     <string name="keypad_clear_btn">C</string>
     <string name="keypad_confirm_btn">✓</string>
+    <string name="no_data_image_alt">No data image</string>
 </resources>

@@ -1,80 +1,48 @@
 package com.asptechinc.daymark.repository
 
+import com.asptechinc.daymark.data.ActivityDao
 import com.asptechinc.daymark.models.Activity
-import org.joda.time.DateTime
+import kotlinx.coroutines.flow.Flow
+import java.time.LocalDateTime
 
 class ActivityRepository(
-    initialActivities: List<Activity> = emptyList(),
+    private val activityDao: ActivityDao,
 ) {
-    private val _activities = initialActivities.toMutableList()
+    val allActivities: Flow<List<Activity>> = activityDao.getAllActivities()
 
-    val activities: List<Activity>
-        get() = _activities.toList()
-
-    fun add(activity: Activity) {
-        _activities.add(activity)
+    suspend fun add(activity: Activity) {
+        activityDao.insert(activity)
     }
 
-    fun addAt(
-        index: Int,
-        activity: Activity,
-    ) {
-        if (index in 0.._activities.size) {
-            _activities.add(index, activity)
-        } else {
-            _activities.add(activity)
-        }
+    suspend fun addAll(activities: List<Activity>) {
+        activityDao.insertAll(activities)
     }
 
-    fun update(
-        index: Int,
-        updatedActivity: Activity,
-    ) {
-        if (index in _activities.indices) {
-            _activities[index] = updatedActivity
-        }
+    suspend fun update(activity: Activity) {
+        activityDao.update(activity)
     }
 
-    fun removeAt(index: Int): Activity? =
-        if (index in _activities.indices) {
-            _activities.removeAt(index)
-        } else {
-            null
-        }
-
-    fun remove(activity: Activity): Boolean = _activities.remove(activity)
-
-    fun archive(index: Int) {
-        if (index in _activities.indices) {
-            _activities[index].archived = true
-        }
+    suspend fun remove(activity: Activity) {
+        activityDao.delete(activity)
     }
 
-    fun reset(index: Int) {
-        if (index in _activities.indices) {
-            val activity = _activities[index]
-            activity.startDateTime = DateTime.now()
-            activity.endDateTime = null
-        }
+    suspend fun archive(activity: Activity) {
+        val updated = activity.copy(archived = true)
+        activityDao.update(updated)
     }
 
-    fun rename(
-        index: Int,
-        newName: String,
-    ) {
-        if (index in _activities.indices) {
-            _activities[index].activityName = newName
-        }
+    suspend fun reset(activity: Activity) {
+        val updated =
+            activity.copy(
+                startDateTime = LocalDateTime.now(),
+                endDateTime = null,
+            )
+        activityDao.update(updated)
     }
 
-    fun clear() {
-        _activities.clear()
+    suspend fun clear() {
+        activityDao.deleteAll()
     }
 
-    fun setAll(newActivities: List<Activity>) {
-        _activities.clear()
-        _activities.addAll(newActivities)
-    }
-
-    fun indexOf(activity: Activity): Int = _activities.indexOfFirst { it === activity }
+    suspend fun isEmpty(): Boolean = activityDao.getCount() == 0
 }

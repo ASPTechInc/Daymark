@@ -13,6 +13,24 @@
 
     <PreferenceCategory
         android:layout="@layout/settings_category"
+        android:title="@string/settings_category_date_calculators">
+        <Preference
+            android:icon="@drawable/ic_days"
+            android:key="@string/settings_key_days_calculator"
+            android:summary="How many days, months and years are there between two days?"
+            android:title="@string/settings_label_days_calculator"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_dates"
+            android:key="@string/settings_key_date_calculator"
+            android:summary="Enter a start date and add or subtract any number of days, months or years."
+            android:title="@string/settings_label_date_calculator"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:layout="@layout/settings_category"
         android:title="@string/settings_category_data_management">
         <Preference
             android:icon="@drawable/ic_delete"

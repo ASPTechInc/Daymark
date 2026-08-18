@@ -1,13 +1,13 @@
 package com.asptechinc.daymark.utils
 
-import org.joda.time.DateTime
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.LocalDateTime
 
 class DateUtilsTest {
     @Test
     fun testRelativeDateText_Past() {
-        val now = DateTime.now()
+        val now = LocalDateTime.now()
 
         assertEquals("1 day ago", relativeDateText(now.minusDays(1), now))
         assertEquals("2 days ago", relativeDateText(now.minusDays(2), now))
@@ -18,7 +18,7 @@ class DateUtilsTest {
 
     @Test
     fun testRelativeDateText_Future() {
-        val now = DateTime.now()
+        val now = LocalDateTime.now()
 
         assertEquals("in 1 day", relativeDateText(now.plusDays(1), now))
         assertEquals("in 2 weeks", relativeDateText(now.plusWeeks(2), now))
@@ -28,30 +28,34 @@ class DateUtilsTest {
 
     @Test
     fun testRelativeDateText_Mixed() {
-        val now = DateTime(2026, 8, 17, 12, 0)
-        val then = DateTime(2027, 10, 20, 12, 0)
+        val now = LocalDateTime.of(2026, 8, 17, 12, 0)
+        val then = LocalDateTime.of(2027, 10, 20, 12, 0)
 
-        // 1 year, 2 months, 3 days
+        // Period handles this differently than Joda.
+        // 2026-08-17 to 2027-10-20
+        // 2026-08-17 to 2027-08-17 is 1 year
+        // 2027-08-17 to 2027-10-17 is 2 months
+        // 2027-10-17 to 2027-10-20 is 3 days
         assertEquals("in 1 year, 2 months, 3 days", relativeDateText(then, now))
     }
 
     @Test
     fun testRelativeDateText_Today() {
-        val now = DateTime.now()
+        val now = LocalDateTime.now()
         assertEquals("0 days ago", relativeDateText(now, now))
     }
 
     @Test
     fun testOrdinalDateString() {
-        assertEquals("1st January, 2026", DateTime(2026, 1, 1, 0, 0).toOrdinalDateString())
-        assertEquals("2nd February, 2026", DateTime(2026, 2, 2, 0, 0).toOrdinalDateString())
-        assertEquals("3rd March, 2026", DateTime(2026, 3, 3, 0, 0).toOrdinalDateString())
-        assertEquals("4th April, 2026", DateTime(2026, 4, 4, 0, 0).toOrdinalDateString())
-        assertEquals("11th May, 2026", DateTime(2026, 5, 11, 0, 0).toOrdinalDateString())
-        assertEquals("12th June, 2026", DateTime(2026, 6, 12, 0, 0).toOrdinalDateString())
-        assertEquals("13th July, 2026", DateTime(2026, 7, 13, 0, 0).toOrdinalDateString())
-        assertEquals("21st August, 2026", DateTime(2026, 8, 21, 0, 0).toOrdinalDateString())
-        assertEquals("22nd September, 2026", DateTime(2026, 9, 22, 0, 0).toOrdinalDateString())
-        assertEquals("23rd October, 2026", DateTime(2026, 10, 23, 0, 0).toOrdinalDateString())
+        assertEquals("1st January, 2026", LocalDateTime.of(2026, 1, 1, 0, 0).toOrdinalDateString())
+        assertEquals("2nd February, 2026", LocalDateTime.of(2026, 2, 2, 0, 0).toOrdinalDateString())
+        assertEquals("3rd March, 2026", LocalDateTime.of(2026, 3, 3, 0, 0).toOrdinalDateString())
+        assertEquals("4th April, 2026", LocalDateTime.of(2026, 4, 4, 0, 0).toOrdinalDateString())
+        assertEquals("11th May, 2026", LocalDateTime.of(2026, 5, 11, 0, 0).toOrdinalDateString())
+        assertEquals("12th June, 2026", LocalDateTime.of(2026, 6, 12, 0, 0).toOrdinalDateString())
+        assertEquals("13th July, 2026", LocalDateTime.of(2026, 7, 13, 0, 0).toOrdinalDateString())
+        assertEquals("21st August, 2026", LocalDateTime.of(2026, 8, 21, 0, 0).toOrdinalDateString())
+        assertEquals("22nd September, 2026", LocalDateTime.of(2026, 9, 22, 0, 0).toOrdinalDateString())
+        assertEquals("23rd October, 2026", LocalDateTime.of(2026, 10, 23, 0, 0).toOrdinalDateString())
     }
 }

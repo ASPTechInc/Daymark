@@ -1,9 +1,12 @@
 package com.asptechinc.daymark.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ListOptions(
-    var searchText: String = "",
-    var categoryId: Int? = null,
-    var month: Int? = null,
-    var year: Int? = null,
-    var sortByName: Boolean = false,
+    val searchText: String = "",
+    val categoryId: Int? = null,
+    val month: Int? = null,
+    val year: Int? = null,
+    val sortByName: Boolean = false,
 )

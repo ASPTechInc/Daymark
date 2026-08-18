@@ -17,7 +17,7 @@ import com.asptechinc.daymark.models.Tag
 import com.asptechinc.daymark.utils.relativeDateText
 import com.asptechinc.daymark.utils.toOrdinalDateString
 import com.google.android.material.checkbox.MaterialCheckBox
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 class ActivityAdapter(
     context: Context,
@@ -109,7 +109,7 @@ class ActivityAdapter(
             activityNameView.text = counter.activityName
             notesView.text = counter.notes
 
-            val currentDate = DateTime.now()
+            val currentDate = LocalDateTime.now()
             val endDateTime = counter.endDateTime
             val startDateTime = counter.startDateTime
 

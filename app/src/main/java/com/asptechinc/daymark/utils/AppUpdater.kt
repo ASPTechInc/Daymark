@@ -12,9 +12,10 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.asptechinc.daymark.config.AppConfig
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
@@ -23,11 +24,13 @@ object AppUpdater {
     private const val TAG = "AppUpdater"
     private const val GITHUB_API_URL = "https://api.github.com/repos/Sherida101/Daymark/releases/latest"
 
+    @Serializable
     data class GitHubRelease(
         val tag_name: String,
         val assets: List<GitHubAsset>,
     )
 
+    @Serializable
     data class GitHubAsset(
         val name: String,
         val browser_download_url: String,
@@ -43,7 +46,8 @@ object AppUpdater {
 
                 if (connection.responseCode == HttpURLConnection.HTTP_OK) {
                     val response = connection.inputStream.bufferedReader().use { it.readText() }
-                    val release = Gson().fromJson(response, GitHubRelease::class.java)
+                    val json = Json { ignoreUnknownKeys = true }
+                    val release = json.decodeFromString<GitHubRelease>(response)
 
                     if (isNewerVersion(currentVersion, release.tag_name)) {
                         return@withContext release

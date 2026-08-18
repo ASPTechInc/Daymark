@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.ktlint)
     alias(libs.plugins.ben.manes.versions)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -35,7 +36,7 @@ android {
     }
 
     sourceSets {
-        getByName("main") {
+        named("main") {
             assets.srcDirs("src/generated/assets")
         }
     }
@@ -50,21 +51,19 @@ preBuild.dependsOn(copyChangelog)
 
 //To update dependencies run, ./gradlew dependencyUpdates
 dependencies {
-    // AndroidX Core & UI
+    // Persistence & Serialization
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.kotlinx.serialization.json)
+
+    // UI
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.browser)
     implementation(libs.material)
     implementation(libs.androidx.recyclerview)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.gson)
-    implementation(libs.joda.time)
-    implementation(libs.gson.joda.time.serializers)
-    implementation(libs.kotson)
-    implementation(libs.koi.core) {
-        exclude group: 'com.android.support'
-    }
     implementation(libs.androidx.preference.ktx)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.androidx.fragment.ktx)
@@ -74,7 +73,6 @@ dependencies {
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
 
-
     // About Page
     implementation libs.android.about.page
 
@@ -82,7 +80,9 @@ dependencies {
     testImplementation libs.junit
     testImplementation libs.mockito.core
     testImplementation libs.mockito.kotlin
+    testImplementation libs.kotlinx.coroutines.test
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.test.rules
     androidTestImplementation libs.androidx.espresso.core
+    ksp(libs.androidx.room.compiler)
 }

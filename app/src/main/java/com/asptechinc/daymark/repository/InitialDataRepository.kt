@@ -6,113 +6,69 @@ import com.asptechinc.daymark.models.Activity
 import com.asptechinc.daymark.models.Category
 import com.asptechinc.daymark.models.Tag
 import com.asptechinc.daymark.utils.i18n
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 /**
  * Initial data loaded on first app launch
  */
 fun initialActivities(context: Context): MutableList<Activity> {
-    val now = DateTime.now()
+    val now = LocalDateTime.now()
 
     return mutableListOf(
         Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusWeeks(5),
+            activityName = context.i18n(R.string.default_entry_title1),
+            notes = context.i18n(R.string.default_entry_note1),
+            startDateTime = now.minusWeeks(5),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title2),
-            context.i18n(R.string.default_entry_note2),
-            now.minusDays(1),
-            now.plusMonths(3),
+            activityName = context.i18n(R.string.default_entry_title2),
+            notes = context.i18n(R.string.default_entry_note2),
+            startDateTime = now.minusDays(1),
+            endDateTime = now.plusMonths(3),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title3),
-            context.i18n(R.string.default_entry_note3),
-            now.plusYears(2),
+            activityName = context.i18n(R.string.default_entry_title3),
+            notes = context.i18n(R.string.default_entry_note3),
+            startDateTime = now.plusYears(2),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title4),
-            context.i18n(R.string.default_entry_note4),
-            now.minusDays(1),
-            now.plusMonths(3),
+            activityName = context.i18n(R.string.default_entry_title4),
+            notes = context.i18n(R.string.default_entry_note4),
+            startDateTime = now.minusDays(1),
+            endDateTime = now.plusMonths(3),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title5),
-            context.i18n(R.string.default_entry_note5),
-            now.minusDays(1),
+            activityName = context.i18n(R.string.default_entry_title5),
+            notes = context.i18n(R.string.default_entry_note5),
+            startDateTime = now.minusDays(1),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title6),
-            context.i18n(R.string.default_entry_note6),
-            now.minusDays(1),
-            now.plusMonths(3),
+            activityName = context.i18n(R.string.default_entry_title6),
+            notes = context.i18n(R.string.default_entry_note6),
+            startDateTime = now.minusDays(1),
+            endDateTime = now.plusMonths(3),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title7),
-            context.i18n(R.string.default_entry_note7),
-            now.minusMonths(2),
+            activityName = context.i18n(R.string.default_entry_title7),
+            notes = context.i18n(R.string.default_entry_note7),
+            startDateTime = now.minusMonths(2),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title8),
-            context.i18n(R.string.default_entry_note8),
-            now.minusYears(1),
-            now.plusMonths(3),
+            activityName = context.i18n(R.string.default_entry_title8),
+            notes = context.i18n(R.string.default_entry_note8),
+            startDateTime = now.minusYears(1),
+            endDateTime = now.plusMonths(3),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title9),
-            context.i18n(R.string.default_entry_note9),
-            now.minusDays(1),
+            activityName = context.i18n(R.string.default_entry_title9),
+            notes = context.i18n(R.string.default_entry_note9),
+            startDateTime = now.minusDays(1),
         ),
         Activity(
-            context.i18n(R.string.default_entry_title10),
-            context.i18n(R.string.default_entry_note10),
-            now.minusHours(1),
-            now.plusMinutes(5),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusMinutes(45),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusDays(1),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusDays(1),
-            now.minusHours(6),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusDays(6),
-            now.plusMonths(3),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.plusDays(9),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusHours(7),
-            now.plusYears(3),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusMonths(4),
-        ),
-        Activity(
-            context.i18n(R.string.default_entry_title1),
-            context.i18n(R.string.default_entry_note1),
-            now.minusYears(3),
-            now.plusWeeks(2),
+            activityName = context.i18n(R.string.default_entry_title10),
+            notes = context.i18n(R.string.default_entry_note10),
+            startDateTime = now.minusHours(1),
+            endDateTime = now.plusMinutes(5),
         ),
     )
 }

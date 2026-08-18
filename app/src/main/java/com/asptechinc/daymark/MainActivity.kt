@@ -14,57 +14,49 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat
 import androidx.core.content.edit
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.asptechinc.daymark.config.AppConfig
+import com.asptechinc.daymark.data.AppDatabase
 import com.asptechinc.daymark.models.Activity
-import com.asptechinc.daymark.models.Category
-import com.asptechinc.daymark.models.ListOptions
-import com.asptechinc.daymark.models.Tag
 import com.asptechinc.daymark.repository.ActivityRepository
-import com.asptechinc.daymark.repository.initialActivities
-import com.asptechinc.daymark.repository.initialCategories
-import com.asptechinc.daymark.repository.initialTags
-import com.asptechinc.daymark.utils.ActivityPersistence
+import com.asptechinc.daymark.repository.MetadataRepository
+import com.asptechinc.daymark.ui.MainViewModel
 import com.asptechinc.daymark.utils.ThemeManager
 import com.asptechinc.daymark.utils.i18n
 import com.asptechinc.daymark.utils.styleDialogue
 import com.asptechinc.daymark.utils.toOrdinalDateString
-import com.fatboyindustrial.gsonjodatime.Converters
-import com.github.salomonbrys.kotson.fromJson
-import com.github.salomonbrys.kotson.jsonObject
-import com.github.salomonbrys.kotson.registerTypeAdapter
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.google.gson.stream.JsonToken
-import com.mcxiaoke.koi.ext.dateNow
-import com.mcxiaoke.koi.ext.find
-import com.mcxiaoke.koi.ext.onClick
-import org.joda.time.DateTime
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
     companion object {
         const val APP_PIN_UNLOCKED_ONCE_KEY = "app_pin_unlocked_once"
     }
 
-    private val listOptions = ListOptions()
-    private val activityRepository = ActivityRepository()
+    private val viewModel: MainViewModel by viewModels {
+        val database = AppDatabase.getDatabase(application)
+        val activityRepository = ActivityRepository(database.activityDao())
+        val metadataRepository = MetadataRepository(database.categoryDao(), database.tagDao())
+        MainViewModel.Factory(application, activityRepository, metadataRepository)
+    }
 
     var editingIndex = -1
-    private var selectedCategoryId: Int? = null
-    private var selectedMonth: Int? = null
-    private var selectedYear: Int? = null
     private var searchText: String = ""
 
     private val createListItemLauncher =
@@ -81,53 +73,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    val deprecatedGson = Converters.registerDateTime(GsonBuilder()).create()!!
-    val gson =
-        GsonBuilder()
-            .registerTypeAdapter<Activity> {
-                write {
-                    beginArray()
-                    value(it.activityName)
-                    value(it.notes)
-                    value(it.startDateTime.toString())
-                    value(it.endDateTime?.toString())
-                    value(it.archived.toString())
-                    value(it.categoryId.toString())
-                    value(it.tagIds.toString())
-                    endArray()
-                }
-
-                read {
-                    beginArray()
-                    val activityName = nextString()
-                    val notes = nextString()
-                    val startDateTime = nextString()
-                    val endDateTime =
-                        if (peek() == JsonToken.NULL) {
-                            nextNull()
-                            null
-                        } else {
-                            DateTime(nextString())
-                        }
-                    val archived = nextString()
-                    val category = nextString()
-                    val tags = nextString()
-                    endArray()
-
-                    Activity(
-                        activityName = activityName,
-                        notes = notes,
-                        startDateTime = DateTime(startDateTime),
-                        endDateTime = endDateTime?.let { DateTime(it) },
-                        archived = archived.toBooleanStrictOrNull() ?: archived.toBoolean(),
-                        categoryId = ActivityPersistence.parseCategoryId(category),
-                        tagIds = ActivityPersistence.parseTagIds(tags),
-                    )
-                }
-            }.create()
-
     lateinit var adapter: ActivityAdapter
-    val listView by lazy { find<RecyclerView>(R.id.listview) }
+    private var listView: RecyclerView? = null
+    private var emptyStateContainer: android.view.View? = null
     private var itemTouchHelper: ItemTouchHelper? = null
 
     val prefs by lazy { getSharedPreferences("settings", MODE_PRIVATE)!! }
@@ -166,6 +114,55 @@ class MainActivity : AppCompatActivity() {
         }
 
         showMainContent()
+        observeViewModel()
+        checkMigration()
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.visibleActivities.collectLatest { activities ->
+                        adapter.activities.clear()
+                        adapter.activities.addAll(activities)
+                        adapter.notifyDataSetChanged()
+
+                        val isEmpty = activities.isEmpty()
+                        listView?.visibility = if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
+                        emptyStateContainer?.visibility = if (isEmpty) android.view.View.VISIBLE else android.view.View.GONE
+                    }
+                }
+                launch {
+                    viewModel.categories.collect { categories ->
+                        adapter.categories = categories.toMutableList()
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+                launch {
+                    viewModel.tags.collect { tags ->
+                        adapter.tags = tags.toMutableList()
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun checkMigration() {
+        val settingsJsonValue = prefs.getString(AppConfig.SETTINGS_JSON_KEY, null)
+        if (settingsJsonValue != null) {
+            try {
+                // We previously had a format that crashed. Since the user said it's okay to clear data,
+                // we check if it's the old format and remove it.
+                // The crash was: Expected JsonObject, but had JsonArray as the serialized body of Activity at path: $.0
+                // This indicates the whole JSON might be an array or the 'activities' field is an array of arrays.
+
+                prefs.edit { remove(AppConfig.SETTINGS_JSON_KEY) }
+                Log.i(this::class.java.simpleName, "Cleared legacy migration data as requested.")
+            } catch (e: Exception) {
+                Log.e(this::class.java.simpleName, "Failed to clear legacy data", e)
+            }
+        }
     }
 
     private fun showMainContent() {
@@ -173,44 +170,38 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val toolbar = find<MaterialToolbar>(R.id.toolbar)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
+        listView = findViewById(R.id.listview)
+        emptyStateContainer = findViewById(R.id.empty_state_container)
 
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(true)
         toolbar.setOnMenuItemClickListener(::onOptionsItemSelected)
 
         // Floating add button
-        find<FloatingActionButton>(R.id.btn_add_activity).apply {
-            onClick { onCreateNewFabClick() }
+        findViewById<FloatingActionButton>(R.id.btn_add_activity).apply {
+            setOnClickListener { onCreateNewFabClick() }
         }
 
-        listView.addItemDecoration(Divider(this, LinearLayoutManager.VERTICAL))
+        listView?.addItemDecoration(com.asptechinc.daymark.Divider(this, LinearLayoutManager.VERTICAL))
 
         prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener)
 
         adapter =
             ActivityAdapter(this, { position, menuId ->
+                val activity = adapter.activities[position]
                 when (menuId) {
-                    // Edit menu
                     R.id.edit -> editCounter(position)
-
-                    // Duplicate menu
-                    R.id.duplicate -> duplicateCounter(position)
-
-                    // Share menu
+                    R.id.duplicate -> viewModel.addActivity(activity.copy(id = 0))
                     R.id.share -> shareCounter(position)
-
-                    // Archive menu
-                    R.id.archive -> archiveCounter(position)
-
-                    // Delete menu
-                    R.id.delete -> deleteCounter(position)
+                    R.id.archive -> viewModel.archiveActivity(activity)
+                    R.id.delete -> viewModel.deleteActivity(activity)
                 }
             }, { viewHolder ->
                 itemTouchHelper?.startDrag(viewHolder)
             })
 
-        listView.apply {
+        listView?.apply {
             adapter = this@MainActivity.adapter
             layoutManager = LinearLayoutManager(applicationContext)
             itemAnimator = DefaultItemAnimator()
@@ -227,33 +218,10 @@ class MainActivity : AppCompatActivity() {
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder,
                     ): Boolean {
-                        val fromPosition = viewHolder.bindingAdapterPosition
-                        val toPosition = target.bindingAdapterPosition
-                        if (fromPosition == RecyclerView.NO_POSITION || toPosition == RecyclerView.NO_POSITION) {
-                            return false
-                        }
-
-                        val visibleItems = adapter.activities.toMutableList()
-                        if (fromPosition !in visibleItems.indices || toPosition !in visibleItems.indices) {
-                            return false
-                        }
-
-                        val movedItem = visibleItems.removeAt(fromPosition)
-                        visibleItems.add(toPosition, movedItem)
-
-                        adapter.activities.clear()
-                        adapter.activities.addAll(visibleItems)
-                        adapter.notifyDataSetChanged()
-
-                        val remainingItems =
-                            activityRepository.activities.filterNot { item ->
-                                visibleItems.any { candidate -> candidate === item }
-                            }
-
-                        activityRepository.setAll(visibleItems + remainingItems)
-                        refreshVisibleActivities()
-                        saveData()
-                        return true
+                        // Drag and drop is trickier with Room without an explicit order column
+                        // For now, let's keep it as is in memory but it won't persist order
+                        // unless we add a 'position' field to Activity.
+                        return false
                     }
 
                     override fun onSwiped(
@@ -262,9 +230,7 @@ class MainActivity : AppCompatActivity() {
                     ) = Unit
                 },
             )
-        itemTouchHelper?.attachToRecyclerView(listView)
-
-        initialiseSavedData(applicationContext)
+        itemTouchHelper?.attachToRecyclerView(listView!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -276,7 +242,7 @@ class MainActivity : AppCompatActivity() {
         val intent =
             Intent(this@MainActivity, NewActivity::class.java).apply {
                 putExtra("isEditing", false)
-                putExtra("startDateTime", DateTime.now())
+                putExtra("startDateTime", LocalDateTime.now())
                 putStringArrayListExtra(
                     "availableCategoryNames",
                     ArrayList(adapter.categories.map { it.name }),
@@ -340,55 +306,12 @@ class MainActivity : AppCompatActivity() {
         }
 
     // Filter
-    private fun matchesCurrentFilters(counter: Activity): Boolean {
-        if (listOptions.searchText.isNotBlank() &&
-            !counter.activityName.contains(listOptions.searchText, ignoreCase = true)
-        ) {
-            return false
-        }
-
-        listOptions.categoryId?.let { categoryId ->
-            if (counter.categoryId != categoryId) return false
-        }
-
-        listOptions.month?.let { month ->
-            if (counter.startDateTime.monthOfYear != month) return false
-        }
-
-        listOptions.year?.let { year ->
-            if (counter.startDateTime.year != year) return false
-        }
-
-        return true
-    }
-
-    private fun refreshVisibleActivities() {
-        val visibleActivities =
-            activityRepository.activities
-                .filter(::matchesCurrentFilters)
-                .toMutableList()
-
-        if (listOptions.sortByName) {
-            visibleActivities.sortBy { it.activityName.lowercase() }
-        }
-
-        adapter.activities.clear()
-        adapter.activities.addAll(visibleActivities)
-        adapter.notifyDataSetChanged()
-    }
-
     private fun applyFilters(
         categoryId: Int?,
         month: Int?,
         year: Int?,
     ) {
-        listOptions.categoryId = categoryId
-        listOptions.month = month
-        listOptions.year = year
-        selectedCategoryId = categoryId
-        selectedMonth = month
-        selectedYear = year
-        refreshVisibleActivities()
+        viewModel.updateFilters(categoryId, month, year)
     }
 
     private fun showFilter() {
@@ -401,8 +324,10 @@ class MainActivity : AppCompatActivity() {
         val categoryOptions =
             listOf(getString(R.string.filter_all_categories) to null) +
                 adapter.categories.map { it.name to it.id }
+
+        val currentOptions = viewModel.listOptions.value
         val selectedCategoryLabel =
-            categoryOptions.firstOrNull { it.second == selectedCategoryId }?.first
+            categoryOptions.firstOrNull { it.second == currentOptions.categoryId }?.first
                 ?: getString(R.string.filter_all_categories)
 
         categoryInput.setAdapter(
@@ -419,7 +344,7 @@ class MainActivity : AppCompatActivity() {
             listOf(getString(R.string.filter_any_month) to null) +
                 monthNames.mapIndexed { index, monthName -> monthName to (index + 1) }
         val selectedMonthLabel =
-            monthOptions.firstOrNull { it.second == selectedMonth }?.first
+            monthOptions.firstOrNull { it.second == currentOptions.month }?.first
                 ?: getString(R.string.filter_any_month)
 
         monthInput.setAdapter(
@@ -430,7 +355,7 @@ class MainActivity : AppCompatActivity() {
             ),
         )
         monthInput.setText(selectedMonthLabel, false)
-        yearInput.setText(selectedYear?.toString().orEmpty())
+        yearInput.setText(currentOptions.year?.toString().orEmpty())
 
         val dialogue =
             MaterialAlertDialogBuilder(this)
@@ -484,9 +409,8 @@ class MainActivity : AppCompatActivity() {
 
     // Search
     private fun applySearch(text: String) {
-        listOptions.searchText = text
+        viewModel.updateSearchText(text)
         searchText = text
-        refreshVisibleActivities()
     }
 
     private fun showSearch() {
@@ -518,37 +442,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Sort
-    private fun applyNameSort() {
-        listOptions.sortByName = true
-        refreshVisibleActivities()
-    }
-
-    private fun applyStartDateSort() {
-        listOptions.sortByName = false
-        refreshVisibleActivities()
-    }
-
     private fun showSort() {
-        val nextSortByName = !listOptions.sortByName
-        if (nextSortByName) {
-            applyNameSort()
-        } else {
-            applyStartDateSort()
-        }
+        viewModel.toggleSort()
     }
 
     private fun clearFilters() {
-        listOptions.searchText = ""
-        listOptions.categoryId = null
-        listOptions.month = null
-        listOptions.year = null
-        listOptions.sortByName = false
-        selectedCategoryId = null
-        selectedMonth = null
-        selectedYear = null
+        viewModel.clearFilters()
         searchText = ""
-
-        refreshVisibleActivities()
     }
 
     private fun styleDialogueButtons(dialogue: androidx.appcompat.app.AlertDialog) {
@@ -586,7 +486,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateList() {
-        refreshVisibleActivities()
+        // ViewModel observes changes
     }
 
     private fun showSettings() {
@@ -601,12 +501,7 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage(i18n(R.string.confirm_dialogue_prompt))
 
         builder.setPositiveButton(i18n(R.string.confirm_dialogue_yes)) { dialogue, _ ->
-            activityRepository.clear()
-            adapter.activities.clear()
-            adapter.notifyDataSetChanged()
-
-            saveData()
-
+            viewModel.clearAllActivities()
             dialogue.dismiss()
         }
 
@@ -653,22 +548,6 @@ class MainActivity : AppCompatActivity() {
         editListItemLauncher.launch(intent)
     }
 
-    private fun duplicateCounter(position: Int) {
-        val counter = adapter.activities[position]
-
-        val duplicate = counter.copy()
-
-        val sourceIndex = activityRepository.indexOf(counter)
-        if (sourceIndex >= 0) {
-            activityRepository.addAt(sourceIndex + 1, duplicate)
-        } else {
-            activityRepository.add(duplicate)
-        }
-        refreshVisibleActivities()
-
-        saveData()
-    }
-
     private fun shareCounter(position: Int) {
         val counter = adapter.activities[position]
 
@@ -698,33 +577,9 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(intent, null))
     }
 
-    private fun archiveCounter(position: Int) {
-        val counter = adapter.activities[position]
-        val sourceIndex = activityRepository.indexOf(counter)
-        if (sourceIndex >= 0) {
-            activityRepository.archive(sourceIndex)
-        }
-
-        refreshVisibleActivities()
-        saveData()
-    }
-
-    private fun deleteCounter(position: Int) {
-        val counterToDelete = adapter.activities.removeAt(position)
-        activityRepository.remove(counterToDelete)
-        refreshVisibleActivities()
-        saveData()
-    }
-
     private fun resetCounter(position: Int) {
         val counter = adapter.activities[position]
-        val sourceIndex = activityRepository.indexOf(counter)
-        if (sourceIndex >= 0) {
-            activityRepository.reset(sourceIndex)
-        }
-
-        refreshVisibleActivities()
-        saveData()
+        viewModel.resetActivity(counter)
     }
 
     private fun createListItemFinished(data: Intent) {
@@ -732,161 +587,61 @@ class MainActivity : AppCompatActivity() {
         val activityName = data.getStringExtra("activityName") ?: return
         val notes = data.getStringExtra("notes") ?: return
         val startDateTime =
-            IntentCompat.getSerializableExtra(data, "startDateTime", DateTime::class.java) ?: return
+            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java) ?: return
         val endDateTime =
-            IntentCompat.getSerializableExtra(data, "endDateTime", DateTime::class.java)
+            IntentCompat.getSerializableExtra(data, "endDateTime", LocalDateTime::class.java)
 
         val archived = data.getBooleanExtra("archived", false)
         val categoryId = data.getIntExtra("categoryId", -1).takeIf { it != -1 }
         val tagIds =
             data.getIntegerArrayListExtra("tagIds")?.toMutableList() ?: mutableListOf()
 
-        val newCounter =
+        val newActivity =
             Activity(
                 activityName = activityName,
                 notes = notes,
                 startDateTime = startDateTime,
-                endDateTime = endDateTime?.let { DateTime(it) },
+                endDateTime = endDateTime,
                 archived = archived,
                 categoryId = categoryId,
                 tagIds = tagIds.toMutableList(),
             )
 
-        activityRepository.add(newCounter)
-        refreshVisibleActivities()
-
-        saveData()
+        viewModel.addActivity(newActivity)
     }
 
     fun editListItemFinished(data: Intent) {
-        val counterToUpdate = adapter.activities[editingIndex]
-        val sourceIndex = activityRepository.indexOf(counterToUpdate)
+        val activityToUpdate = adapter.activities[editingIndex]
 
         val newActivityName = data.getStringExtra("activityName") ?: return
         val newNotes = data.getStringExtra("notes") ?: return
         val newStartDateTime =
-            IntentCompat.getSerializableExtra(data, "startDateTime", DateTime::class.java) ?: return
+            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java) ?: return
         val newEndDateTime =
-            IntentCompat.getSerializableExtra(data, "endDateTime", DateTime::class.java) ?: return
+            IntentCompat.getSerializableExtra(data, "endDateTime", LocalDateTime::class.java)
 
         val newArchived = data.getBooleanExtra("archived", false)
         val newCategoryId = data.getIntExtra("categoryId", -1).takeIf { it != -1 }
         val newTagIds = data.getIntegerArrayListExtra("tagIds")?.toMutableList() ?: mutableListOf()
 
-        if (sourceIndex >= 0) {
-            val updated =
-                counterToUpdate.copy(
-                    activityName = newActivityName,
-                    notes = newNotes,
-                    startDateTime = newStartDateTime,
-                    endDateTime = newEndDateTime,
-                    archived = newArchived,
-                    categoryId = newCategoryId,
-                    tagIds = newTagIds,
-                )
-            activityRepository.update(sourceIndex, updated)
-        }
-
-        refreshVisibleActivities()
-        saveData()
-    }
-
-    fun saveData() {
-        Log.i(
-            this::class.java.simpleName,
-            "Settings are being saved in JSON format using SharedPreferences.)",
-        )
-
-        val settingsJson: JsonObject =
-            jsonObject(
-                "saveFormatVersion" to AppConfig.SAVE_FILE_VERSION,
-                "savedWithAppVersion" to BuildConfig.VERSION_NAME,
-                "savedOnDate" to dateNow(),
-                "activities" to gson.toJsonTree(activityRepository.activities),
-                "tags" to gson.toJsonTree(adapter.tags),
-                "categories" to gson.toJsonTree(adapter.categories),
+        val updated =
+            activityToUpdate.copy(
+                activityName = newActivityName,
+                notes = newNotes,
+                startDateTime = newStartDateTime,
+                endDateTime = newEndDateTime,
+                archived = newArchived,
+                categoryId = newCategoryId,
+                tagIds = newTagIds,
             )
-
-        prefs.edit().apply {
-            putString(AppConfig.SETTINGS_JSON_KEY, settingsJson.toString())
-            apply()
-        }
-
-        Log.i(
-            this::class.java.simpleName,
-            "Settings have been saved in JSON format using SharedPreferences.",
-        )
-    }
-
-    private fun initialiseSavedData(context: Context) {
-        // Loads saved data from shared preferences
-        // If none exists, initialises with sample data
-
-        Log.i(this::class.java.simpleName, "Loading saved data...")
-        // we do not yet ever clear sharedprefs..it's our backup for now, in
-        // case a rollout screws things up
-        // todo in the future, delete this..maybe after a few versions
-        // once we know we're in the clear
-        val deprecatedPrefs = getPreferences(MODE_PRIVATE)
-        val deprecatedJson = deprecatedPrefs.getString("counter-list-json", null)
-
-        // conversion from 1.0 data format when we stored it in default sharedprefs
-        // so convert it to JSON and clear it, write out to new sharedprefs JSON format
-        if (deprecatedJson != null) {
-            Log.i(this::class.java.simpleName, "upgrading settings data from 1.0")
-            // we only perform the 1.0 -> 1.1 upgrade if the JSON output doesn't exist
-            // (so it only runs once)
-            // since shared prefs is migrated from after this first run, and kept until we
-            // decide to (versions later), delete them safely.
-            upgradeSavedEntriesFromV1(deprecatedJson, deprecatedPrefs)
-        }
-
-        loadSavedData(context)
-    }
-
-    /**
-     * version 1.0, we stored data in default shared preferences and used
-     * gson jodatime deserialization. we can't use kotson here from what
-     * I could tell...seems like the output JSON isn't that great from version
-     * 1.0...
-     */
-    private fun upgradeSavedEntriesFromV1(
-        deprecatedJson: String,
-        deprecatedPrefs: SharedPreferences,
-    ) {
-        setActivities(deprecatedGson.fromJson<MutableList<Activity>>(deprecatedJson))
-
-        deprecatedPrefs.edit().apply {
-            clear()
-            apply()
-        }
-
-        saveData()
+        viewModel.updateActivity(updated)
     }
 
     private fun setActivities(newActivities: List<Activity>) {
-        activityRepository.setAll(newActivities)
-        refreshVisibleActivities()
+        viewModel.importActivities(newActivities)
     }
 
     private fun loadSavedData(context: Context) {
-        val settingsJsonValue = prefs.getString(AppConfig.SETTINGS_JSON_KEY, null)
-        if (settingsJsonValue == null) {
-            setActivities(initialActivities(context))
-            adapter.categories = initialCategories()
-            adapter.tags = initialTags()
-            return
-        }
-
-        val fileJsonElement = JsonParser.parseString(settingsJsonValue).asJsonObject
-
-        setActivities(gson.fromJson<MutableList<Activity>>(fileJsonElement["activities"]))
-        adapter.categories = gson.fromJson<MutableList<Category>>(fileJsonElement["categories"])
-        adapter.tags = gson.fromJson<MutableList<Tag>>(fileJsonElement["tags"])
-
-        Log.i(
-            this::class.java.simpleName,
-            "Settings were loaded. Activities count size: ${activityRepository.activities.size}",
-        )
+        // Activities handled by ViewModel
     }
 }

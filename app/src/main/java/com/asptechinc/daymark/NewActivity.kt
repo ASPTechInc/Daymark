@@ -20,15 +20,14 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.mcxiaoke.koi.ext.find
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 
 class NewActivity : AppCompatActivity() {
     lateinit var startDateButton: Button
-    lateinit var startDateTime: DateTime
+    lateinit var startDateTime: LocalDateTime
 
     lateinit var endDateButton: Button
-    lateinit var endDateTime: DateTime
+    lateinit var endDateTime: LocalDateTime
 
     private lateinit var archivedCheckBox: MaterialCheckBox
     private lateinit var categoryDropdown: AutoCompleteTextView
@@ -45,43 +44,37 @@ class NewActivity : AppCompatActivity() {
         activityInit(isEditing)
 
         // Activity name
-        activityNameEditText = find<EditText>(R.id.activityName)
+        activityNameEditText = findViewById(R.id.activityName)
         activityNameEditText.setText(intent.getStringExtra("activityName") ?: "")
         activityNameEditText.addTextChangedListener(TextChangedListener())
 
         // Notes
-        notesEditText = find<EditText>(R.id.notes)
+        notesEditText = findViewById(R.id.notes)
         notesEditText.setText(intent.getStringExtra("notes") ?: "")
         notesEditText.addTextChangedListener(TextChangedListener())
 
-        // null along with other values if we're creating a new entry.
-        // else it'll be the existing data that we're editing
-
         // Start date
-        // It is required.
         startDateTime =
-            requireNotNull(
-                IntentCompat.getSerializableExtra(
-                    intent,
-                    "startDateTime",
-                    DateTime::class.java,
-                ),
-            ) { "startDateTime is required" }
+            IntentCompat.getSerializableExtra(
+                intent,
+                "startDateTime",
+                LocalDateTime::class.java,
+            ) ?: LocalDateTime.now()
 
         val startDateDialog =
             DatePickerDialog(
                 this,
-                OnDateSetListener { datePicker, year, month, day ->
-                    startDateTime = datePicked(datePicker, year, month + 1, day)
+                OnDateSetListener { _, year, month, day ->
+                    startDateTime = datePicked(year, month + 1, day)
                     startDateButton.text = formatDate(startDateTime)
                 },
                 startDateTime.year,
-                startDateTime.monthOfYear - 1,
+                startDateTime.monthValue - 1,
                 startDateTime.dayOfMonth,
             )
 
         startDateButton =
-            find<Button>(R.id.startDateButton).apply {
+            findViewById<Button>(R.id.startDateButton).apply {
                 setOnClickListener {
                     startDateDialog.show()
                 }
@@ -90,24 +83,23 @@ class NewActivity : AppCompatActivity() {
             }
 
         // End date
-        // It is optional and its default value is the current date.
-        endDateTime = IntentCompat.getSerializableExtra(intent, "endDateTime", DateTime::class.java)
-            ?: DateTime.now() // .minusDays(5)
+        endDateTime = IntentCompat.getSerializableExtra(intent, "endDateTime", LocalDateTime::class.java)
+            ?: LocalDateTime.now()
 
         val endDateDialog =
             DatePickerDialog(
                 this,
-                OnDateSetListener { datePicker, year, month, day ->
-                    endDateTime = datePicked(datePicker, year, month + 1, day)
+                OnDateSetListener { _, year, month, day ->
+                    endDateTime = datePicked(year, month + 1, day)
                     endDateButton.text = formatDate(endDateTime)
                 },
                 endDateTime.year,
-                endDateTime.monthOfYear - 1,
+                endDateTime.monthValue - 1,
                 endDateTime.dayOfMonth,
             )
 
         endDateButton =
-            find<Button>(R.id.endDateButton).apply {
+            findViewById<Button>(R.id.endDateButton).apply {
                 setOnClickListener {
                     endDateDialog.show()
                 }
@@ -115,11 +107,11 @@ class NewActivity : AppCompatActivity() {
                 text = formatDate(endDateTime)
             }
 
-        archivedCheckBox = find<MaterialCheckBox>(R.id.archived_checkbox)
+        archivedCheckBox = findViewById(R.id.archived_checkbox)
         archivedCheckBox.isChecked = intent.getBooleanExtra("archived", false)
 
-        categoryDropdown = find<AutoCompleteTextView>(R.id.category_dropdown)
-        tagChipGroup = find<ChipGroup>(R.id.tag_chip_group)
+        categoryDropdown = findViewById(R.id.category_dropdown)
+        tagChipGroup = findViewById(R.id.tag_chip_group)
 
         val availableCategoryNames = intent.getStringArrayListExtra("availableCategoryNames")
         val availableCategoryIds = intent.getIntegerArrayListExtra("availableCategoryIds")
@@ -159,7 +151,7 @@ class NewActivity : AppCompatActivity() {
         }
 
         // Save button
-        val saveButton = find<Button>(R.id.saveButton)
+        val saveButton = findViewById<Button>(R.id.saveButton)
         saveButton.setOnClickListener {
             val selectedCategoryIdValue =
                 categoryDropdown.text?.toString()?.let { categoryName ->
@@ -192,7 +184,7 @@ class NewActivity : AppCompatActivity() {
         }
 
         // Cancel button
-        val cancelButton = find<Button>(R.id.cancel)
+        val cancelButton = findViewById<Button>(R.id.cancel)
         cancelButton.setOnClickListener {
             setResult(RESULT_CANCELED)
             finish()
@@ -201,7 +193,7 @@ class NewActivity : AppCompatActivity() {
 
     inner class TextChangedListener : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
-            val saveButton = this@NewActivity.find<Button>(R.id.saveButton)
+            val saveButton = this@NewActivity.findViewById<Button>(R.id.saveButton)
             saveButton.isEnabled = !s.isNullOrEmpty()
         }
 
@@ -222,7 +214,7 @@ class NewActivity : AppCompatActivity() {
 
     private fun activityInit(isEditing: Boolean) {
         setContentView(R.layout.activity_new)
-        val toolbar = find<MaterialToolbar>(R.id.toolbar)
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar)
 
         setSupportActionBar(toolbar)
 

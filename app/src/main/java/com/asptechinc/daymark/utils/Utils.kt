@@ -8,7 +8,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckedTextView
-import android.widget.DatePicker
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -16,50 +15,28 @@ import com.asptechinc.daymark.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.joda.time.DateTime
-import org.joda.time.Period
-import org.joda.time.PeriodType
-import org.joda.time.format.DateTimeFormat
+import java.time.LocalDateTime
+import java.time.Period
+import java.time.format.DateTimeFormatter
 
 fun datePicked(
-    datePicker: DatePicker,
     year: Int,
     month: Int,
     day: Int,
-) = DateTime(year, month, day, 0, 0)
+) = LocalDateTime.of(year, month, day, 0, 0)
 
-fun formatDate(dateTime: DateTime): String = dateTime.toString(DateTimeFormat.shortDate())
+fun formatDate(dateTime: LocalDateTime): String = dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
 
 fun relativeDateText(
-    from: DateTime,
-    to: DateTime,
+    from: LocalDateTime,
+    to: LocalDateTime,
 ): String {
     val isFuture = from.isAfter(to)
 
-    val period =
-        if (isFuture) {
-            Period(
-                to,
-                from,
-                PeriodType
-                    .standard()
-                    .withHoursRemoved()
-                    .withMinutesRemoved()
-                    .withSecondsRemoved()
-                    .withMillisRemoved(),
-            )
-        } else {
-            Period(
-                from,
-                to,
-                PeriodType
-                    .standard()
-                    .withHoursRemoved()
-                    .withMinutesRemoved()
-                    .withSecondsRemoved()
-                    .withMillisRemoved(),
-            )
-        }
+    val startDate = if (isFuture) to.toLocalDate() else from.toLocalDate()
+    val endDate = if (isFuture) from.toLocalDate() else to.toLocalDate()
+
+    val period = Period.between(startDate, endDate)
 
     val parts = mutableListOf<String>()
 
@@ -69,11 +46,14 @@ fun relativeDateText(
     if (period.months != 0) {
         parts += if (period.months == 1) "1 month" else "${period.months} months"
     }
-    if (period.weeks != 0) {
-        parts += if (period.weeks == 1) "1 week" else "${period.weeks} weeks"
+    val daysOnly = period.days % 7
+    val weeks = period.days / 7
+
+    if (weeks != 0) {
+        parts += if (weeks == 1) "1 week" else "$weeks weeks"
     }
-    if (period.days != 0) {
-        parts += if (period.days == 1) "1 day" else "${period.days} days"
+    if (daysOnly != 0) {
+        parts += if (daysOnly == 1) "1 day" else "$daysOnly days"
     }
 
     val text = if (parts.isEmpty()) "0 days" else parts.joinToString(", ")
@@ -81,7 +61,7 @@ fun relativeDateText(
     return if (isFuture) "in $text" else "$text ago"
 }
 
-fun DateTime.toOrdinalDateString(): String {
+fun LocalDateTime.toOrdinalDateString(): String {
     val day = dayOfMonth
     val suffix =
         when {
@@ -92,7 +72,7 @@ fun DateTime.toOrdinalDateString(): String {
             else -> "th"
         }
 
-    return "$day$suffix ${toString("MMMM, yyyy")}"
+    return "$day$suffix ${format(DateTimeFormatter.ofPattern("MMMM, yyyy"))}"
 }
 
 fun Float.dpToPx(context: Context): Float =
@@ -205,7 +185,8 @@ fun styleDialogue(dialogue: AlertDialog) {
                 override fun onChildViewRemoved(
                     parent: View?,
                     child: View?,
-                ) {}
+                ) {
+                }
             },
         )
     }
