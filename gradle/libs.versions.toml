@@ -2,7 +2,7 @@
 agp = "9.3.1"
 androidAboutPage = "2.0.0"
 androidxPreference = "1.2.1"
-appcompat = "1.7.1"
+appcompat = "1.8.0"
 browser = "1.8.0"
 benManesVersions = "0.58.0"
 composeBom = "2026.06.01"
