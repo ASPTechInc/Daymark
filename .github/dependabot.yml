@@ -9,3 +9,47 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "weekly"
+
+    open-pull-requests-limit: 10
+
+    labels:
+      - "dependencies"
+      - "kotlin"
+      - "android"
+
+    groups:
+      android:
+        patterns:
+          - "com.android.*"
+          - "androidx.*"
+
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "org.jetbrains.kotlinx*"
+
+      testing:
+        patterns:
+          - "*junit*"
+          - "*mockk*"
+          - "*test*"
+          - "*espresso*"
+
+      compose:
+        patterns:
+          - "*compose*"
+          - "androidx.compose.*"
+
+      all-others:
+        patterns:
+          - "*"
+
+  # GitHub Actions updates
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+
+    labels:
+      - "dependencies"
+      - "github-actions"
