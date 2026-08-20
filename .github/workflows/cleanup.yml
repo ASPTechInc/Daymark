@@ -1,0 +1,23 @@
+name: Daymark Runner Cleanup
+
+on:
+  schedule:
+    - cron: '0 17 * * *'  # Runs daily at 5 pm UTC
+  workflow_dispatch:  # Allows manual triggering of the workflow
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check disk space
+        run: df -h
+
+      - name: Cleanup tasks
+        run: |
+          echo 'Begin cleaning up the runner for Daymark builds...'
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /home/linuxbrew/.linuxbrew
+          sudo rm -rf /tmp/* /var/tmp/*
+          sudo apt-get clean
+          echo 'Finished cleaning up the runner.'

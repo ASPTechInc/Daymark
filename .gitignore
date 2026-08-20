@@ -10,3 +10,6 @@
 .idea
 *.apk
 .artifacts/
+keystore.properties
+*.jks
+*.keystore

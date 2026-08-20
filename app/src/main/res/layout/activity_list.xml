@@ -111,5 +111,6 @@
         android:layout_height="48dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@string/menu_more"
-        android:src="@drawable/ic_vertical_ellipsis" />
+        android:src="@drawable/ic_vertical_ellipsis"
+        app:iconTint="?attr/colorOnMenuContainer" />
 </LinearLayout>

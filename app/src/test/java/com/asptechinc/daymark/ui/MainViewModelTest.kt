@@ -43,7 +43,7 @@ class MainViewModelTest {
         // Mock strings for initialActivities
         `when`(application.getString(anyInt())).thenReturn("mock_string")
 
-        // Mock flows to avoid null pointer exceptions when ViewModel initializes StateFlows
+        // Mock flows to avoid null pointer exceptions when ViewModel initialises StateFlows
         `when`(activityRepository.allActivities).thenReturn(flowOf(emptyList()))
         `when`(metadataRepository.allCategories).thenReturn(flowOf(emptyList()))
         `when`(metadataRepository.allTags).thenReturn(flowOf(emptyList()))
@@ -60,7 +60,7 @@ class MainViewModelTest {
             // Given the database is empty
             `when`(activityRepository.isEmpty()).thenReturn(true)
 
-            // When ViewModel is initialized
+            // When ViewModel is initialised
             MainViewModel(application, activityRepository, metadataRepository)
 
             // Then initial data should be added
@@ -76,7 +76,7 @@ class MainViewModelTest {
             // Given the database is not empty
             `when`(activityRepository.isEmpty()).thenReturn(false)
 
-            // When ViewModel is initialized
+            // When ViewModel is initialised
             MainViewModel(application, activityRepository, metadataRepository)
 
             // Then no data should be added

@@ -46,8 +46,8 @@ To keep the codebase clean and consistent:
 - **Kotlin Conventions**: Follow the
   official [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html).
 - **Formatting**: We use **ktlint**. Please check and format your code before committing:
-    - Check formatting: `./gradlew ktlintCheck`
-    - Auto-format: `./gradlew ktlintFormat`
+  - Check formatting: `./gradlew ktlintCheck`
+  - Auto-format: `./gradlew ktlintFormat`
 - **Focus**: Keep pull requests small and focused on a single feature or fix.
 - **Documentation**: Use KDoc for public functions and classes where the purpose isn't immediately
   obvious.
@@ -79,7 +79,7 @@ Run tests on a physical device or emulator:
 ## Reporting Issues
 
 If you find a bug or have a feature request,
-please [open an issue](https://github.com/Sherida101/Daymark/issues) and include:
+please [open an issue](https://github.com/ASPTechInc/Daymark/issues) and include:
 
 - A clear title and description.
 - Steps to reproduce (for bugs).
@@ -103,4 +103,4 @@ Before submitting your PR, please ensure:
 ## Questions or Help
 
 If you have questions or need help setting up the environment, please
-use [GitHub Discussions](https://github.com/Sherida101/Daymark/discussions).
+use [GitHub Discussions](https://github.com/ASPTechInc/Daymark/discussions).

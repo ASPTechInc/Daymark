@@ -11,7 +11,7 @@ daymark/
 │ └── src/
 │ ├── androidTest/ ← Instrumentation tests
 │ ├── main/
-│ │ ├── java/asptechinc/daymark/ ← Kotlin source files
+│ │ ├── java/com.asptechinc/daymark/ ← Kotlin source files
 │ │ │ ├── DayCounterAdapter.kt
 │ │ │ ├── DividerItemDecoration.kt
 │ │ │ ├── KotlinExtensions.kt
@@ -43,7 +43,7 @@ daymark/
 ## Android app package layout
 
 ```markdown
-app/src/main/java/asptechinc/daymark/
+app/src/main/java/com/asptechinc/daymark/
 ├── MainActivity.kt ← Main screen UI and app entry flow
 ├── NewCounterActivity.kt ← Create/edit counter screen
 ├── SettingsActivity.kt ← Settings screen
@@ -55,17 +55,10 @@ app/src/main/java/asptechinc/daymark/
 
 | Type            | File                     | Path                                  |
 |-----------------|--------------------------|---------------------------------------|
-| Activity        | MainActivity.kt          | app/src/main/java/asptechinc/daymark/ |
-| Activity        | NewCounterActivity.kt    | app/src/main/java/asptechinc/daymark/ |
-| Activity        | SettingsActivity.kt      | app/src/main/java/asptechinc/daymark/ |
-| Adapter         | DayCounterAdapter.kt     | app/src/main/java/asptechinc/daymark/ |
-| Recycler helper | DividerItemDecoration.kt | app/src/main/java/asptechinc/daymark/ |
-| Utilities       | KotlinExtensions.kt      | app/src/main/java/asptechinc/daymark/ |
-| Touch helper    | RecyclerTouchListener.kt | app/src/main/java/asptechinc/daymark/ |
-
-## Notes
-
-- The project currently contains a single Android application module under app/.
-- There is no separate web backend, Go CLI or database module in the repository at this time.
-- The app uses Android resources under app/src/main/res/ and Gradle for build and dependency
-  management.
+| Activity        | MainActivity.kt          | app/src/main/java/com/asptechinc/daymark/ |
+| Activity        | NewCounterActivity.kt    | app/src/main/java/com/asptechinc/daymark/ |
+| Activity        | SettingsActivity.kt      | app/src/main/java/com/asptechinc/daymark/ |
+| Adapter         | DayCounterAdapter.kt     | app/src/main/java/com/asptechinc/daymark/ |
+| Recycler helper | DividerItemDecoration.kt | app/src/main/java/com/asptechinc/daymark/ |
+| Utilities       | KotlinExtensions.kt      | app/src/main/java/com/asptechinc/daymark/ |
+| Touch helper    | RecyclerTouchListener.kt | app/src/main/java/com/asptechinc/daymark/ |

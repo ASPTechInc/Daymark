@@ -4,27 +4,33 @@
 
 - [Overview](#overview)
 - [Features](#features)
-    - [Future features](#future-features)
+  - [Future features](#future-features)
 - [Screenshots](#screenshots)
 - [Requirements](#requirements)
 - [Setup and Installation](#setting-up-and-running-the-kotlin-android-app)
-    - [Install Java](#1-install-java-jdk)
-    - [Install Android Studio](#2-install-android-studio)
-    - [Configure Android SDK](#3-configure-android-sdk-paths)
+  - [Install Java](#1-install-java-jdk)
+  - [Install Android Studio](#2-install-android-studio)
+  - [Configure Android SDK](#3-configure-android-sdk-paths)
 - [Running the Application](#running-the-application)
 - [Testing the Application](#testing-the-application)
+- [Releasing the Application](#releasing-the-application)
+  - [Create a keystore file](#create-a-keystore-file)
+  - [Encode the keystore file](#encode-the-keystore-file)
+  - [Update the example keystore file](#update-the-example-keystore-file-in-the-project)
+  - [Create environment secrets in GitHub repository](#create-environment-secrets-in-gitHub-repository)
+  - [Create app release](#create-app-release)
 - [Project Structure](#project-structure)
 - [Development Workflow](#development-workflow)
-    - [Code Formatting](#code-formatting)
-    - [Android Studio Settings](#android-studio-settings)
+  - [Code Formatting](#code-formatting)
+  - [Android Studio Settings](#android-studio-settings)
 - [Gradle Tools](#code-quality-gradle-tools)
-    - [Ktlint](#ktlint)
+  - [Ktlint](#ktlint)
 - [Application Usage](#application-usage)
-    - [Creating a Day Counter](#creating-a-day-counter)
-    - [Editing Items](#editing-items)
-    - [Item Actions](#item-actions)
-    - [Search, Filter and Sort](#search-filter-and-sort)
-    - [Future features](#future-features)
+  - [Creating a Day Counter](#creating-a-day-counter)
+  - [Editing Items](#editing-items)
+  - [Item Actions](#item-actions)
+  - [Search, Filter and Sort](#search-filter-and-sort)
+  - [Future features](#future-features)
 - [Data Storage](#data-storage)
 - [Contributing](#contributing)
 - [Licence](#licence)
@@ -48,22 +54,22 @@ original project while introducing enhancements.
 
 See the [Application usage](#application-usage) section for a detailed list of features.
 
-|   |                                                                                                                                       |
-|---|:-------------------------------------------------------------------------------------------------------------------------------------:|
-| ✅ |                             **Create day activities** for activities, events, milestones, and reminders.                              |
-| ✅ |                             **Optional end dates** to track date ranges in addition to single-day events.                             |
-| ✅ |              **Relative time display** showing elapsed or remaining time (for example, *3 weeks ago* or *in 2 months*).               |
-| ✅ |               **Exact start and end dates** displayed using a human-friendly format (for example, *1st August, 2026*).                |
-| ✅ |                                          **Edit existing activities** with a single app tap.                                          |
-|   | **Quick item actions** via the item menu or long press: <br>✅ Edit <br>✅ Duplicate <br>✅ Reset <br>✅ Delete <br>✅ Archive <br>✅ Share |
-| ✅ |                                                **Search** activities by activity name.                                                |
-| ✅ |                                           **Filter** activities by category or start month.                                           |
-| ✅ |                                         **Sort** activities alphabetically by activity name.                                          |
-| ✅ |                                                **Categories** to organise activities.                                                 |
-| ✅ |                             **Persistent storage**, automatically saving activities between app launches.                             |
-| ✅ |                                      **Material 3 interface** with support for dynamic theming.                                       |
-| ✅ |                             **Sample activities** on first launch to demonstrate the app's functionality.                             |
-| ✅ |                              **RecyclerView-based list** for smooth scrolling and efficient performance.                              |
+|     |                                                                                                                                             |
+| --- | :-----------------------------------------------------------------------------------------------------------------------------------------: |
+| ✅  |                                **Create day activities** for activities, events, milestones, and reminders.                                 |
+| ✅  |                                **Optional end dates** to track date ranges in addition to single-day events.                                |
+| ✅  |                 **Relative time display** showing elapsed or remaining time (for example, _3 weeks ago_ or _in 2 months_).                  |
+| ✅  |                  **Exact start and end dates** displayed using a human-friendly format (for example, _1st August, 2026_).                   |
+| ✅  |                                             **Edit existing activities** with a single app tap.                                             |
+|     | **Quick item actions** via the item menu or long press: <br>✅ Edit <br>✅ Duplicate <br>✅ Reset <br>✅ Delete <br>✅ Archive <br>✅ Share |
+| ✅  |                                                   **Search** activities by activity name.                                                   |
+| ✅  |                                              **Filter** activities by category or start month.                                              |
+| ✅  |                                            **Sort** activities alphabetically by activity name.                                             |
+| ✅  |                                                   **Categories** to organise activities.                                                    |
+| ✅  |                                **Persistent storage**, automatically saving activities between app launches.                                |
+| ✅  |                                         **Material 3 interface** with support for dynamic theming.                                          |
+| ✅  |                                **Sample activities** on first launch to demonstrate the app's functionality.                                |
+| ✅  |                                 **RecyclerView-based list** for smooth scrolling and efficient performance.                                 |
 
 ### Future features
 
@@ -167,15 +173,15 @@ Power-user / nice-to-have features
 ## Screenshots
 
 |                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-|:---------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|
+| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
 | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
 
 |                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-|:---------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|
+| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
 | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
 
 |                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-|:---------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|
+| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
 | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
 
 ---
@@ -242,25 +248,23 @@ adb --version
 
 #### Using Android Studio:
 
-1. Clone the project repository
+#. Clone the project repository
 
-  ```bash
-    git clone https://github.com/Sherida101/Daymark.git
-  ``` 
+```bash
+  git clone https://github.com/ASPTechInc/Daymark.git
+```
 
-> **Push an existing repository from the command line
+> \*\*Push an existing repository from the command line
 >
->
-> or git remote set-url origin https://github.com/Sherida101/Daymark.git
+> or git remote set-url origin https://github.com/ASPTechInc/Daymark.git
 >
 > git branch -M main
 >
 > git push -u origin main
 
-> **Create a new repository on the command line
+> \*\*Create a new repository on the command line
 >
 > echo "# Daymark" >> README.md
->
 >
 > git init
 >
@@ -270,7 +274,7 @@ adb --version
 >
 > git branch -M main
 >
-> git remote add origin https://github.com/Sherida101/Daymark.git
+> git remote add origin https://github.com/ASPTechInc/Daymark.git
 >
 > git push -u origin main
 
@@ -282,6 +286,10 @@ adb --version
 #### Using the terminal:
 
 ```bash
+# Update dependencies
+./gradlew dependencyUpdates
+
+
 ./gradlew assembleDebug
 
 ./gradlew installDebug
@@ -303,24 +311,24 @@ adb shell monkey -p com.asptechinc.daymark 1
    Run button (upper-left)
 
 2. Pick any of the following launch configurations from the list:
+   - **Run Android app (emulator)**
 
-    - **Run Android app (emulator)**
+     > This calls the **Launch Android app (emulator)** task, which will start the emulator and run
+     > the app.
 
-      > This calls the **Launch Android app (emulator)** task, which will start the emulator and run
-      the app.
+   - **Run Android app (connected device)**
 
-    - **Run Android app (connected device)**
+     > This calls the **Launch Android app (connected device)** task, which will run the app on a
+     > connected device.
 
-      > This calls the **Launch Android app (connected device)** task, which will run the app on a
-      connected device.
+   - **Run Android app (automatically detect device)**
 
-    - **Run Android app (automatically detect device)**
-      > This calls the **Launch Android app (auto)** task, which will run the app on an
-      automatically detected device.
+     > This calls the **Launch Android app (auto)** task, which will run the app on an
+     > automatically detected device.
 
-    - **Stop Android emulator**
+   - **Stop Android emulator**
 
-      > This calls the **Stop Android emulator** task, which will stop the running emulator.
+     > This calls the **Stop Android emulator** task, which will stop the running emulator.
 
 3. To stop the server, press `Ctrl` + `C` in the terminal or click the red square stop button in the
    debug panel.
@@ -329,15 +337,77 @@ adb shell monkey -p com.asptechinc.daymark 1
 
 ## Testing the application
 
-``` bash
+```bash
 ./gradlew :app:testDebugUnitTest
+```
+
+---
+
+## Releasing the application
+
+A keystore is used to store the signing key required for Android app releases.
+
+### Create a keystore file
+
+> Replace `keystore.jks` and `key-alias` with your desired values.
+
+```bash
+keytool -genkeypair \
+  -v \
+  -keystore keystore.jks \
+  -alias key-alias \
+  -keyalg RSA \
+  -keysize 2048 \
+  -validity 10000
+```
+
+### Encode the keystore file
+
+The decoding of the file occurs in the GitHub repository workflow.
+
+> Replace `keystore.jks` and `keystore.base64` with your file names.
+
+```bash
+base64 -i keystore.jks | tr -d '\n' > keystore.base64
+```
+
+### Update the example keystore file in the project
+
+Rename the example keystore file [keystore.properties.example](/app/keystore.properties.example)
+to `keystore.properties`. Then, update the values of the variables - `storeFile`, `storePassword`,
+`keyAlias` and `keyPassword` with the values used above.
+
+### Create environment secrets in GitHub repository
+
+The following secrets should be created. Their values should match the values used above.
+
+```txt
+KEY_ALIAS
+KEY_PASSWORD
+KEYSTORE_CONTENT
+KEYSTORE_FILE_NAME
+KEYSTORE_PASSWORD
+```
+
+### Create app release
+
+Push a tag matching the pattern `v*` to the `main` branch. The GitHub workflow will then
+automatically build the release APK and bundle, sign them using the provided keystore
+and upload the artefacts.
+
+Example tag for a release:
+
+```bash
+git checkout main
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 ---
 
 ## Project Structure
 
-See [architecture.md](architecture.md) for a detailed overview of the project structure.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed overview of the project structure.
 
 ---
 
@@ -434,10 +504,10 @@ Automatically fix formatting:
 ### Item Actions
 
 - Long press item → Show quick actions:
-    - Delete
-    - Reset
-    - Duplicate
-    - Other item actions
+  - Delete
+  - Reset
+  - Duplicate
+  - Other item actions
 
 - Ellipsis (⋮) on item → Opens the same item action menu
 
@@ -454,12 +524,6 @@ Android.
 
 ---
 
-## Testing
-
-Tests are located in the [test](./app/src/test) directory
-
----
-
 ## Contributing
 
 Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how
@@ -467,14 +531,12 @@ to contribute to this project.
 
 If you find any issues or have suggestions, feel free to open an issue.
 
-
 ---
 
 ## Licence
 
 The project is open-sourced under the [MIT Licence](LICENSE). You can use, modify and distribute
 this project as long as you include the original licence.
-
 
 ---
 
@@ -491,5 +553,5 @@ Star ⭐ the repository if you like what you see 😉.
 
 ## Connect with Me
 
-[<img align="center" alt="Sherida101 | GitHub" src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" />](https://github.com/Sherida101)
-&ensp;GitHub: [@Sherida101](https://github.com/Sherida101 'GitHub Sherida101')
+[<img align="center" alt="ASPTechInc | GitHub" src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" />](https://github.com/ASPTechInc)
+&ensp;GitHub: [@ASPTechInc](https://github.com/ASPTechInc 'GitHub ASPTechInc')

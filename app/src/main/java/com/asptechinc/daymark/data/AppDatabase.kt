@@ -9,7 +9,11 @@ import com.asptechinc.daymark.models.Activity
 import com.asptechinc.daymark.models.Category
 import com.asptechinc.daymark.models.Tag
 
-@Database(entities = [Activity::class, Category::class, Tag::class], version = 2, exportSchema = false)
+@Database(
+    entities = [Activity::class, Category::class, Tag::class],
+    version = 2,
+    exportSchema = false
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun activityDao(): ActivityDao
@@ -30,7 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
                             context.applicationContext,
                             AppDatabase::class.java,
                             "daymark_database",
-                        ).fallbackToDestructiveMigration()
+                        ).fallbackToDestructiveMigration(false)
                         .build()
                 instance = newInstance
                 newInstance
