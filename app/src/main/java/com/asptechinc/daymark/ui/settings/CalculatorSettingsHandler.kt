@@ -283,12 +283,8 @@ class CalculatorSettingsHandler(
         }
 
         val totalDays = ChronoUnit.DAYS.between(startDate, endDate).toInt()
-        val weeksInPeriod =
-            (totalDays - (period.years * 365) - (period.months * 30)) / 7 // Rough approximation for breakdown
-        // Actually java.time.Period.between is good for Y/M/D.
-        // If we want weeks in the breakdown, it's tricky because Period doesn't have them.
 
-        // Let's just use days for the last part of breakdown if it's less than a month.
+        // Days is used for the last part of breakdown if it is less than a month.
         if (period.days != 0) {
             val w = period.days / 7
             val d = period.days % 7

@@ -101,7 +101,8 @@ class MainViewModel(
                 }
 
                 options.showCompleted?.let { showCompleted ->
-                    val isCompleted = counter.endDateTime != null && counter.endDateTime!!.isBefore(now)
+                    val isCompleted =
+                        counter.endDateTime != null && counter.endDateTime!!.isBefore(now)
                     if (isCompleted != showCompleted) return@filter false
                 }
 
@@ -149,7 +150,12 @@ class MainViewModel(
         viewModelScope.launch {
             val id = repository.add(activity)
             activity.endDateTime?.let { endTime ->
-                AlarmHelper.scheduleActivityEndAlarm(getApplication(), id, activity.activityName, endTime)
+                AlarmHelper.scheduleActivityEndAlarm(
+                    getApplication(),
+                    id,
+                    activity.activityName,
+                    endTime
+                )
             }
             WidgetUtils.updateAllWidgets(getApplication())
         }
@@ -159,7 +165,12 @@ class MainViewModel(
             repository.update(activity)
             AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
             activity.endDateTime?.let { endTime ->
-                AlarmHelper.scheduleActivityEndAlarm(getApplication(), activity.id, activity.activityName, endTime)
+                AlarmHelper.scheduleActivityEndAlarm(
+                    getApplication(),
+                    activity.id,
+                    activity.activityName,
+                    endTime
+                )
             }
             WidgetUtils.updateAllWidgets(getApplication())
         }
@@ -175,34 +186,6 @@ class MainViewModel(
         viewModelScope.launch {
             repository.archive(activity)
             AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
-            WidgetUtils.updateAllWidgets(getApplication())
-        }
-
-    fun resetActivity(activity: Activity) =
-        viewModelScope.launch {
-            repository.reset(activity)
-            AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
-            WidgetUtils.updateAllWidgets(getApplication())
-        }
-
-    fun clearAllActivities() =
-        viewModelScope.launch {
-            // We should probably cancel all alarms, but we don't have a list here easily.
-            // For now, let's just clear.
-            repository.clear()
-            WidgetUtils.updateAllWidgets(getApplication())
-        }
-
-    fun importActivities(activities: List<Activity>) =
-        viewModelScope.launch {
-            val ids = repository.addAll(activities)
-            // Re-schedule alarms for all imported activities that have end dates in the future
-            activities.forEachIndexed { index, activity ->
-                activity.endDateTime?.let { endTime ->
-                    val activityId = if (activity.id == 0) ids[index] else activity.id
-                    AlarmHelper.scheduleActivityEndAlarm(getApplication(), activityId, activity.activityName, endTime)
-                }
-            }
             WidgetUtils.updateAllWidgets(getApplication())
         }
 

@@ -124,7 +124,7 @@ class ChangelogAdapter(
         return try {
             val date = LocalDate.parse(dateStr)
             date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             dateStr
         }
     }

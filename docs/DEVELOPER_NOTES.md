@@ -9,13 +9,14 @@
 
 ## Overview
 
-This section entails information that the developer found useful while creating the application. It complements what is documented in the [README](README.md).
+This section entails information that the developer found useful while creating the application. It
+complements what is documented in the [README](/README.md).
 
 ---
 
 ## Project structure
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for a a visual breakdown of the project.
+See [ARCHITECTURE.md](/ARCHITECTURE.md) for a visual breakdown of the project.
 
 ---
 

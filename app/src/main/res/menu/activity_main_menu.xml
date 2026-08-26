@@ -14,14 +14,14 @@
         android:icon="@drawable/ic_filter"
         android:title="@string/menu_filter"
         app:iconTint="?attr/colorOnMenuContainer"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/sortButton"
         android:icon="@drawable/ic_sort"
         android:title="@string/menu_sort"
         app:iconTint="?attr/colorOnMenuContainer"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/settingsButton"
