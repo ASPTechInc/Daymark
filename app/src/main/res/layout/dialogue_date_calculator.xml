@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/layout_dimension_24">
+
+        <!-- Start Date -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/calculator_start_date"
+            android:textAppearance="?attr/textAppearanceTitleSmall"
+            android:textColor="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_8"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/start_day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:hint="@string/calculator_day"
+                android:inputType="number"
+                android:maxLength="2" />
+
+            <EditText
+                android:id="@+id/start_month"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:hint="@string/calculator_month"
+                android:inputType="number"
+                android:maxLength="2" />
+
+            <EditText
+                android:id="@+id/start_year"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:autofillHints="A 4-digit number"
+                android:hint="@string/calculator_year"
+                android:inputType="number"
+                android:maxLength="4" />
+
+            <ImageButton
+                android:id="@+id/btn_pick_start"
+                android:layout_width="@dimen/layout_dimension_48"
+                android:layout_height="@dimen/layout_dimension_48"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/btn_start_date"
+                android:src="@drawable/ic_dates"
+                app:iconTint="?attr/colorOnMenuContainer" />
+        </LinearLayout>
+
+        <!-- Add/Subtract dropdown -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_16"
+            android:hint="@string/calculator_op_label"
+            android:textColorHint="?attr/colorOnTertiary">
+
+            <AutoCompleteTextView
+                android:id="@+id/op_dropdown"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Duration section -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_16"
+            android:columnCount="2"
+            android:rowCount="2">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginEnd="@dimen/layout_dimension_8"
+                android:hint="@string/calculator_years"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_years"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="@string/calculator_months"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_months"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="3" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginTop="@dimen/layout_dimension_8"
+                android:layout_marginEnd="@dimen/layout_dimension_8"
+                android:hint="@string/calculator_weeks"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_weeks"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginTop="@dimen/layout_dimension_8"
+                android:hint="@string/calculator_days"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="5" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </GridLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_calculate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_24"
+            android:text="@string/calculator_btn_calculate"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            app:backgroundTint="?attr/colorPrimaryContainer" />
+
+        <!-- Results section -->
+        <LinearLayout
+            android:id="@+id/result_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_24"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
+                android:background="?attr/colorOutline" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_dimension_40"
+                android:text="@string/calculator_result_title"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorPrimary" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
+                android:background="?attr/colorOutlineVariant" />
+
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_16"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

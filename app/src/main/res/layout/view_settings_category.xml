@@ -1,0 +1,9 @@
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/layout_dimension_12"
+    android:paddingTop="@dimen/layout_dimension_16"
+    android:paddingEnd="@dimen/layout_dimension_0"
+    android:paddingBottom="@dimen/layout_dimension_8"
+    android:textAppearance="@style/SettingsCategoryTitleAppearance" />

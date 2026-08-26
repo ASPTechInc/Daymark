@@ -1,0 +1,5 @@
+Initial release of Daymark FOSS!
+- Track milestones and activities.
+- Material 3 design with dynamic colours.
+- Local JSON and CSV backup.
+- Privacy-first: no tracking or ads.

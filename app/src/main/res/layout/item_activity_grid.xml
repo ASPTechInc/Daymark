@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/layout_dimension_8"
+    app:cardCornerRadius="@dimen/layout_dimension_12"
+    app:cardElevation="@dimen/layout_dimension_2"
+    app:strokeColor="?attr/colorOutlineVariant"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/layout_dimension_12">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Drag icon -->
+            <ImageView
+                android:id="@+id/drag_handle"
+                android:layout_width="@dimen/layout_dimension_24"
+                android:layout_height="@dimen/layout_dimension_24"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/menu_drag"
+                android:src="@drawable/ic_menu"
+                android:visibility="gone"
+                app:tint="?attr/colorOnMenuContainer" />
+
+            <!-- Ellipsis button -->
+            <ImageButton
+                android:id="@+id/item_menu_button"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/menu_more"
+                android:src="@drawable/ic_vertical_ellipsis"
+                app:tint="?attr/colorOnMenuContainer" />
+        </RelativeLayout>
+
+        <!-- Activity details -->
+
+        <!-- Activity name -->
+        <TextView
+            android:id="@+id/activity_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="bold" />
+
+        <!-- Relative date -->
+        <TextView
+            android:id="@+id/relative_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_4"
+            android:textColor="?attr/colorOnTertiary"
+            android:textSize="@dimen/text_size_14"
+            android:textStyle="bold" />
+
+        <!-- Start date -->
+        <TextView
+            android:id="@+id/start_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/layout_dimension_8"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="@dimen/text_size_12" />
+
+        <!-- End date -->
+        <TextView
+            android:id="@+id/end_date_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="@dimen/text_size_12"
+            android:visibility="gone" />
+
+        <!-- Hidden fields for consistency with adapter -->
+        <!-- Notes (hidden) -->
+        <TextView
+            android:id="@+id/notes_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <!-- Archived (hidden) -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/archived_checkbox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <!-- Category (hidden) -->
+        <TextView
+            android:id="@+id/category_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tag_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+        </intent>
+    </queries>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".AppLockActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="true"
+            android:label="@string/screen_settings">
+            <intent-filter>
+                <action android:name="android.intent.action.GET_CONTENT" />
+
+                <!--<data android:type=""></data>-->
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <!-- The OPENABLE category declares that the returned file is accessible
+                     from a content provider that supports OpenableColumns
+                     and ContentResolver.openFileDescriptor() -->
+                <category android:name="android.intent.category.OPENABLE" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".NewActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+
+            <meta-data
+                android:name="androidx.PARENT_ACTIVITY"
+                android:value="com.asptechinc.daymark.MainActivity" />
+        </activity>
+
+        <receiver
+            android:name=".QuickAddWidgetProvider"
+            android:exported="true"
+            android:label="Quick Add Activity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_add_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".ActivitiesListWidgetProvider"
+            android:exported="true"
+            android:label="Activity List">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/activities_list_widget_info" />
+        </receiver>
+
+        <service
+            android:name=".ActivitiesListRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <receiver
+            android:name=".receivers.ActivityEndReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <receiver
+            android:name=".receivers.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.asptechinc.daymark.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+    </application>
+</manifest>

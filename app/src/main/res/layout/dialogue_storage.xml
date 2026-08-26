@@ -1,0 +1,139 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/layout_dimension_30"
+        android:paddingTop="@dimen/layout_dimension_10"
+        android:paddingEnd="@dimen/layout_dimension_50"
+        android:paddingBottom="@dimen/layout_dimension_24">
+
+        <!-- Storage: Categories-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/storage_label_categories"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/categories_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+
+        <!-- Storage: Tags -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/storage_label_tags"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tags_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+
+        <!-- Storage: Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="@dimen/layout_dimension_8"
+            android:background="?attr/colorOutlineVariant" />
+
+        <!-- Storage: Archived -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/storage_label_archived"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/archived_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+
+        <!-- Storage: Unarchived -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/storage_label_unarchived"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/unarchived_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+
+        <!-- Storage: Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/layout_dimension_2"
+            android:layout_marginVertical="@dimen/layout_dimension_8"
+            android:background="?attr/colorOnSurface" />
+
+        <!-- Storage: Total activities -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/storage_label_total_count"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/total_activities_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_16" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

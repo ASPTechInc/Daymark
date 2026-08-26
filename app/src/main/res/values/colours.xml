@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Brand colours (light theme) -->
+    <color name="primary">#8A3D72</color>
+    <color name="on_primary">#272123</color>
+
+    <color name="primary_container">#FFD8EC</color>
+    <color name="on_primary_container">#3A0B2F</color>
+
+    <!-- Secondary -->
+    <color name="secondary">#6C5865</color>
+    <color name="on_secondary">#826c77</color>
+
+    <color name="secondary_container">#F4DCEB</color>
+    <color name="on_secondary_container">#2B1B27</color>
+    <color name="secondary_btn_icon">#8A3D72</color>
+
+    <!-- Tertiary -->
+    <color name="tertiary">#8F4A5E</color>
+    <color name="on_tertiary">#B34D7D</color>
+
+    <!-- Surfaces -->
+    <color name="surface">#FFF8FB</color>
+    <color name="on_surface">#23171F</color>
+
+    <color name="surface_variant">#F2DDE8</color>
+    <color name="on_surface_variant">#52424C</color>
+
+    <!-- Navigation / App bar -->
+    <color name="surface_container">#F8EAF2</color>
+    <color name="on_surface_container">#2D1E27</color>
+    <color name="navbar_icon">#6B4D5D</color>
+    <color name="app_lock_container">#F8EAF2</color>
+    t
+    <!-- Outline -->
+    <color name="outline">#85707D</color>
+
+    <!-- Status -->
+    <color name="error">#BA1A1A</color>
+    <color name="on_error">#000000</color>
+    <color name="on_info">#000000</color>
+
+    <!-- Menu -->
+    <color name="menu_container">#F8EAF2</color>
+    <color name="on_menu_container">#2D1E27</color>
+
+    <!-- Checkboxes -->
+    <color name="checkbox_checked">#2B1B27</color>
+    <color name="checkbox_unchecked">#85707D</color>
+</resources>

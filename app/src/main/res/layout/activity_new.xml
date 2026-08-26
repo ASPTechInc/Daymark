@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.asptechinc.daymark.NewActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSurfaceContainer"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay"
+            app:titleTextColor="?attr/colorOnSurfaceContainer" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behaviour">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/layout_dimension_16"
+            android:paddingTop="@dimen/layout_dimension_16"
+            android:paddingEnd="@dimen/layout_dimension_16"
+            android:paddingBottom="@dimen/layout_dimension_90">
+
+            <!--  Activity name -->
+            <TextView
+                android:id="@+id/activityLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/activity_label"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_8"
+                android:hint="@string/activity_name_hint"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/activityName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:inputType="text"
+                    android:minHeight="@dimen/layout_dimension_48"
+                    android:textColor="?attr/colorOnSurface" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Notes -->
+            <TextView
+                android:id="@+id/notesLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="@string/activity_notes_label"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_size_16"
+                android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_8"
+                android:hint="@string/activity_notes_hint"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/notes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints=""
+                    android:gravity="top|start"
+
+                    android:inputType="textMultiLine"
+                    android:maxLines="6"
+                    android:minHeight="120dp"
+                    android:minLines="4"
+                    android:padding="@dimen/layout_dimension_12" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Archived -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_archived_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/archived_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+            </LinearLayout>
+
+            <!--  Category -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/categoryLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/activity_category_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_manage_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:text="@string/settings_manage_categories"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/category_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/activity_category_hint"
+                android:labelFor="@+id/category_dropdown"
+                android:textColorHint="?attr/colorOnTertiary">
+
+                <AutoCompleteTextView
+                    android:id="@+id/category_dropdown"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!--  Tags -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/activity_tags_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_manage_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:text="@string/settings_manage_tags"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/tag_chip_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                app:singleSelection="false">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/tag_chip_example"
+                    style="@style/Widget.Material3.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_tags_example"
+                    android:textColor="?attr/colorOnTertiary" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Dates -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_24"
+                android:baselineAligned="false"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Start date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/startDateLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_start_date_label"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/startDateButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_dimension_8"
+                        android:text="@string/btn_start_date"
+                        android:textColor="?attr/colorOnPrimaryContainer"
+                        app:backgroundTint="?attr/colorPrimaryContainer" />
+                </LinearLayout>
+
+                <!-- End date -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/endDateLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activity_end_date_label"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="@dimen/text_size_16"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/endDateButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/layout_dimension_8"
+                        android:text="@string/btn_end_date"
+                        android:textColor="?attr/colorOnPrimaryContainer"
+                        app:backgroundTint="?attr/colorPrimaryContainer" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/layout_dimension_30"
+                android:orientation="horizontal">
+
+                <!-- Cancel button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_cancel"
+                    android:textColor="?attr/colorOnSecondaryContainer"
+                    app:backgroundTint="?attr/colorSecondaryContainer"
+                    app:cornerRadius="@dimen/layout_dimension_4"
+                    app:strokeColor="?attr/colorOutline"
+                    app:strokeWidth="@dimen/layout_dimension_2" />
+
+                <Space
+                    android:layout_width="@dimen/layout_dimension_12"
+                    android:layout_height="wrap_content" />
+
+                <!-- Save button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/saveButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/btn_save"
+                    android:textColor="?attr/colorOnPrimaryContainer"
+                    app:backgroundTint="?attr/colorPrimaryContainer" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

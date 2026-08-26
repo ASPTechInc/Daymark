@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+          "name": "Run Android app (emulator)",
+          "type": "node-terminal",
+          "request": "launch",
+          "command": "echo Starting Android app...",
+          "preLaunchTask": "Launch Android app (emulator)"
+        },
+        {
+          "name": "Run Android app (connected device)",
+          "type": "node-terminal",
+          "request": "launch",
+          "command": "echo Starting Android app...",
+          "preLaunchTask": "Launch Android app (connected device)"
+        },
+        {
+          "name": "Run Android app (automatically detect device)",
+          "type": "node-terminal",
+          "request": "launch",
+          "command": "echo Starting Android app...",
+          "preLaunchTask": "Launch Android app (auto)"
+        },
+         {
+          "name": "Stop Android emulator",
+          "type": "node-terminal",
+          "request": "launch",
+          "command": "echo Stopping Android emulator...",
+          "preLaunchTask": "Stop Android emulator"
+        }
+
+        
+    ]
+}

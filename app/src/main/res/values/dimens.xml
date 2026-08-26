@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+
+    <!-- Text sizes -->
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_14">14sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="text_size_32">32sp</dimen>
+
+    <!-- Layout dimensions in density-independent (dp) pixels -->
+    <dimen name="layout_dimension_0">0dp</dimen>
+    <dimen name="layout_dimension_1">1dp</dimen>
+    <dimen name="layout_dimension_2">2dp</dimen>
+    <dimen name="layout_dimension_4">4dp</dimen>
+    <dimen name="layout_dimension_6">6dp</dimen>
+    <dimen name="layout_dimension_8">8dp</dimen>
+    <dimen name="layout_dimension_10">10dp</dimen>
+    <dimen name="layout_dimension_12">12dp</dimen>
+    <dimen name="layout_dimension_16">16dp</dimen>
+    <dimen name="layout_dimension_18">18dp</dimen>
+    <dimen name="layout_dimension_20">20dp</dimen>
+    <dimen name="layout_dimension_24">24dp</dimen>
+    <dimen name="layout_dimension_30">30dp</dimen>
+    <dimen name="layout_dimension_40">40dp</dimen>
+    <dimen name="layout_dimension_48">48dp</dimen>
+    <dimen name="layout_dimension_50">50dp</dimen>
+    <dimen name="layout_dimension_72">72dp</dimen>
+    <dimen name="layout_dimension_90">90dp</dimen>
+    <dimen name="layout_dimension_180">180dp</dimen>
+</resources>
