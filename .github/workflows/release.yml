@@ -119,7 +119,7 @@ jobs:
 
       - name: Check if release exists
         id: check_release
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const version = process.env.VERSION;
