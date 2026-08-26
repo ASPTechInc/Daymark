@@ -7,24 +7,27 @@ import android.text.style.StyleSpan
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
 import com.asptechinc.daymark.R
 import com.asptechinc.daymark.models.Category
 import com.asptechinc.daymark.models.Tag
-import com.asptechinc.daymark.repository.SettingsRepository
-import com.asptechinc.daymark.repository.SettingsState
+import com.asptechinc.daymark.repository.BackupRepository
+import com.asptechinc.daymark.repository.BackupState
 import com.asptechinc.daymark.repository.initialActivities
 import com.asptechinc.daymark.repository.initialCategories
 import com.asptechinc.daymark.repository.initialTags
+import com.asptechinc.daymark.utils.AlarmHelper
 import com.asptechinc.daymark.utils.dpToPx
 import com.asptechinc.daymark.utils.i18n
 import com.asptechinc.daymark.utils.showStyled
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class DataManagementHandler(
     private val fragment: PreferenceFragmentCompat,
-    private val repository: SettingsRepository,
+    private val repository: BackupRepository,
 ) {
     fun confirmClearAllActivities() {
         val context = fragment.requireContext()
@@ -32,76 +35,136 @@ class DataManagementHandler(
             .setTitle(R.string.settings_label_clear_all)
             .setMessage(R.string.settings_clear_all_confirm)
             .setPositiveButton(R.string.btn_clear) { _, _ ->
-                val state = repository.loadSettingsState()
-                state.activities.clear()
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_clear_all_done), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    val state = repository.loadBackupState()
+                    state.activities.clear()
+                    repository.saveBackupState(state)
+                    AlarmHelper.rescheduleAllAlarms(context)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.settings_clear_all_done),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
+    }
+
+    fun showAppStorageDialogue() {
+        fragment.lifecycleScope.launch {
+            val state = repository.loadBackupState()
+            val categoryCount = state.categories.size
+            val tagsCount = state.tags.size
+            val archiveCountChecked =
+                state.activities.count { it.archived == true }
+            val archiveCountUnchecked =
+                state.activities.count { it.archived == false }
+            val activitiesCount = state.activities.size
+            val context = fragment.requireContext()
+
+            val dialogView =
+                fragment.layoutInflater.inflate(
+                    R.layout.dialogue_storage,
+                    null,
+                )
+            dialogView.findViewById<TextView>(R.id.categories_count).text =
+                categoryCount.toString()
+
+            dialogView.findViewById<TextView>(R.id.tags_count).text =
+                tagsCount.toString()
+
+            dialogView.findViewById<TextView>(R.id.archived_count).text =
+                archiveCountChecked.toString()
+
+            dialogView.findViewById<TextView>(R.id.unarchived_count).text =
+                archiveCountUnchecked.toString()
+
+            dialogView.findViewById<TextView>(R.id.total_activities_count).text =
+                activitiesCount.toString()
+
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.settings_view_app_data)
+                .setView(dialogView)
+                .setNegativeButton(R.string.btn_close, null)
+                .showStyled()
+        }
     }
 
     fun confirmFullReset() {
         val context = fragment.requireContext()
         MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.settings_reset)
+            .setTitle(R.string.settings_label_reset)
             .setMessage(R.string.settings_reset_confirm)
-            .setPositiveButton(R.string.confirm_dialogue_yes) { _, _ ->
-                val resetState =
-                    SettingsState(
-                        activities = initialActivities(context),
-                        categories = initialCategories(),
-                        tags = initialTags(),
-                    )
-                repository.saveSettingsState(resetState)
-                Toast.makeText(context, context.i18n(R.string.settings_reset_done), Toast.LENGTH_LONG).show()
-            }.setNegativeButton(R.string.confirm_dialogue_no, null)
+            .setPositiveButton(R.string.btn_yes) { _, _ ->
+                fragment.lifecycleScope.launch {
+                    val resetState =
+                        BackupState(
+                            activities = initialActivities(context),
+                            categories = initialCategories(),
+                            tags = initialTags(),
+                        )
+                    repository.saveBackupState(resetState)
+                    AlarmHelper.rescheduleAllAlarms(context)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.settings_reset_done),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
+            }.setNegativeButton(R.string.btn_no, null)
             .showStyled()
     }
 
     fun showManageCategoriesDialogue() {
-        val state = repository.loadSettingsState()
-        val categoryNames = state.categories.map { it.name }.toTypedArray()
-        val context = fragment.requireContext()
+        fragment.lifecycleScope.launch {
+            val state = repository.loadBackupState()
+            val categoryNames = state.categories.map { it.name }.toTypedArray()
+            val context = fragment.requireContext()
 
-        MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.settings_manage_categories)
-            .setMessage(
-                if (categoryNames.isEmpty()) {
-                    context.i18n(R.string.settings_manage_categories_empty)
-                } else {
-                    null
-                },
-            ).setItems(categoryNames) { _, which ->
-                showCategoryActionDialogue(state, state.categories[which].id)
-            }.setPositiveButton(R.string.settings_add) { _, _ ->
-                showAddCategoryDialogue(state)
-            }.setNegativeButton(R.string.settings_close, null)
-            .showStyled()
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.settings_manage_categories)
+                .setMessage(
+                    if (categoryNames.isEmpty()) {
+                        context.i18n(R.string.settings_manage_categories_empty)
+                    } else {
+                        null
+                    },
+                ).setItems(categoryNames) { _, which ->
+                    showCategoryActionDialogue(state, state.categories[which].id)
+                }.setPositiveButton(R.string.btn_add) { _, _ ->
+                    showAddCategoryDialogue(state)
+                }.setNegativeButton(R.string.btn_close, null)
+                .showStyled()
+        }
     }
 
     fun showManageTagsDialogue() {
-        val state = repository.loadSettingsState()
-        val tagNames = state.tags.map { it.name }.toTypedArray()
-        val context = fragment.requireContext()
+        fragment.lifecycleScope.launch {
+            val state = repository.loadBackupState()
+            val tagNames = state.tags.map { it.name }.toTypedArray()
+            val context = fragment.requireContext()
 
-        MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.settings_manage_tags)
-            .setMessage(
-                if (tagNames.isEmpty()) {
-                    context.i18n(R.string.settings_manage_tags_empty)
-                } else {
-                    null
-                },
-            ).setItems(tagNames) { _, which ->
-                showTagActionDialogue(state, state.tags[which].id)
-            }.setPositiveButton(R.string.settings_add) { _, _ ->
-                showAddTagDialogue(state)
-            }.setNegativeButton(R.string.settings_close, null)
-            .showStyled()
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.settings_manage_tags)
+                .setMessage(
+                    if (tagNames.isEmpty()) {
+                        context.i18n(R.string.settings_manage_tags_empty)
+                    } else {
+                        null
+                    },
+                ).setItems(tagNames) { _, which ->
+                    showTagActionDialogue(state, state.tags[which].id)
+                }.setPositiveButton(R.string.btn_add) { _, _ ->
+                    showAddTagDialogue(state)
+                }.setNegativeButton(R.string.btn_close, null)
+                .showStyled()
+        }
     }
 
     private fun showCategoryActionDialogue(
-        state: SettingsState,
+        state: BackupState,
         categoryId: Int,
     ) {
         val category = state.categories.firstOrNull { it.id == categoryId } ?: return
@@ -113,7 +176,7 @@ class DataManagementHandler(
         val renameAction = view.findViewById<TextView>(R.id.renameAction)
         val deleteAction = view.findViewById<TextView>(R.id.deleteAction)
 
-        explanation.text = context.i18n(R.string.settings_manage_action_title)
+        explanation.text = context.i18n(R.string.dialogue_action_prompt)
 
         val textColour =
             MaterialColors.getColor(
@@ -149,7 +212,7 @@ class DataManagementHandler(
     }
 
     private fun showTagActionDialogue(
-        state: SettingsState,
+        state: BackupState,
         tagId: Int,
     ) {
         val tag = state.tags.firstOrNull { it.id == tagId } ?: return
@@ -160,7 +223,7 @@ class DataManagementHandler(
         val renameAction = view.findViewById<TextView>(R.id.renameAction)
         val deleteAction = view.findViewById<TextView>(R.id.deleteAction)
 
-        explanation.text = context.i18n(R.string.settings_manage_action_title)
+        explanation.text = context.i18n(R.string.dialogue_action_prompt)
 
         val textColour =
             MaterialColors.getColor(
@@ -195,79 +258,113 @@ class DataManagementHandler(
             .showStyled()
     }
 
-    private fun showAddCategoryDialogue(state: SettingsState) {
+    private fun showAddCategoryDialogue(state: BackupState) {
         val context = fragment.requireContext()
-        val input = EditText(context).apply { hint = context.i18n(R.string.settings_name_hint) }
+        val input = EditText(context).apply { hint = context.i18n(R.string.hint_new_item_name) }
 
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.settings_manage_categories)
             .setView(input)
-            .setPositiveButton(R.string.settings_add) { _, _ ->
+            .setPositiveButton(R.string.btn_add) { _, _ ->
                 val name =
                     input.text
                         ?.toString()
                         ?.trim()
                         .orEmpty()
                 if (name.isBlank()) {
-                    Toast.makeText(context, context.i18n(R.string.settings_empty_name_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_empty_item_name),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 val exists = state.categories.any { it.name.equals(name, ignoreCase = true) }
                 if (exists) {
-                    Toast.makeText(context, context.i18n(R.string.settings_name_exists_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_item_name_exists),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 val nextId = (state.categories.maxOfOrNull { it.id } ?: 0) + 1
                 state.categories.add(Category(nextId, name))
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_saved), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_saved),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
     }
 
-    private fun showAddTagDialogue(state: SettingsState) {
+    private fun showAddTagDialogue(state: BackupState) {
         val context = fragment.requireContext()
-        val input = EditText(context).apply { hint = context.i18n(R.string.settings_name_hint) }
+        val input = EditText(context).apply { hint = context.i18n(R.string.hint_new_item_name) }
 
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.settings_manage_tags)
             .setView(input)
-            .setPositiveButton(R.string.settings_add) { _, _ ->
+            .setPositiveButton(R.string.btn_add) { _, _ ->
                 val name =
                     input.text
                         ?.toString()
                         ?.trim()
                         .orEmpty()
                 if (name.isBlank()) {
-                    Toast.makeText(context, context.i18n(R.string.settings_empty_name_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_empty_item_name),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 val exists = state.tags.any { it.name.equals(name, ignoreCase = true) }
                 if (exists) {
-                    Toast.makeText(context, context.i18n(R.string.settings_name_exists_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_item_name_exists),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 val nextId = (state.tags.maxOfOrNull { it.id } ?: 0) + 1
                 state.tags.add(Tag(nextId, name))
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_saved), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_saved),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
     }
 
     private fun showRenameCategoryDialogue(
-        state: SettingsState,
+        state: BackupState,
         categoryId: Int,
     ) {
         val category = state.categories.firstOrNull { it.id == categoryId } ?: return
         val context = fragment.requireContext()
         val input =
             EditText(context).apply {
-                hint = context.i18n(R.string.settings_name_hint)
+                hint = context.i18n(R.string.hint_new_item_name)
                 setText(category.name)
                 setSelection(category.name.length)
 
@@ -284,14 +381,19 @@ class DataManagementHandler(
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.settings_rename_category)
             .setView(input)
-            .setPositiveButton(R.string.settings_action_rename) { _, _ ->
+            .setPositiveButton(R.string.btn_rename) { _, _ ->
                 val newName =
                     input.text
                         ?.toString()
                         ?.trim()
                         .orEmpty()
                 if (newName.isBlank()) {
-                    Toast.makeText(context, context.i18n(R.string.settings_empty_name_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_empty_item_name),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
@@ -300,26 +402,38 @@ class DataManagementHandler(
                         it.id != categoryId && it.name.equals(newName, ignoreCase = true)
                     }
                 if (exists) {
-                    Toast.makeText(context, context.i18n(R.string.settings_name_exists_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_item_name_exists),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 category.name = newName
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_saved), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_saved),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
     }
 
     private fun showRenameTagDialogue(
-        state: SettingsState,
+        state: BackupState,
         tagId: Int,
     ) {
         val tag = state.tags.firstOrNull { it.id == tagId } ?: return
         val context = fragment.requireContext()
         val input =
             EditText(context).apply {
-                hint = context.i18n(R.string.settings_name_hint)
+                hint = context.i18n(R.string.hint_new_item_name)
                 setText(tag.name)
                 setSelection(tag.name.length)
 
@@ -336,14 +450,19 @@ class DataManagementHandler(
         MaterialAlertDialogBuilder(context)
             .setTitle(R.string.settings_rename_tag)
             .setView(input)
-            .setPositiveButton(R.string.settings_action_rename) { _, _ ->
+            .setPositiveButton(R.string.btn_rename) { _, _ ->
                 val newName =
                     input.text
                         ?.toString()
                         ?.trim()
                         .orEmpty()
                 if (newName.isBlank()) {
-                    Toast.makeText(context, context.i18n(R.string.settings_empty_name_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_empty_item_name),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
@@ -352,25 +471,37 @@ class DataManagementHandler(
                         it.id != tagId && it.name.equals(newName, ignoreCase = true)
                     }
                 if (exists) {
-                    Toast.makeText(context, context.i18n(R.string.settings_name_exists_error), Toast.LENGTH_LONG).show()
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.error_item_name_exists),
+                            Toast.LENGTH_LONG,
+                        ).show()
                     return@setPositiveButton
                 }
 
                 tag.name = newName
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_saved), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_saved),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
     }
 
     private fun confirmDeleteCategory(
-        state: SettingsState,
+        state: BackupState,
         categoryId: Int,
     ) {
         val category = state.categories.firstOrNull { it.id == categoryId } ?: return
         val context = fragment.requireContext()
 
-        val message = context.getString(R.string.settings_confirm_delete, category.name)
+        val message = context.getString(R.string.confirm_dialogue_delete_prompt, category.name)
         val start = message.indexOf(category.name)
         val end = start + category.name.length
 
@@ -394,20 +525,27 @@ class DataManagementHandler(
                         activity.categoryId = null
                     }
                 }
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_deleted), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_deleted),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_no, null)
             .showStyled()
     }
 
     private fun confirmDeleteTag(
-        state: SettingsState,
+        state: BackupState,
         tagId: Int,
     ) {
         val tag = state.tags.firstOrNull { it.id == tagId } ?: return
         val context = fragment.requireContext()
 
-        val message = context.getString(R.string.settings_confirm_delete, tag.name)
+        val message = context.getString(R.string.confirm_dialogue_delete_prompt, tag.name)
         val start = message.indexOf(tag.name)
         val end = start + tag.name.length
 
@@ -429,8 +567,15 @@ class DataManagementHandler(
                 state.activities.forEach { activity ->
                     activity.tagIds = activity.tagIds.filterNot { it == tagId }.toMutableList()
                 }
-                repository.saveSettingsState(state)
-                Toast.makeText(context, context.i18n(R.string.settings_item_deleted), Toast.LENGTH_LONG).show()
+                fragment.lifecycleScope.launch {
+                    repository.saveBackupState(state)
+                    Toast
+                        .makeText(
+                            context,
+                            context.i18n(R.string.toast_item_deleted),
+                            Toast.LENGTH_LONG,
+                        ).show()
+                }
             }.setNegativeButton(R.string.btn_no, null)
             .showStyled()
     }

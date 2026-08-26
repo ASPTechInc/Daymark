@@ -8,5 +8,7 @@ data class ListOptions(
     val categoryId: Int? = null,
     val month: Int? = null,
     val year: Int? = null,
+    val showArchived: Boolean? = null,
+    val showCompleted: Boolean? = null,
     val sortByName: Boolean = false,
 )

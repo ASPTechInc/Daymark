@@ -1,153 +1,198 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- General -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_general">
         <Preference
             android:icon="@drawable/ic_palette"
             android:key="@string/settings_key_theme_config"
-            android:summary="Set light or dark theme for the app."
+            android:summary="@string/summary_theme_mode"
             android:title="@string/settings_label_theme"
             app:iconTint="?attr/colorOnMenuContainer" />
+        <Preference
+            android:icon="@drawable/ic_list_view"
+            android:key="@string/settings_key_layout_mode"
+            android:summary="@string/summary_app_layout"
+            android:title="@string/settings_label_app_layout"
+            app:iconTint="?attr/colorOnMenuContainer" />
+        <Preference
+            android:icon="@drawable/ic_calendar"
+            android:key="@string/settings_key_time_unit"
+            android:summary="@string/summary_time_unit"
+            android:title="@string/settings_label_time_unit"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <SwitchPreferenceCompat
+            android:key="@string/settings_key_notifications"
+            android:summary="@string/summary_notifications"
+            android:title="@string/settings_label_notifications"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <!-- Date calculators -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_date_calculators">
         <Preference
             android:icon="@drawable/ic_days"
             android:key="@string/settings_key_days_calculator"
-            android:summary="How many days, months and years are there between two days?"
+            android:summary="@string/summary_days_calculator"
             android:title="@string/settings_label_days_calculator"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_dates"
             android:key="@string/settings_key_date_calculator"
-            android:summary="Enter a start date and add or subtract any number of days, months or years."
+            android:summary="@string/summary_date_calculator"
             android:title="@string/settings_label_date_calculator"
             app:iconTint="?attr/colorOnMenuContainer" />
     </PreferenceCategory>
 
+    <!-- Data management -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_data_management">
         <Preference
             android:icon="@drawable/ic_delete"
             android:key="@string/settings_key_clear_all"
-            android:summary="Remove all activities."
+            android:summary="@string/summary_clear_all"
             android:title="@string/settings_label_clear_all"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_tune"
             android:key="@string/settings_key_category"
-            android:summary="Add, rename or delete categories."
+            android:summary="@string/summary_manage_categories"
             android:title="@string/settings_manage_categories"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_filter"
             android:key="@string/settings_key_tags"
-            android:summary="Add, rename or delete tags."
+            android:summary="@string/summary_manage_tags"
             android:title="@string/settings_manage_tags"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_database"
+            android:key="@string/settings_key_app_storage"
+            android:summary="@string/summary_app_storage"
+            android:title="@string/settings_view_app_data"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_refresh"
             android:key="@string/settings_key_reset"
-            android:summary="Revert to the default state of the app."
-            android:title="@string/settings_reset"
+            android:summary="@string/summary_app_reset"
+            android:title="@string/settings_label_reset"
             app:iconTint="?attr/colorOnMenuContainer" />
     </PreferenceCategory>
 
+    <!-- Security -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_security">
 
         <SwitchPreferenceCompat
-            android:key="@string/settings_key_app_pin"
-            android:summary="Password or PIN to protect the whole application."
+            android:key="@string/settings_key_manage_app_pin"
+            android:summary="@string/summary_app_pin"
             android:title="@string/settings_label_set_app_pin"
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <!-- Backup -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_backup">
         <Preference
             android:icon="@drawable/ic_restore"
             android:key="@string/settings_key_import_backup"
-            android:summary="Load activities from a backup file."
+            android:summary="@string/summary_import_backup"
             android:title="@string/settings_label_import_backup" />
 
         <Preference
             android:icon="@drawable/ic_backup"
             android:key="@string/settings_key_export_backup"
-            android:summary="Create a backup by exporting all activities to a file."
+            android:summary="@string/summary_export_backup"
             android:title="@string/settings_label_export_backup" />
+
+        <Preference
+            android:icon="@drawable/ic_share"
+            android:key="@string/settings_key_export_csv"
+            android:summary="@string/summary_export_csv"
+            android:title="@string/settings_label_export_csv" />
     </PreferenceCategory>
 
+    <!-- About -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_about">
 
         <Preference
             android:icon="@drawable/ic_privacy_policy"
             android:key="@string/settings_key_privacy_policy"
-            android:summary="View in-app privacy policy."
+            android:summary="@string/summary_privacy_policy"
             android:title="@string/settings_label_privacy_policy"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_licence"
             android:key="@string/settings_key_licence"
-            android:summary="View in-app licence."
+            android:summary="@string/summary_app_licence"
             android:title="Licence"
+            app:iconTint="?attr/colorOnMenuContainer" />
+
+        <Preference
+            android:icon="@drawable/ic_licence"
+            android:key="@string/settings_key_oss_licences"
+            android:summary="@string/summary_oss_licences"
+            android:title="@string/settings_label_oss_licences"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_system_update"
             android:key="@string/settings_key_app_updater"
-            android:summary="Update Daymark to the latest version."
+            android:summary="@string/summary_app_updater"
             android:title="@string/settings_label_app_updater"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_info"
             android:key="@string/settings_key_app_version"
-            android:summary="The current build and version of the application."
+            android:summary="@string/summary_app_version"
             android:title="@string/settings_label_app_version"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_history"
             android:key="@string/settings_key_app_changelog"
-            android:summary="Changes made in the application."
+            android:summary="@string/summary_app_changelog"
             android:title="Changelog"
             app:iconTint="?attr/colorOnMenuContainer" />
     </PreferenceCategory>
 
+    <!-- Support -->
     <PreferenceCategory
-        android:layout="@layout/settings_category"
+        android:layout="@layout/view_settings_category"
         android:title="@string/settings_category_support">
 
         <Preference
             android:icon="@drawable/ic_donation"
             android:key="@string/settings_key_donate"
-            android:summary="View how to donate to Daymark\'s lead app developer"
+            android:summary="@string/summary_donate"
             android:title="Donation"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
             android:icon="@drawable/ic_open_external"
             android:key="@string/settings_key_app_source_code"
-            android:summary="View Daymark's source code on GitHub."
+            android:summary="@string/summary_app_source_code"
             android:title="Source code"
             app:iconTint="?attr/colorOnMenuContainer" />
 
         <Preference
-            android:layout="@layout/spacer_bottom"
+            android:layout="@layout/view_spacer_bottom"
             android:selectable="false"
             android:shouldDisableView="false"
             app:iconSpaceReserved="false" />

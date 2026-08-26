@@ -43,6 +43,7 @@ class CalculatorSettingsHandler(
         val btnCalculate = dialogueView.findViewById<MaterialButton>(R.id.btn_calculate)
         val resultContainer = dialogueView.findViewById<LinearLayout>(R.id.result_container)
         val resultText = dialogueView.findViewById<TextView>(R.id.result_text)
+        val scrollView = dialogueView.findViewById<View>(R.id.scroll_view)
 
         // Setup dropdown
         val ops =
@@ -72,7 +73,12 @@ class CalculatorSettingsHandler(
         btnCalculate.setOnClickListener {
             val start = parseDate(startDay, startMonth, startYear)
             if (start == null) {
-                Toast.makeText(context, context.i18n(R.string.calculator_error_invalid_date), Toast.LENGTH_LONG).show()
+                Toast
+                    .makeText(
+                        context,
+                        context.i18n(R.string.calculator_error_invalid_date),
+                        Toast.LENGTH_LONG,
+                    ).show()
                 return@setOnClickListener
             }
 
@@ -100,13 +106,19 @@ class CalculatorSettingsHandler(
             val formattedDate = resultDate.format(DateTimeFormatter.ofPattern("EEEE, d MMMM yyyy"))
             resultText.text = formattedDate
             resultContainer.visibility = View.VISIBLE
+
+            scrollView.post {
+                if (scrollView is android.widget.ScrollView) {
+                    scrollView.fullScroll(View.FOCUS_DOWN)
+                }
+            }
         }
 
         val dialogue =
             MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.settings_label_date_calculator)
                 .setView(dialogueView)
-                .setNegativeButton(R.string.settings_close, null)
+                .setNegativeButton(R.string.btn_close, null)
                 .create()
 
         dialogue.setOnShowListener { styleDialogue(dialogue) }
@@ -137,6 +149,7 @@ class CalculatorSettingsHandler(
         val resultBusinessDays = dialogueView.findViewById<TextView>(R.id.result_business_days)
         val resultWeekends = dialogueView.findViewById<TextView>(R.id.result_weekends)
         val resultTotalDays = dialogueView.findViewById<TextView>(R.id.result_total_days)
+        val scrollView = dialogueView.findViewById<View>(R.id.scroll_view)
 
         // Set current date as default
         val now = LocalDateTime.now()
@@ -169,12 +182,22 @@ class CalculatorSettingsHandler(
             val end = parseDate(endDay, endMonth, endYear)
 
             if (start == null || end == null) {
-                Toast.makeText(context, context.i18n(R.string.calculator_error_invalid_date), Toast.LENGTH_LONG).show()
+                Toast
+                    .makeText(
+                        context,
+                        context.i18n(R.string.calculator_error_invalid_date),
+                        Toast.LENGTH_LONG,
+                    ).show()
                 return@setOnClickListener
             }
 
             if (end.isBefore(start)) {
-                Toast.makeText(context, context.i18n(R.string.calculator_error_end_before_start), Toast.LENGTH_LONG).show()
+                Toast
+                    .makeText(
+                        context,
+                        context.i18n(R.string.calculator_error_end_before_start),
+                        Toast.LENGTH_LONG,
+                    ).show()
                 return@setOnClickListener
             }
 
@@ -188,6 +211,7 @@ class CalculatorSettingsHandler(
                 resultBusinessDays,
                 resultWeekends,
                 resultTotalDays,
+                scrollView,
             )
         }
 
@@ -195,7 +219,7 @@ class CalculatorSettingsHandler(
             MaterialAlertDialogBuilder(context)
                 .setTitle(R.string.settings_label_days_calculator)
                 .setView(dialogueView)
-                .setNegativeButton(R.string.settings_close, null)
+                .setNegativeButton(R.string.btn_close, null)
                 .create()
 
         dialogue.setOnShowListener { styleDialogue(dialogue) }
@@ -239,6 +263,7 @@ class CalculatorSettingsHandler(
         businessDaysTv: TextView,
         weekendsTv: TextView,
         totalDaysTv: TextView,
+        scrollView: View,
     ) {
         var actualEnd = end
         if (includeEndDate) {
@@ -258,7 +283,8 @@ class CalculatorSettingsHandler(
         }
 
         val totalDays = ChronoUnit.DAYS.between(startDate, endDate).toInt()
-        val weeksInPeriod = (totalDays - (period.years * 365) - (period.months * 30)) / 7 // Rough approximation for breakdown
+        val weeksInPeriod =
+            (totalDays - (period.years * 365) - (period.months * 30)) / 7 // Rough approximation for breakdown
         // Actually java.time.Period.between is good for Y/M/D.
         // If we want weeks in the breakdown, it's tricky because Period doesn't have them.
 
@@ -300,7 +326,8 @@ class CalculatorSettingsHandler(
             current = current.plusDays(1)
         }
 
-        businessDaysTv.text = context.getString(R.string.calculator_result_business_days, businessDays)
+        businessDaysTv.text =
+            context.getString(R.string.calculator_result_business_days, businessDays)
         weekendsTv.text =
             context.getString(
                 R.string.calculator_result_weekends,
@@ -311,5 +338,11 @@ class CalculatorSettingsHandler(
         totalDaysTv.text = context.getString(R.string.calculator_result_total_days, totalDays)
 
         container.visibility = View.VISIBLE
+
+        scrollView.post {
+            if (scrollView is android.widget.ScrollView) {
+                scrollView.fullScroll(View.FOCUS_DOWN)
+            }
+        }
     }
 }

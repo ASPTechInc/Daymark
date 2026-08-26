@@ -2,7 +2,7 @@
 # when a tag matching 'v*' is pushed to the 'main' branch
 # e.g. git tag v1.0.0
 #      git push origin v1.0.0
-name: Create Daymark Release
+name: Create Daymark release
 
 on:
   push:
@@ -67,14 +67,14 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/daymark-foss-release.apk
           retention-days: 1
 
       - name: Upload Bundle artefact
         uses: actions/upload-artifact@v4
         with:
           name: app-release-bundle
-          path: app/build/outputs/bundle/release/app-release.aab
+          path: app/build/outputs/bundle/release/daymark-foss-release.aab
           retention-days: 1
 
       - name: Upload version artefact
@@ -159,8 +159,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app-release.apk
-          asset_name: Daymark-v${{ env.VERSION }}.apk
+          asset_path: ./daymark-foss-release.apk
+          asset_name: daymark-v${{ env.VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload Bundle to Release
@@ -170,13 +170,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./app-release.aab
-          asset_name: Daymark-v${{ env.VERSION }}.aab
+          asset_path: ./daymark-foss-release.aab
+          asset_name: daymark-v${{ env.VERSION }}.aab
           asset_content_type: application/octet-stream
 
       - name: Cleanup
         if: always()
         run: |
           rm -f version.txt
-          rm -f app-release.apk
-          rm -f app-release.aab
+          rm -f daymark-foss-release.apk
+          rm -f daymark-foss-release.aab

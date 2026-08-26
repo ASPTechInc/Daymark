@@ -1,187 +1,77 @@
+<a id="top"></a>
+
 # Daymark
+
+![Continuous Integration](https://github.com/ASPTechInc/Daymark/actions/workflows/ci.yml/badge.svg)
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
-  - [Future features](#future-features)
 - [Screenshots](#screenshots)
 - [Requirements](#requirements)
-- [Setup and Installation](#setting-up-and-running-the-kotlin-android-app)
-  - [Install Java](#1-install-java-jdk)
-  - [Install Android Studio](#2-install-android-studio)
-  - [Configure Android SDK](#3-configure-android-sdk-paths)
-- [Running the Application](#running-the-application)
-- [Testing the Application](#testing-the-application)
-- [Releasing the Application](#releasing-the-application)
-  - [Create a keystore file](#create-a-keystore-file)
-  - [Encode the keystore file](#encode-the-keystore-file)
-  - [Update the example keystore file](#update-the-example-keystore-file-in-the-project)
-  - [Create environment secrets in GitHub repository](#create-environment-secrets-in-gitHub-repository)
-  - [Create app release](#create-app-release)
-- [Project Structure](#project-structure)
-- [Development Workflow](#development-workflow)
-  - [Code Formatting](#code-formatting)
-  - [Android Studio Settings](#android-studio-settings)
-- [Gradle Tools](#code-quality-gradle-tools)
-  - [Ktlint](#ktlint)
-- [Application Usage](#application-usage)
-  - [Creating a Day Counter](#creating-a-day-counter)
-  - [Editing Items](#editing-items)
-  - [Item Actions](#item-actions)
-  - [Search, Filter and Sort](#search-filter-and-sort)
-  - [Future features](#future-features)
-- [Data Storage](#data-storage)
+- [Setup and installation](#setting-up-and-running-the-kotlin-android-app)
+- [Running the application](#running-the-application)
+- [Testing the application](#testing-the-application)
+- [Releasing the application](#releasing-the-application)
+- [Application usage](#application-usage)
+- [F-Droid Metadata](#f-droid-metadata)
 - [Contributing](#contributing)
 - [Licence](#licence)
 - [Support](#support)
-- [Connect with me](#connect-with-me)
+
+---
+[⬇️ Go to bottom](#bottom)
 
 ## Overview
 
 Daymark is a free open source (FOSS) Android application written in Kotlin that counts the number of
-days since
-or until a given date. It is [MIT licence](#licence).
+days since or until a given date for events. It is released under the [MIT licence](#licence).
 
-It builds on the
-original [Count The Days Android application](https://github.com/sreich/android-count-the-days)
-created by [sreich](https://github.com/sreich) as a fork that preserves the foundation of the
-original project while introducing enhancements.
+It builds on the original
+[Count The Days Android application](https://github.com/sreich/android-count-the-days)
+created by [sreich](https://github.com/sreich) by preserving the foundation of the
+original project while introducing modern enhancements like Material 3, widgets and advanced
+notifications.
 
 ---
 
 ## Features
 
-See the [Application usage](#application-usage) section for a detailed list of features.
-
-|     |                                                                                                                                             |
-| --- | :-----------------------------------------------------------------------------------------------------------------------------------------: |
-| ✅  |                                **Create day activities** for activities, events, milestones, and reminders.                                 |
-| ✅  |                                **Optional end dates** to track date ranges in addition to single-day events.                                |
-| ✅  |                 **Relative time display** showing elapsed or remaining time (for example, _3 weeks ago_ or _in 2 months_).                  |
-| ✅  |                  **Exact start and end dates** displayed using a human-friendly format (for example, _1st August, 2026_).                   |
-| ✅  |                                             **Edit existing activities** with a single app tap.                                             |
-|     | **Quick item actions** via the item menu or long press: <br>✅ Edit <br>✅ Duplicate <br>✅ Reset <br>✅ Delete <br>✅ Archive <br>✅ Share |
-| ✅  |                                                   **Search** activities by activity name.                                                   |
-| ✅  |                                              **Filter** activities by category or start month.                                              |
-| ✅  |                                            **Sort** activities alphabetically by activity name.                                             |
-| ✅  |                                                   **Categories** to organise activities.                                                    |
-| ✅  |                                **Persistent storage**, automatically saving activities between app launches.                                |
-| ✅  |                                         **Material 3 interface** with support for dynamic theming.                                          |
-| ✅  |                                **Sample activities** on first launch to demonstrate the app's functionality.                                |
-| ✅  |                                 **RecyclerView-based list** for smooth scrolling and efficient performance.                                 |
+|   | Feature                   | Description                                                                         |
+|---|:--------------------------|:------------------------------------------------------------------------------------|
+| ✅ | **Activity tracking**     | Create day counters for activities, events, milestones and reminders.               |
+| ✅ | **Date range support**    | Optional end dates to track durations in addition to single-day events.             |
+| ✅ | **Relative time display** | View time as "3 weeks ago" or "in 2 months" based on your preferences.              |
+| ✅ | **Home screen widgets**   | **1x1 Quick add** for fast entry and **4x4 list** to view all counters at a glance. |
+| ✅ | **Rich notifications**    | Get notified on your device the moment an activity reaches its end date.            |
+| ✅ | **Data sovereignty**      | Export your data to human-readable **CSV** or technical **JSON** formats.           |
+| ✅ | **Flexible viewing**      | Switch between **List** and **Grid** layouts to suit your style.                    |
+| ✅ | **Privacy lock**          | Protect your data with an optional **App PIN** (between 4 and 16 digits).           |
+| ✅ | **Organisation**          | Use **Categories** and **Tags** to keep your activities organised.                  |
+| ✅ | **Reorder & sort**        | Manually **drag-and-drop** activities or sort them alphabetically.                  |
+| ✅ | **Quick item actions**    | Edit, duplicate, share, archive and delete via simple menus.                        |
+| ✅ | **Modern UI**             | Full **Material 3** interface with support for **Dynamic Colour** and Dark Mode.    |
+| ✅ | **Offline-first**         | No tracking, no ads and no internet connection required for core features.          |
 
 ### Future features
 
-These can be added without separate list manipulation logic:
-
-- Active/completed activities
-- Date ranges
-- Categories
-- Archived items
-- Favourites
-- Tags
-
-- Search items
-- Rearrange items
-- Add end countdate
-- Sort items by title, date inputted, manual
-- View things in terms of days, months, weeks,
-- Change theme, dark theme,material
-
-Core counting improvements (high value)
-
-- Count between two dates
-- Show total days, weeks, months, and years between start and end.
-
-Inclusive / exclusive toggle
-
-- Let users choose whether to include the start/end day.
-
-Multiple activities
-
-- Track several events at once (e.g. “Since quitting”, “Until deadline”).
-
-Pause / resume counter
-
-- Useful for temporary events.
-
-Timezone-safe counting
-
-- Avoid day shifts when users travel or DST changes.
-
-Display & UX improvements
-
-- Progress indicator
-- Percentage bar or circular progress when an end date exists.
-
-- Human-readable summaries
-  e.g. “3 months, 12 days (104 days total)”
-
-- Calendar view...Visualise the range on a mini calendar.
-
-- Colour-coded activities...Different colours for different events.
-
-- Reorder / pin activities....Keep important ones at the top.
-
-Notifications & reminders
-
-- Milestone notifications
-  e.g. day 7, 30, 100, 365.
-
-- Custom reminders
-  “Notify me every 10 days” or “1 week before end date”.
-
-- End-date alert...Notify when the counter finishes.
-
-Data & persistence
-
-- Backup & restore (local or cloud)
-  JSON export/import (great for FOSS).
-
-- CSV / text export...for tracking progress.
-
-- Offline-first design
-- No account required.
-
-Widgets & quick access (Android-friendly)
-
-- Home screen widget
-- Live day count without opening the app.
-- Quick-add counter shortcut
-
-Accessibility & polish
-
-- Dark / AMOLED mode
-- Screen reader–friendly labels
-
-Power-user / nice-to-have features
-
-- Tags / categories like health, work, personal, faith, etc.
-
-- Privacy lock...App PIN / biometric.
-- No tracking / no ads (clearly stated)
-- Translation support (crowdsourced)
-- Count between two dates
-- Multiple activities
-- Progress indicator
-- Milestone notifications
-- Backup/export
+- **Translation support**: Community-driven localisations for non-English speakers.
 
 ---
 
 ## Screenshots
 
-|                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
-| <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
+### Dark mode
 
 |                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
+|:---------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|
 | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
 
+### Light mode
+
 |                       **TBC**                       |                        **TBC**                        |                       **TBC**                       |                       **TBC**                        |
-| :-------------------------------------------------: | :---------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------------: |
+|:---------------------------------------------------:|:-----------------------------------------------------:|:---------------------------------------------------:|:----------------------------------------------------:|
 | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"    /> | <img src="assets/images/image-place-holder.png"  /> | <img src="assets/images/image-place-holder.png"   /> |
 
 ---
@@ -190,7 +80,7 @@ Power-user / nice-to-have features
 
 - Kotlin
 - Java 17+
-- Shared Preferences
+- Room database (SQLite)
 
 ---
 
@@ -198,14 +88,7 @@ Power-user / nice-to-have features
 
 ### 1. Install Java (JDK)
 
-Android development requires a Java Development Kit.
-
-Recommended:
-
-- Install the JDK bundled with Android Studio or
-- Install a standalone JDK (17+ recommended)
-
-Verify:
+Recommended: Install a standalone JDK (17+ recommended) or use the one bundled with Android Studio.
 
 ```bash
 java -version
@@ -213,20 +96,10 @@ java -version
 
 ### 2. Install Android Studio
 
-Download and install Android Studio:
+Download and install Android Studio from https://developer.android.com/studio. Ensure the Android
+SDK, Platform Tools and Emulator are selected during setup.
 
-https://developer.android.com/studio
-
-During setup, ensure these are installed:
-
-- Android SDK
-- Android SDK Platform Tools
-- Android Emulator
-- Android SDK Build Tools
-
-Open the project in Android Studio and allow Gradle to sync.
-
-### 3. Configure Android SDK paths
+### 3. Configure Android SDK paths (optional)
 
 Add the Android SDK environment variables.
 
@@ -244,66 +117,34 @@ Verify:
 adb --version
 ```
 
+---
+
 ## Running the application
 
-#### Using Android Studio:
+### Using Android Studio
 
-#. Clone the project repository
+1. Clone the repository: `git clone https://github.com/ASPTechInc/Daymark.git`
+2. Open the project and wait for Gradle sync to complete.
+3. Select a device and click **Run ▶**.
 
-```bash
-  git clone https://github.com/ASPTechInc/Daymark.git
-```
-
-> \*\*Push an existing repository from the command line
->
-> or git remote set-url origin https://github.com/ASPTechInc/Daymark.git
->
-> git branch -M main
->
-> git push -u origin main
-
-> \*\*Create a new repository on the command line
->
-> echo "# Daymark" >> README.md
->
-> git init
->
-> git add README.md
->
-> git commit -m "first commit"
->
-> git branch -M main
->
-> git remote add origin https://github.com/ASPTechInc/Daymark.git
->
-> git push -u origin main
-
-2. Open the project.
-3. Wait for Gradle sync to complete.
-4. Select an emulator or connected Android device.
-5. Click Run ▶.
-
-#### Using the terminal:
+### Using the command line
 
 ```bash
-# Update dependencies
-./gradlew dependencyUpdates
-
-
 ./gradlew assembleDebug
-
 ./gradlew installDebug
 adb shell monkey -p com.asptechinc.daymark 1
 ```
 
-#### Using VSCode `launch.json`
+### Using VS Code launch.json
 
-##### Install VS Code extensions
+VS Code can be downloaded from https://code.visualstudio.com/download.
+
+#### Install VS Code extensions
 
 - [Kotlin (by JetBrains or the Kotlin Language extension)](https://marketplace.visualstudio.com/items?itemName=fwcd.kotlin)
 - [Extension Pack for Java (Microsoft)](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
 
-##### Launch app
+#### Launch app
 
 1. Open VS Code command palette using `Ctrl` + `Shift` + `P`.
 
@@ -311,24 +152,24 @@ adb shell monkey -p com.asptechinc.daymark 1
    Run button (upper-left)
 
 2. Pick any of the following launch configurations from the list:
-   - **Run Android app (emulator)**
+    - **Run Android app (emulator)**
 
-     > This calls the **Launch Android app (emulator)** task, which will start the emulator and run
-     > the app.
+      > This calls the **Launch Android app (emulator)** task, which will start the emulator and run
+      > the app.
 
-   - **Run Android app (connected device)**
+    - **Run Android app (connected device)**
 
-     > This calls the **Launch Android app (connected device)** task, which will run the app on a
-     > connected device.
+      > This calls the **Launch Android app (connected device)** task, which will run the app on a
+      > connected device.
 
-   - **Run Android app (automatically detect device)**
+    - **Run Android app (automatically detect device)**
 
-     > This calls the **Launch Android app (auto)** task, which will run the app on an
-     > automatically detected device.
+      > This calls the **Launch Android app (auto)** task, which will run the app on an
+      > automatically detected device.
 
-   - **Stop Android emulator**
+    - **Stop Android emulator**
 
-     > This calls the **Stop Android emulator** task, which will stop the running emulator.
+      > This calls the **Stop Android emulator** task, which will stop the running emulator.
 
 3. To stop the server, press `Ctrl` + `C` in the terminal or click the red square stop button in the
    debug panel.
@@ -338,220 +179,120 @@ adb shell monkey -p com.asptechinc.daymark 1
 ## Testing the application
 
 ```bash
-./gradlew :app:testDebugUnitTest
+./gradlew :app:testDebugUnitTest     # Local unit tests
+./gradlew connectedDebugAndroidTest  # Instrumented device tests
+
+# Check for warnings (optional)
+./gradlew :app:help --warning-mode all
 ```
 
 ---
 
 ## Releasing the application
 
-A keystore is used to store the signing key required for Android app releases.
-
-### Create a keystore file
-
-> Replace `keystore.jks` and `key-alias` with your desired values.
-
-```bash
-keytool -genkeypair \
-  -v \
-  -keystore keystore.jks \
-  -alias key-alias \
-  -keyalg RSA \
-  -keysize 2048 \
-  -validity 10000
-```
-
-### Encode the keystore file
-
-The decoding of the file occurs in the GitHub repository workflow.
-
-> Replace `keystore.jks` and `keystore.base64` with your file names.
-
-```bash
-base64 -i keystore.jks | tr -d '\n' > keystore.base64
-```
-
-### Update the example keystore file in the project
-
-Rename the example keystore file [keystore.properties.example](/app/keystore.properties.example)
-to `keystore.properties`. Then, update the values of the variables - `storeFile`, `storePassword`,
-`keyAlias` and `keyPassword` with the values used above.
-
-### Create environment secrets in GitHub repository
-
-The following secrets should be created. Their values should match the values used above.
-
-```txt
-KEY_ALIAS
-KEY_PASSWORD
-KEYSTORE_CONTENT
-KEYSTORE_FILE_NAME
-KEYSTORE_PASSWORD
-```
-
-### Create app release
-
-Push a tag matching the pattern `v*` to the `main` branch. The GitHub workflow will then
-automatically build the release APK and bundle, sign them using the provided keystore
-and upload the artefacts.
-
-Example tag for a release:
-
-```bash
-git checkout main
-git tag v1.0.0
-git push origin v1.0.0
-```
+This project uses GitHub Actions for automated releases. Pushing a tag matching `v*` to the `main`
+branch will trigger a build and create a draft release with signed APKs.
 
 ---
 
-## Project Structure
+## Application usage
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for a detailed overview of the project structure.
+### Home screen widgets
 
----
+Daymark provides two widgets to keep your milestones visible without opening the app:
 
-## Development workflow
+- **Quick add (1x1)**: Tapping this opens the app directly to the "New Activity" screen.
+- **Activity list (4x4)**: Displays a scrollable list of your active counters with their relative
+  time.
 
-### Code formatting
+### Creating & Editing activities
 
-Reformat code:
+- Click the **Floating action button (+)** to create a new activity.
+- Enter a name, optional notes and choose a start date.
+- Use the **Ellipsis (⋮)** on any activity card to access the **Edit** screen.
 
-- Windows/Linux: `Ctrl + Alt + L`
-- macOS: `⌥ + ⌘ + L`
+### Activity actions
 
-### Android Studio Settings
+- **Long Press**: activates reorder mode. Drag items to change their position in the list.
+- **Menu Options**:
+    - **Duplicate**: creates a copy of an existing activity.
+    - **Share**: exports the details of an activity as plain text to other apps.
+    - **Archive**: Hide completed activities from the main list.
+    - **Reset**: Set the start date to "Now" and clear the end date.
 
-#### Enable automatic imports
+### Search & Filtering
 
-Go to: `Settings` → `Editor` → `General` → `Auto Import`
+Use the top toolbar to find specific activities:
 
-Enable:
+- **Search**: Search by activity name.
+- **Filter**: Narrow down the list by category, month, year or status (archived or completed).
+- **Sort**: Toggle between manual reordering and alphabetical sorting.
 
-- Optimise imports on the fly
-- Add unambiguous imports automatically
+### Notifications
 
-#### Format code on save
-
-Go to: `Settings` → `Tools` → `Actions on Save`
-
-Enable:
-
-- Reformat code
-- Optimise imports
-
-### Code quality gradle tools
-
-This project uses **Ktlint** - Kotlin formatting.
-
-#### Ktlint
-
-The plugin is added using the Gradle plugin system.
-
-Define the plugin and version in: `gradle/libs.versions.toml`
-
-Example:
-
-```TOML
-[versions]
-ktlint = "14.2.0"
-
-[plugins]
-kotlin-ktlint = {
-    id = "org.jlleitschuh.gradle.ktlint",
-    version.ref = "ktlint"
-}
-```
-
-Reference it in the root: `build.gradle.kts`
-
-```kotlin
-plugins {
-    alias(libs.plugins.kotlin.ktlint) apply false
-}
-```
-
-Apply it in: `app/build.gradle.kts`
-
-```kotlin
-plugins {
-    alias(libs.plugins.kotlin.ktlint)
-}
-```
-
-Run:
-
-```bash
-./gradlew ktlintCheck
-```
-
-Automatically fix formatting:
-
-```bash
-./gradlew ktlintFormat
-```
+You can enable or disable notifications for activities with end dates in **Settings > General**. If
+enabled, Daymark will alert you the moment an activity reaches its scheduled completion.
 
 ---
 
-## Application Usage
+## Data storage & Backup
 
-### Creating a Day Counter
-
-### Editing Items
-
-- Tap item → Edit the activity
-
-### Item Actions
-
-- Long press item → Show quick actions:
-  - Delete
-  - Reset
-  - Duplicate
-  - Other item actions
-
-- Ellipsis (⋮) on item → Opens the same item action menu
-
-### Search, Filter and Sort
-
-Search, filtering, and sorting are handled through a single list update flow.
+- **JSON backup**: A full technical backup of your database, perfect for restoring data on a new
+  device.
+- **CSV export**: A human-readable export that allows you to view your data in spreadsheet software
+  like Google Sheets or LibreOffice.
+- **Privacy**: All data remains on your device. Daymark does not use cloud storage or third-party
+  analytics.
 
 ---
 
-## Data storage
+## F-Droid Metadata
 
-Data is stored using Shared Preferences, which is a simple key-value storage mechanism provided by
-Android.
+This project includes [Fastlane](https://docs.fastlane.tools/getting-started/android/metadata/)
+compatible metadata. This ensures that the app's listing, descriptions, and changelogs are
+maintained directly within source control for FOSS repository compatibility.
+
+Location: `fastlane/metadata/android/en-GB/`
+
+---
+
+## Resources
+
+*Naming convention for resource files*
+
+- **`activity_`**: Entire screen layouts.
+- **`fragment_`**: Entire fragment screen
+- **`item_`**: Individual list item layouts.
+- **`view_`**: Reusable UI components.
+- **`row_`**: One row in a list
+- **`dialogue_`**: Custom dialogue layouts.
 
 ---
 
 ## Contributing
 
-Contributions are welcome! Please read the [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on how
-to contribute to this project.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on code
+style, testing, and PR submission.
 
-If you find any issues or have suggestions, feel free to open an issue.
+For useful notes, refer to [DEVELOPER_NOTES.md](docs/DEVELOPER_NOTES.md)
 
 ---
 
 ## Licence
 
-The project is open-sourced under the [MIT Licence](LICENSE). You can use, modify and distribute
-this project as long as you include the original licence.
+The project is open-source under the [MIT Licence](LICENSE).
 
 ---
 
 ## Support
 
-![developer](https://img.shields.io/badge/Developed%20By%20%3A-ASPTechnologies%20Incorporations-blue) | [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/asptechinc)
+Developed by [**ASPTechnologies Incorporation**](https://github.com/ASPTechInc 'GitHub ASPTechInc').
+If you find Daymark useful,
+consider [Supporting the Developer](https://www.buymeacoffee.com/asptechinc). Daymark is and will
+always be ad-free.
 
-If you like this project, please consider supporting the developer.
-There are no advertisements nor in-app purchases.
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/asptechinc)
 
-Your support will help keep the project free and updated. Thank you!
+[🔝 Back to top](#top)
 
-Star ⭐ the repository if you like what you see 😉.
-
-## Connect with Me
-
-[<img align="center" alt="ASPTechInc | GitHub" src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github" />](https://github.com/ASPTechInc)
-&ensp;GitHub: [@ASPTechInc](https://github.com/ASPTechInc 'GitHub ASPTechInc')
+<a id="bottom"></a>

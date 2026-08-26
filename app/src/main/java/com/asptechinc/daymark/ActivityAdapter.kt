@@ -1,6 +1,5 @@
 package com.asptechinc.daymark
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,15 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.asptechinc.daymark.models.Activity
 import com.asptechinc.daymark.models.Category
 import com.asptechinc.daymark.models.Tag
-import com.asptechinc.daymark.utils.relativeDateText
+import com.asptechinc.daymark.utils.TimeUnitManager
+import com.asptechinc.daymark.utils.getActivityRelativeText
 import com.asptechinc.daymark.utils.toOrdinalDateString
 import com.google.android.material.checkbox.MaterialCheckBox
 import java.time.LocalDateTime
 
 class ActivityAdapter(
-    context: Context,
     private val onMenuClick: (Int, Int) -> Unit,
     private val onStartDrag: (RecyclerView.ViewHolder) -> Unit,
+    var isGridLayout: Boolean = false,
 ) : RecyclerView.Adapter<ActivityAdapter.DayViewHolder>() {
     var activities = mutableListOf<Activity>()
     var tags = mutableListOf<Tag>()
@@ -41,14 +41,17 @@ class ActivityAdapter(
         holder.bind(activities[position], categories, tags)
     }
 
+    override fun getItemViewType(position: Int): Int = if (isGridLayout) 1 else 0
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): DayViewHolder {
+        val layoutRes = if (viewType == 1) R.layout.item_activity_grid else R.layout.item_activity_list
         val itemView =
             LayoutInflater
                 .from(parent.context)
-                .inflate(R.layout.activity_list, parent, false)
+                .inflate(layoutRes, parent, false)
 
         return DayViewHolder(itemView, onMenuClick, onStartDrag)
     }
@@ -83,8 +86,8 @@ class ActivityAdapter(
                 toggleDragMode()
                 true
             }
-            dragHandleView.setOnLongClickListener {
-                if (isDragModeEnabled) {
+            dragHandleView.setOnTouchListener { _, event ->
+                if (isDragModeEnabled && event.actionMasked == android.view.MotionEvent.ACTION_DOWN) {
                     onStartDrag(this@DayViewHolder)
                     true
                 } else {
@@ -112,16 +115,16 @@ class ActivityAdapter(
             val currentDate = LocalDateTime.now()
             val endDateTime = counter.endDateTime
             val startDateTime = counter.startDateTime
+            val timeUnitIndex = TimeUnitManager.getSavedTimeUnitIndex(itemView.context)
 
             // Relative date
             val relativeText =
-                endDateTime?.let {
-                    if (it.isAfter(currentDate)) {
-                        "Ends ${relativeDateText(it, currentDate)}"
-                    } else {
-                        "Ended ${relativeDateText(it, currentDate)}"
-                    }
-                } ?: relativeDateText(counter.startDateTime, currentDate)
+                getActivityRelativeText(
+                    counter.startDateTime,
+                    counter.endDateTime,
+                    currentDate,
+                    timeUnitIndex,
+                )
 
             relativeTextView.text = relativeText
 
@@ -179,7 +182,7 @@ class ActivityAdapter(
                 val popup = PopupMenu(view.context, view)
                 popup.setForceShowIcon(true)
                 popup.menuInflater.inflate(
-                    R.menu.menu_list,
+                    R.menu.item_activity_menu,
                     popup.menu,
                 )
                 MenuCompat.setGroupDividerEnabled(popup.menu, true)

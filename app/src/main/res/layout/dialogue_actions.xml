@@ -2,41 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:lineSpacingExtra="2dp"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="12dp"
-        android:textSize="14sp" />
+        android:layout_marginTop="@dimen/layout_dimension_10"
+        android:lineSpacingExtra="@dimen/layout_dimension_2"
+        android:paddingStart="@dimen/layout_dimension_24"
+        android:paddingEnd="@dimen/layout_dimension_24"
+        android:paddingBottom="@dimen/layout_dimension_12"
+        android:textSize="@dimen/text_size_14" />
 
     <TextView
         android:id="@+id/renameAction"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/layout_dimension_48"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/settings_action_rename"
-        android:textSize="16sp" />
+        android:paddingStart="@dimen/layout_dimension_24"
+        android:paddingEnd="@dimen/layout_dimension_24"
+        android:text="@string/btn_rename"
+        android:textSize="@dimen/text_size_16" />
 
     <TextView
         android:id="@+id/deleteAction"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="@dimen/layout_dimension_48"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:text="@string/settings_action_delete"
-        android:textSize="16sp" />
+        android:paddingStart="@dimen/layout_dimension_24"
+        android:paddingEnd="@dimen/layout_dimension_24"
+        android:text="@string/btn_delete"
+        android:textSize="@dimen/text_size_16" />
 
 </LinearLayout>

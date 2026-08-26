@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="@dimen/layout_dimension_24">
 
         <!-- Start Date -->
         <TextView
@@ -21,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_dimension_8"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -57,20 +59,20 @@
 
             <ImageButton
                 android:id="@+id/btn_pick_start"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/layout_dimension_48"
+                android:layout_height="@dimen/layout_dimension_48"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/btn_start_date"
                 android:src="@drawable/ic_dates"
                 app:iconTint="?attr/colorOnMenuContainer" />
         </LinearLayout>
 
-        <!-- Add/Subtract Dropdown -->
+        <!-- Add/Subtract dropdown -->
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/layout_dimension_16"
             android:hint="@string/calculator_op_label"
             android:textColorHint="?attr/colorOnTertiary">
 
@@ -81,11 +83,11 @@
                 android:inputType="none" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Duration Section -->
+        <!-- Duration section -->
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/layout_dimension_16"
             android:columnCount="2"
             android:rowCount="2">
 
@@ -94,7 +96,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="@dimen/layout_dimension_8"
                 android:hint="@string/calculator_years"
                 android:textColorHint="?attr/colorOnTertiary">
 
@@ -127,8 +129,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginTop="@dimen/layout_dimension_8"
+                android:layout_marginEnd="@dimen/layout_dimension_8"
                 android:hint="@string/calculator_weeks"
                 android:textColorHint="?attr/colorOnTertiary">
 
@@ -145,7 +147,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/layout_dimension_8"
                 android:hint="@string/calculator_days"
                 android:textColorHint="?attr/colorOnTertiary">
 
@@ -162,23 +164,30 @@
             android:id="@+id/btn_calculate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_dimension_24"
             android:text="@string/calculator_btn_calculate"
             android:textColor="?attr/colorOnPrimaryContainer"
             app:backgroundTint="?attr/colorPrimaryContainer" />
 
-        <!-- Result Section -->
+        <!-- Results section -->
         <LinearLayout
             android:id="@+id/result_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_dimension_24"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
+                android:background="?attr/colorOutline" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_dimension_40"
                 android:text="@string/calculator_result_title"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="?attr/colorPrimary" />
@@ -186,14 +195,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:background="?attr/colorOutlineVariant" />
 
             <TextView
                 android:id="@+id/result_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/layout_dimension_16"
                 android:gravity="center"
                 android:textAppearance="?attr/textAppearanceHeadlineSmall"
                 android:textColor="?attr/colorOnSurface" />

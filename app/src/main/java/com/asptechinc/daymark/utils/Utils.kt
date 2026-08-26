@@ -2,6 +2,7 @@ package com.asptechinc.daymark.utils
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.util.TypedValue
@@ -18,6 +19,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.time.LocalDateTime
 import java.time.Period
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 
 fun datePicked(
     year: Int,
@@ -30,35 +32,74 @@ fun formatDate(dateTime: LocalDateTime): String = dateTime.format(DateTimeFormat
 fun relativeDateText(
     from: LocalDateTime,
     to: LocalDateTime,
+    timeUnitIndex: Int = 0,
 ): String {
     val isFuture = from.isAfter(to)
 
     val startDate = if (isFuture) to.toLocalDate() else from.toLocalDate()
     val endDate = if (isFuture) from.toLocalDate() else to.toLocalDate()
 
-    val period = Period.between(startDate, endDate)
+    val text =
+        when (timeUnitIndex) {
+            1 -> { // Year only
+                val years = ChronoUnit.YEARS.between(startDate, endDate)
+                if (years == 1L) "1 year" else "$years years"
+            }
 
-    val parts = mutableListOf<String>()
+            2 -> { // Months only
+                val months = ChronoUnit.MONTHS.between(startDate, endDate)
+                if (months == 1L) "1 month" else "$months months"
+            }
 
-    if (period.years != 0) {
-        parts += if (period.years == 1) "1 year" else "${period.years} years"
-    }
-    if (period.months != 0) {
-        parts += if (period.months == 1) "1 month" else "${period.months} months"
-    }
-    val daysOnly = period.days % 7
-    val weeks = period.days / 7
+            3 -> { // Weeks only
+                val weeks = ChronoUnit.WEEKS.between(startDate, endDate)
+                if (weeks == 1L) "1 week" else "$weeks weeks"
+            }
 
-    if (weeks != 0) {
-        parts += if (weeks == 1) "1 week" else "$weeks weeks"
-    }
-    if (daysOnly != 0) {
-        parts += if (daysOnly == 1) "1 day" else "$daysOnly days"
-    }
+            4 -> { // Days only
+                val days = ChronoUnit.DAYS.between(startDate, endDate)
+                if (days == 1L) "1 day" else "$days days"
+            }
 
-    val text = if (parts.isEmpty()) "0 days" else parts.joinToString(", ")
+            else -> { // Default: Year, month, weeks, day
+                val period = Period.between(startDate, endDate)
+                val parts = mutableListOf<String>()
+
+                if (period.years != 0) {
+                    parts += if (period.years == 1) "1 year" else "${period.years} years"
+                }
+                if (period.months != 0) {
+                    parts += if (period.months == 1) "1 month" else "${period.months} months"
+                }
+                val daysOnly = period.days % 7
+                val weeks = period.days / 7
+
+                if (weeks != 0) {
+                    parts += if (weeks == 1) "1 week" else "$weeks weeks"
+                }
+                if (daysOnly != 0) {
+                    parts += if (daysOnly == 1) "1 day" else "$daysOnly days"
+                }
+                if (parts.isEmpty()) "0 days" else parts.joinToString(", ")
+            }
+        }
 
     return if (isFuture) "in $text" else "$text ago"
+}
+
+fun getActivityRelativeText(
+    startDateTime: LocalDateTime,
+    endDateTime: LocalDateTime?,
+    currentDate: LocalDateTime,
+    timeUnitIndex: Int,
+): String {
+    return endDateTime?.let {
+        if (it.isAfter(currentDate)) {
+            "Ends ${relativeDateText(it, currentDate, timeUnitIndex)}"
+        } else {
+            "Ended ${relativeDateText(it, currentDate, timeUnitIndex)}"
+        }
+    } ?: relativeDateText(startDateTime, currentDate, timeUnitIndex)
 }
 
 fun LocalDateTime.toOrdinalDateString(): String {
@@ -207,7 +248,7 @@ fun styleDialogue(dialogue: AlertDialog) {
             )
 
         this.backgroundTintList = ColorStateList.valueOf(primaryContainerColour)
-        this.backgroundTintMode = android.graphics.PorterDuff.Mode.SRC_IN
+        this.backgroundTintMode = PorterDuff.Mode.SRC_IN
     }
 
     val negativeButton = dialogue.getButton(AlertDialog.BUTTON_NEGATIVE)
@@ -255,18 +296,6 @@ private fun View.recursivelyStyleDialogueItem(
         is CheckedTextView -> {
             setTextColor(textColour)
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
-//            checkMarkTintList = ColorStateList.valueOf(checkColour)
-//            checkMarkTintMode = android.graphics.PorterDuff.Mode.SRC_IN
-
-//            val drawable = checkMarkDrawable?.mutate()
-//            drawable?.setTint(checkColour)
-//            checkMarkDrawable = drawable
-
-//            val outlineColour = MaterialColors.getColor(
-//                context,
-//                com.google.android.material.R.attr.colorOutline,
-//                context.getColor(R.color.outline),
-//            )
             val checkTint =
                 ColorStateList(
                     arrayOf(
@@ -287,7 +316,7 @@ private fun View.recursivelyStyleDialogueItem(
 
         is RadioButton -> {
             buttonTintList = ColorStateList.valueOf(checkColour)
-            buttonTintMode = android.graphics.PorterDuff.Mode.SRC_IN
+            buttonTintMode = PorterDuff.Mode.SRC_IN
         }
 
         is TextView -> {

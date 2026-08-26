@@ -1,0 +1,13 @@
+Daymark is a free and open-source (FOSS) Android application that helps you track the passage of time for your activities, events, and milestones.
+
+Key Features:
+- Create activities to track elapsed or remaining time.
+- Optional end dates for tracking duration.
+- Human-friendly relative time display (e.g., "3 weeks ago").
+- Categorise and tag activities for better organisation.
+- Privacy-first: All data is stored locally on your device.
+- Beautiful Material 3 interface with dynamic theming.
+- Secure access with an optional app PIN.
+- Data sovereignty: Export your data to JSON or CSV formats.
+
+Daymark is built with a commitment to FOSS values, providing a clean, ad-free experience without any tracking.

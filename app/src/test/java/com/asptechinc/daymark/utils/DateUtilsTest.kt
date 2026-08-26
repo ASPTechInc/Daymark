@@ -58,4 +58,33 @@ class DateUtilsTest {
         assertEquals("22nd September, 2026", LocalDateTime.of(2026, 9, 22, 0, 0).toOrdinalDateString())
         assertEquals("23rd October, 2026", LocalDateTime.of(2026, 10, 23, 0, 0).toOrdinalDateString())
     }
+
+    @Test
+    fun testRelativeDateText_TimeUnits() {
+        val now = LocalDateTime.of(2026, 8, 17, 12, 0)
+        val past = now.minusDays(400) // 1 year, 1 month, 4 days (roughly)
+
+        // 0: Year, month, weeks, day (Default)
+        // 400 days = 1 year (365) + 35 days
+        // 35 days = 1 month (31 in July) + 4 days
+        // Period.between(2025-07-13, 2026-08-17)
+        // 2025-07-13 to 2026-07-13 is 1 year
+        // 2026-07-13 to 2026-08-13 is 1 month
+        // 2026-08-13 to 2026-08-17 is 4 days
+        assertEquals("1 year, 1 month, 4 days ago", relativeDateText(past, now, 0))
+
+        // 1: Year only
+        assertEquals("1 year ago", relativeDateText(past, now, 1))
+
+        // 2: Months only
+        // 2025-07-13 to 2026-08-17
+        assertEquals("13 months ago", relativeDateText(past, now, 2))
+
+        // 3: Weeks only
+        // 400 / 7 = 57.14
+        assertEquals("57 weeks ago", relativeDateText(past, now, 3))
+
+        // 4: Days only
+        assertEquals("400 days ago", relativeDateText(past, now, 4))
+    }
 }

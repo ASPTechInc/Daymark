@@ -30,15 +30,21 @@
     <color name="surface_container">#F8EAF2</color>
     <color name="on_surface_container">#2D1E27</color>
     <color name="navbar_icon">#6B4D5D</color>
-
+    <color name="app_lock_container">#F8EAF2</color>
+    t
     <!-- Outline -->
     <color name="outline">#85707D</color>
 
     <!-- Status -->
     <color name="error">#BA1A1A</color>
-    <color name="on_error">#FFFFFF</color>
+    <color name="on_error">#000000</color>
+    <color name="on_info">#000000</color>
 
     <!-- Menu -->
     <color name="menu_container">#F8EAF2</color>
     <color name="on_menu_container">#2D1E27</color>
+
+    <!-- Checkboxes -->
+    <color name="checkbox_checked">#2B1B27</color>
+    <color name="checkbox_unchecked">#85707D</color>
 </resources>

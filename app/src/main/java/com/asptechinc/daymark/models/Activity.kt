@@ -23,6 +23,7 @@ data class Activity(
     var categoryId: Int? = null,
     // Optional field: defaults to an empty list when no tags are selected.
     var tagIds: MutableList<Int> = mutableListOf(),
+    var position: Int = 0,
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
 )

@@ -1,4 +1,15 @@
 import java.text.SimpleDateFormat
+import org.gradle.api.provider.ValueSource
+import org.gradle.api.provider.ValueSourceParameters
+
+
+abstract class BuildTimeValueSource implements ValueSource<String, ValueSourceParameters.None> {
+    @Override
+    String obtain() {
+        return new SimpleDateFormat("MM.dd.yy HH:mm", Locale.UK).format(new Date())
+    }
+}
+
 
 plugins {
     alias(libs.plugins.android.application)
@@ -19,30 +30,36 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
-        buildConfigField 'String', 'BUILD_TIME', '"' + new SimpleDateFormat("MM.dd.yy HH:mm", Locale.UK).format(new Date(System.currentTimeMillis())) + '"'
+        
+        def buildTime = providers.of(BuildTimeValueSource.class) {}.get()
+        buildConfigField 'String', 'BUILD_TIME', "\"$buildTime\""
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         release {
-            File signingPropsFile = file("signing.properties")
-            if (signingPropsFile.exists()) {
-                java.util.Properties properties = new java.util.Properties()
-                signingPropsFile.withInputStream { properties.load(it) }
-                storeFile = file(properties.getProperty("storeFile"))
-                storePassword = properties.getProperty("storePassword")
-                keyAlias = properties.getProperty("keyAlias")
-                keyPassword = properties.getProperty("keyPassword")
+            def signingPropsFile = layout.projectDirectory.file("signing.properties")
+            if (signingPropsFile.asFile.exists()) {
+                def props = new Properties()
+                providers.fileContents(signingPropsFile).asBytes.map { 
+                    new ByteArrayInputStream(it).withCloseable { props.load(it) }
+                    return props
+                }.getOrElse(new Properties())
+
+                storeFile = props.getProperty("storeFile") ? file(props.getProperty("storeFile")) : null
+                storePassword = props.getProperty("storePassword")
+                keyAlias = props.getProperty("keyAlias")
+                keyPassword = props.getProperty("keyPassword")
             }
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            signingConfig = signingConfigs.release
         }
     }
 
@@ -69,7 +86,9 @@ tasks.register('copyChangelog', Copy) {
     into("${project.projectDir}/src/generated/assets")
 }
 
-preBuild.dependsOn(copyChangelog)
+tasks.named("preBuild").configure {
+    dependsOn(copyChangelog)
+}
 
 //To update dependencies run, ./gradlew dependencyUpdates
 dependencies {
@@ -94,9 +113,6 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.material3)
-
-    // About Page
-    implementation libs.android.about.page
 
     // Testing
     testImplementation libs.junit

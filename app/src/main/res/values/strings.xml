@@ -3,10 +3,13 @@
     <!-- General -->
     <string name="app_name">Daymark</string>
     <string name="appbar_scrolling_view_behaviour">com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior</string>
-    <string name="package_name">com.asptechinc.daymark</string>
-    <string name="fully_qualified_name">"com.asptechinc.daymark.MainActivity</string>
 
-    <!--  Menu-->
+    <!-- Screen titles -->
+    <string name="screen_new_activity">New activity</string>
+    <string name="screen_edit_activity">Edit activity</string>
+    <string name="screen_settings">Settings</string>
+
+    <!-- Menu actions (top-level) -->
     <string name="menu_more">More details</string>
     <string name="menu_drag">Drag to reorder</string>
     <string name="menu_filter">Filter</string>
@@ -14,156 +17,39 @@
     <string name="menu_search">Search</string>
     <string name="menu_settings">Settings</string>
 
+    <!-- Menu actions (sublevel/list item) -->
     <string name="menu_edit">Edit</string>
     <string name="menu_delete">Delete</string>
-    <string name="settings_reset">Reset</string>
     <string name="menu_duplicate">Duplicate</string>
     <string name="menu_share">Share</string>
     <string name="menu_archive">Archive</string>
 
 
-    <!--  Dialogue: Filter, search-->
-    <string name="dialogue_action_apply">Apply</string>
-    <string name="dialogue_action_clear">Clear</string>
-    <string name="filter_all_categories">All categories</string>
-    <string name="filter_any_month">Any month</string>
-    <string name="filter_category_hint">Category</string>
-    <string name="filter_month_hint">Month</string>
-    <string name="filter_year_hint">Year (optional)</string>
-    <string name="filter_year_invalid">Enter a valid year</string>
-    <string name="filter_year_requires_month">Choose a month when filtering by year</string>
-    <string name="search_query_hint">Search activities</string>
-
-    <!-- Dialogue: Confirm -->
-    <string name="confirm_dialogue_title">Confirm</string>
-    <string name="confirm_dialogue_prompt">Are you sure?</string>
-    <string name="confirm_dialogue_yes">Yes</string>
-    <string name="confirm_dialogue_no">No</string>
+    <!-- Screen: Main activity/landing screen -->
+    <string name="empty_state_no_activities">No activities found.</string>
 
 
-    <!-- Screens -->
-    <string name="screen_new_activity">New activity</string>
-    <string name="screen_edit_activity">Edit activity</string>
-    <string name="screen_main">MainActivity</string>
-    <string name="screen_settings">Settings</string>
-
-    <!-- Notifications -->
-    <string name="pref_header_notifications">Notifications</string>
-    <string name="pref_title_new_message_notifications">New message notifications</string>
-
-
-    <!-- Default activities -->
-    <string name="default_entry_title1">Purchased a fridge</string>
-    <string name="default_entry_note1">Kitchen appliance purchase</string>
-
-    <string name="default_entry_title2">Prescribed new medication</string>
-    <string name="default_entry_note2">Daily medication routine</string>
-
-    <string name="default_entry_title3">Purchased a boat</string>
-    <string name="default_entry_note3">Recreational purchase</string>
-
-    <string name="default_entry_title4">Changed the water filter</string>
-    <string name="default_entry_note4">Home maintenance task</string>
-
-    <string name="default_entry_title5">Bought a new dress</string>
-    <string name="default_entry_note5">Self-pamper purchase</string>
-
-    <string name="default_entry_title6">Bought garden plants</string>
-    <string name="default_entry_note6">Garden improvement</string>
-
-    <string name="default_entry_title7">Wardrobe delivery arrived</string>
-    <string name="default_entry_note7">Furniture delivery</string>
-
-    <string name="default_entry_title8">Renewed magazine subscription</string>
-    <string name="default_entry_note8">Subscription renewal</string>
-
-    <string name="default_entry_title9">Started yoga classes</string>
-    <string name="default_entry_note9">Fitness activity</string>
-
-    <string name="default_entry_title10">Painted the nursery</string>
-    <string name="default_entry_note10">Home improvement project</string>
-
-    <!-- New activity -->
+    <!-- Screen: New activity/Edit Activity -->
     <string name="activity_label">Activity:</string>
     <string name="activity_name_hint">Enter the name of an activity</string>
-
     <string name="activity_notes_label">Notes:</string>
     <string name="activity_notes_hint">Give an optional description of the activity</string>
-
     <string name="activity_archived_label">Archived:</string>
-    <string name="activity_archived">Archived</string>
     <string name="activity_archived_hint">Archive the activity</string>
-
     <string name="activity_category_label">Category:</string>
     <string name="activity_category_hint">Choose a category</string>
-
     <string name="activity_tags_label">Tags:</string>
+    <string name="activity_tags_example">New tag</string>
     <string name="activity_tags_hint">Select or add keywords for the activity</string>
-
+    <string name="activity_completed_label">Completed:</string>
+    <string name="activity_completed_hint">Activity has ended</string>
     <string name="activity_start_date_label">Start date:</string>
     <string name="activity_start_date_hint">Select a start date</string>
-
     <string name="activity_end_date_label">End date:</string>
     <string name="activity_end_date_hint">Select a date when the activity has ended or will end. Leave blank if ongoing.</string>
 
-    <string name="activity_item_menu">Item menu</string>
-    <string name="empty_state_no_activities">No activities found.</string>
 
-    <!-- Toast -->>
-    <string name="toast_settings_imported">App data has been restored</string>
-    <string name="toast_settings_exported">Backup saved successfully</string>
-    <string name="toast_settings_exported_not_available">There are no settings to export.</string>
-    <string name="toast_app_lock_backup_save_failed">Failed to save backup</string>
-    <string name="toast_app_lock_pin_removal">App PIN removed</string>
-    <string name="toast_app_lock_unavailable_app">No application is available to open this link</string>
-    <string name="toast_app_lock_pin_required">PIN is required</string>
-    <string name="toast_app_lock_pin_mismatch">PINs do not match</string>
-    <string name="toast_app_lock_pin_action">Please enter a PIN between 4 and 16 digits</string>
-    <string name="toast_app_lock_pin_set_success">App PIN set</string>
-
-
-    <!-- Settings -->
-    <string name="backup_key_app_pin">app_pin</string>
-    <string name="settings_share_backup_to">Share backup to…</string>
-    <string name="settings_key_theme_config">set_theme</string>
-    <string name="settings_key_clear_all">clear_app_data</string>
-    <string name="settings_key_category">manage_categories</string>
-    <string name="settings_key_tags">manage_tags</string>
-    <string name="settings_key_reset">reset_app</string>
-    <string name="settings_key_app_pin">manage_app_pin</string>
-    <string name="settings_key_import_backup">import_backup</string>
-    <string name="settings_key_export_backup">export_backup</string>
-    <string name="settings_key_app_source_code">view_app_source_code</string>
-    <string name="settings_key_licence">view_app_licence</string>
-    <string name="settings_key_privacy_policy">view_app_privacy_policy</string>
-    <string name="settings_key_donate">donate</string>
-    <string name="settings_key_app_version">view_app_version</string>
-    <string name="settings_key_app_changelog">view_app_changelog</string>
-    <string name="settings_key_app_updater">app_updater</string>
-    <string name="settings_key_date_calculator">date_calculator</string>
-    <string name="settings_key_days_calculator">days_calculator</string>
-
-    <string name="settings_label_export_backup">Create backup</string>
-    <string name="settings_label_import_backup">Restore backup</string>
-    <string name="settings_label_set_app_pin">Set app PIN</string>
-    <string name="settings_label_app_updater">Updater</string>
-    <string name="settings_label_app_version">App version</string>
-    <string name="settings_label_date_calculator">Add to or subtract from a date</string>
-    <string name="settings_label_days_calculator">Days between two dates</string>
-
-    <string name="updater_status_checking">Checking for updates…</string>
-    <string name="updater_status_up_to_date">App is up to date</string>
-    <string name="updater_status_update_available">New version available: %1$s</string>
-    <string name="updater_status_error">Failed to check for updates</string>
-    <string name="updater_btn_check">Check for updates</string>
-    <string name="updater_btn_update">Update now</string>
-    <string name="updater_downloading">Downloading update…</string>
-    <string name="updater_install_prompt">The update has been downloaded. Would you like to install it now?</string>
-    <string name="updater_error_no_apk">No APK found in the latest release.</string>
-    <string name="settings_label_privacy_policy">Privacy policy</string>
-    <string name="settings_label_theme">Theme</string>
-    <string name="settings_label_clear_all">Clear all</string>
-
+    <!-- Screen: Settings -->
     <string name="settings_category_general">General</string>
     <string name="settings_category_date_calculators">Date calculators</string>
     <string name="settings_category_data_management">Data management</string>
@@ -173,47 +59,101 @@
     <string name="settings_category_support">Support</string>
 
 
-    <string-array name="settings_theme_options">
-        <item>Follow system</item>
-        <item>Dark</item>
-        <item>Light</item>
-    </string-array>
+    <!-- Settings: General -->
+    <string name="settings_key_theme_config">set_theme</string>
+    <string name="settings_key_layout_mode">set_layout</string>
+    <string name="settings_key_time_unit">set_time_unit</string>
+    <string name="settings_key_notifications">enable_notifications</string>
+    <string name="settings_label_theme">Theme</string>
+    <string name="settings_label_app_layout">Layout mode</string>
+    <string name="settings_label_time_unit">Time unit</string>
+    <string name="settings_label_notifications">Notifications</string>
 
+    <!-- Security: App lock -->
+    <string name="settings_key_manage_app_pin">manage_app_pin</string>
+    <string name="settings_label_set_app_pin">Set app PIN</string>
+    <string name="settings_label_change_app_pin">Change app PIN</string>
+    <string name="app_lock_pin_key">app_pin</string>
+    <string name="app_lock_title">Enter PIN</string>
+    <string name="dialogue_app_pin_input_hint_new_pin">Enter a PIN (4–16 digits)</string>
+    <string name="dialogue_app_pin_input_hint_change_pin">Enter a new PIN (4–16 digits)</string>
+    <string name="dialogue_app_pin_confirm_pin_hint">Confirm PIN</string>
+    <string name="keypad_num_0">0</string>
+    <string name="keypad_num_1">1</string>
+    <string name="keypad_num_2">2</string>
+    <string name="keypad_num_3">3</string>
+    <string name="keypad_num_4">4</string>
+    <string name="keypad_num_5">5</string>
+    <string name="keypad_num_6">6</string>
+    <string name="keypad_num_7">7</string>
+    <string name="keypad_num_8">8</string>
+    <string name="keypad_num_9">9</string>
+    <string name="keypad_clear_btn">C</string>
+    <string name="keypad_confirm_btn">✓</string>
+    <string name="no_data_image_alt">No data image</string>
 
-    <string name="settings_manage_categories">Manage categories</string>
-    <string name="settings_manage_tags">Manage tags</string>
-    <string name="settings_add">Add</string>
-    <string name="settings_action_rename">Rename</string>
-    <string name="settings_rename_tag">Rename tag</string>
-    <string name="settings_rename_category">Rename category</string>
-    <string name="settings_action_delete">Delete</string>
-    <string name="settings_delete_tag">Delete tag</string>
-    <string name="settings_delete_category">Delete category</string>
-    <string name="settings_close">Close</string>
-    <string name="settings_name_hint">Name</string>
-    <string name="settings_empty_name_error">Name cannot be empty.</string>
-    <string name="settings_name_exists_error">That name already exists.</string>
-    <string name="settings_item_saved">Saved.</string>
-    <string name="settings_item_deleted">Deleted.</string>
-    <string name="settings_manage_categories_empty">No categories yet.</string>
-    <string name="settings_manage_tags_empty">No tags yet.</string>
-    <string name="settings_manage_action_title">Choose an action</string>
-    <string name="settings_confirm_delete">Are you sure that you would like to delete %1$s?</string>
-    <string name="settings_clear_all_confirm">This removes all activities. Categories and tags will be kept.</string>
-    <string name="settings_clear_all_done">All activities have been removed.</string>
-    <string name="settings_reset_confirm">Are you sure that you would like to reset the application\'s data to its default state (activities, categories and tags)?</string>
-    <string name="settings_reset_done">App data has been reset to defaults.</string>
-
+    <!-- Settings: Backup -->
+    <string name="settings_key_import_backup">import_backup</string>
+    <string name="settings_key_export_backup">export_backup</string>
+    <string name="settings_key_export_csv">export_csv</string>
+    <string name="settings_label_export_backup">Create backup</string>
+    <string name="settings_label_export_csv">Export to CSV</string>
+    <string name="settings_label_import_backup">Restore backup</string>
 
     <!-- Settings: About -->
-    <string name="about_donate_url">https://buymeacoffee.com/asptechinc</string>
-    <string name="about_privacy_policy_url">https://github.com/Sherida101/Daymark/blob/main/PRIVACY_POLICY.md</string>
-    <string name="about_licence_url">https://github.com/Sherida101/Daymark/blob/main/LICENSE</string>
-    <string name="about_source_code_url">https://github.com/Sherida101/Daymark</string>
+    <string name="settings_key_privacy_policy">view_app_privacy_policy</string>
+    <string name="settings_key_licence">view_app_licence</string>
+    <string name="settings_key_oss_licences">view_oss_licences</string>
+    <string name="settings_label_privacy_policy">Privacy policy</string>
+    <string name="settings_label_oss_licences">Open source licences</string>
+    <string name="about_privacy_policy_url">https://github.com/ASPTechInc/Daymark/blob/main/PRIVACY_POLICY.md</string>
+    <string name="about_licence_url">https://github.com/ASPTechInc/Daymark/blob/main/LICENSE</string>
+    <string name="oss_licence_apache_url">https://www.apache.org/licenses/LICENSE-2.0</string>
+    <string name="oss_licence_mit_url">https://opensource.org/licenses/MIT</string>
+    <string name="oss_licence_epl_url">https://www.eclipse.org/legal/epl-v10.html</string>
 
-    <!-- Buttons -->
-    <string name="btn_add_activity_desc">Floating button</string>
+
+    <!-- Settings: Support -->
+    <string name="settings_key_donate">donate</string>
+    <string name="settings_key_app_source_code">view_app_source_code</string>
+    <string name="about_donate_url">https://buymeacoffee.com/asptechinc</string>
+    <string name="about_source_code_url">https://github.com/ASPTechInc/Daymark</string>
+
+
+    <!-- Content descriptions and summaries -->
+    <string name="content_desc_icon_refresh">Refresh</string>
+    <string name="content_desc_btn_add_activity">Floating button used to add details for a new activity.</string>
+    <string name="summary_theme_mode">Set light or dark theme mode for the application.</string>
+    <string name="summary_app_layout">Choose either a list or grid layout for the activities created.</string>
+    <string name="summary_time_unit">Set the time unit for an activity\'s duration</string>
+    <string name="summary_notifications">Enable or disable notifications for completed activities</string>
+    <string name="summary_days_calculator">How many days, months and years are there between two days?</string>
+    <string name="summary_date_calculator">Enter a start date and add or subtract any number of days, months or years from it.</string>
+    <string name="summary_clear_all">Remove all activities.</string>
+    <string name="summary_manage_categories">Add, rename or delete categories.</string>
+    <string name="summary_manage_tags">Add, rename or delete tags.</string>
+    <string name="summary_app_storage">View the amount of data stored in the application.</string>
+    <string name="summary_app_reset">Revert to the default state of the application.</string>
+    <string name="summary_app_pin">Set a PIN with at least 4 digits to protect the entire application.</string>
+    <string name="summary_import_backup">Load activities from a backup file.</string>
+    <string name="summary_export_backup">Create a backup by exporting all activities to a file.</string>
+    <string name="summary_export_csv">Export activities to a human-readable CSV file.</string>
+    <string name="summary_privacy_policy">View in-app privacy policy.</string>
+    <string name="summary_app_licence">View in-app licence.</string>
+    <string name="summary_oss_licences">Licences for open source libraries used in Daymark.</string>
+    <string name="summary_app_updater">Update Daymark to the latest version.</string>
+    <string name="summary_app_version">View the current build and version of the application.</string>
+    <string name="summary_app_changelog">View all changes made in the application.</string>
+    <string name="summary_donate">View how to donate to Daymark\'s lead app developer</string>
+    <string name="summary_app_source_code">View Daymark\'s source code on GitHub.</string>
+
+
+    <!-- Button labels -->
     <string name="btn_cancel">Cancel</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_rename">Rename</string>
+    <string name="btn_delete">Delete</string>
     <string name="btn_okay">Okay</string>
     <string name="btn_save">Save</string>
     <string name="btn_yes">Yes</string>
@@ -223,7 +163,29 @@
     <string name="btn_end_date">End date</string>
 
 
-    <!-- Dialogue: Days Calculator -->
+    <!-- Dialogues -->
+    <string name="dialogue_action_prompt">Choose an action</string>
+
+    <!-- Sub-dialogue: Confirm -->
+    <string name="confirm_dialogue_title">Confirm</string>
+    <string name="confirm_dialogue_prompt">Are you sure?</string>
+    <string name="confirm_dialogue_delete_prompt">Are you sure that you would like to delete %1$s?</string>
+
+    <!-- Dialogue: Date calculator -->
+    <string name="settings_key_date_calculator">date_calculator</string>
+    <string name="settings_label_date_calculator">Add to or subtract from a date</string>
+    <string name="calculator_op_label">Operation</string>
+    <string name="calculator_op_add">Add (+)</string>
+    <string name="calculator_op_subtract">Subtract (-)</string>
+    <string name="calculator_years">Years</string>
+    <string name="calculator_months">Months</string>
+    <string name="calculator_weeks">Weeks</string>
+    <string name="calculator_days">Days</string>
+    <string name="calculator_result_new_date">New date: %1$s</string>
+
+    <!-- Dialogue: Days calculator -->
+    <string name="settings_key_days_calculator">days_calculator</string>
+    <string name="settings_label_days_calculator">Days between two dates</string>
     <string name="calculator_start_date">Start date</string>
     <string name="calculator_end_date">End date</string>
     <string name="calculator_day">Day</string>
@@ -240,29 +202,142 @@
     <string name="calculator_result_weekends">Weekend days: %1$d (Sat: %2$d, Sun: %3$d)</string>
     <string name="calculator_result_total_days">Total days: %1$d</string>
 
-    <!-- Dialogue: Date Calculator -->
-    <string name="calculator_op_label">Operation</string>
-    <string name="calculator_op_add">Add (+)</string>
-    <string name="calculator_op_subtract">Subtract (-)</string>
-    <string name="calculator_years">Years</string>
-    <string name="calculator_months">Months</string>
-    <string name="calculator_weeks">Weeks</string>
-    <string name="calculator_days">Days</string>
-    <string name="calculator_result_new_date">New date: %1$s</string>
+    <!-- Dialogue: Filter, search -->
+    <string name="dialogue_action_apply">Apply</string>
+    <string name="dialogue_action_clear">Clear</string>
+    <string name="filter_all_categories">All categories</string>
+    <string name="filter_any_month">Any month</string>
+    <string name="filter_category_hint">Category</string>
+    <string name="filter_month_hint">Month</string>
+    <string name="filter_year_hint">Year (optional)</string>
+    <string name="filter_year_invalid">Enter a valid year</string>
+    <string name="search_query_hint">Search activities</string>
 
-    <!-- App lock -->
-    <string name="app_lock_title">Enter PIN</string>
-    <string name="keypad_num_0">0</string>
-    <string name="keypad_num_1">1</string>
-    <string name="keypad_num_2">2</string>
-    <string name="keypad_num_3">3</string>
-    <string name="keypad_num_4">4</string>
-    <string name="keypad_num_5">5</string>
-    <string name="keypad_num_6">6</string>
-    <string name="keypad_num_7">7</string>
-    <string name="keypad_num_8">8</string>
-    <string name="keypad_num_9">9</string>
-    <string name="keypad_clear_btn">C</string>
-    <string name="keypad_confirm_btn">✓</string>
-    <string name="no_data_image_alt">No data image</string>
+    <!-- Dialogue: Clear all activities -->
+    <string name="settings_key_clear_all">clear_app_data</string>
+    <string name="settings_label_clear_all">Clear all</string>
+    <string name="settings_clear_all_confirm">This removes all activities. Categories and tags will be kept.</string>
+    <string name="settings_clear_all_done">All activities have been removed.</string>
+
+    <!-- Dialogue: Manage categories -->
+    <string name="settings_key_category">manage_categories</string>
+    <string name="settings_rename_category">Rename category</string>
+    <string name="settings_manage_categories">Manage categories</string>
+    <string name="settings_manage_categories_empty">No categories yet.</string>
+    <string name="settings_delete_category">Delete category</string>
+
+    <!-- Dialogue: Manage tags -->
+    <string name="settings_key_tags">manage_tags</string>
+    <string name="settings_delete_tag">Delete tag</string>
+    <string name="settings_manage_tags">Manage tags</string>
+    <string name="settings_manage_tags_empty">No tags yet.</string>
+    <string name="settings_rename_tag">Rename tag</string>
+
+    <!-- Dialogue: Storage -->
+    <string name="settings_key_app_storage">view_app_storage</string>
+    <string name="settings_view_app_data">Storage</string>
+    <string name="storage_label_categories">Categories</string>
+    <string name="storage_label_tags">Tags:</string>
+    <string name="storage_label_archived">Archived:</string>
+    <string name="storage_label_unarchived">Unarchived</string>
+    <string name="storage_label_total_count">Total activities:</string>
+
+    <!-- Dialogue: Reset -->
+    <string name="settings_key_reset">reset_app</string>
+    <string name="settings_label_reset">Reset</string>
+    <string name="settings_reset_done">App data has been reset to defaults.</string>
+    <string name="settings_reset_confirm">Are you sure that you would like to reset the application\'s data to its default state (activities, categories and tags)?</string>
+
+    <!-- Dialogue: App updater -->
+    <string name="settings_label_app_updater">Updater</string>
+    <string name="settings_label_app_auto_updater">Downloading Daymark update</string>
+    <string name="settings_key_app_updater">app_updater</string>
+    <string name="settings_key_auto_app_updater">auto_check_updates</string>
+    <string name="updater_status_checking">Checking for updates…</string>
+    <string name="updater_status_up_to_date">App is up to date</string>
+    <string name="updater_status_update_available">New version available: %1$s</string>
+    <string name="updater_status_error">Failed to check for updates</string>
+    <string name="updater_btn_check">Check for updates</string>
+    <string name="updater_btn_update">Update now</string>
+    <string name="updater_downloading">Downloading update…</string>
+    <string name="updater_install_prompt">The update has been downloaded. Would you like to install it now?</string>
+    <string name="updater_error_no_apk">No APK found in the latest release.</string>
+
+    <!-- Dialogue: App version -->
+    <string name="settings_key_app_version">view_app_version</string>
+    <string name="settings_label_app_version">App version</string>
+
+    <!-- Dialogue: Changelog -->
+    <string name="settings_key_app_changelog">view_app_changelog</string>
+    <string name="settings_label_app_changelog">Changelog</string>
+
+    <!-- Feedback: Toast -->
+    <string name="notification_channel_name">Activity Reminders</string>
+    <string name="notification_channel_description">Notifications for ended activities</string>
+    <string name="notification_title">Activity Ended</string>
+    <string name="notification_content">The activity \"%1$s\" has ended.</string>
+    <string name="toast_item_saved">Saved.</string>
+    <string name="toast_item_deleted">Deleted.</string>
+    <string name="toast_settings_imported">App data has been restored</string>
+    <string name="toast_settings_exported">Backup saved successfully</string>
+    <string name="toast_csv_exported">CSV exported successfully</string>
+    <string name="toast_settings_exported_not_available">There are no settings to export.</string>
+    <string name="toast_app_lock_backup_save_failed">Failed to save backup</string>
+    <string name="toast_app_lock_pin_removal">App PIN removed</string>
+    <string name="toast_app_lock_pin_invalid">PIN validation failed</string>
+    <string name="toast_app_lock_unavailable_app">No application is available to open this link</string>
+    <string name="toast_app_lock_pin_required">PIN is required</string>
+    <string name="toast_app_lock_pin_mismatch">PINs do not match</string>
+    <string name="toast_app_lock_pin_action">Please enter a PIN between 4 and 16 digits</string>
+    <string name="toast_app_lock_pin_set_success">App PIN set</string>
+
+    <!-- Feedback: Errors/hints -->
+    <string name="hint_new_item_name">Name</string>
+    <string name="error_empty_item_name">Name cannot be empty.</string>
+    <string name="error_item_name_exists">That name already exists.</string>
+
+
+    <!-- Lists/arrays -->
+    <string-array name="app_theme_options">
+        <item>Follow system</item>
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
+    <string-array name="app_layout_mode">
+        <item>List</item>
+        <item>Grid</item>
+    </string-array>
+
+    <string-array name="app_time_period">
+        <item>Year, month, week, day</item>
+        <item>Year only</item>
+        <item>Month only</item>
+        <item>Week only</item>
+        <item>Day only</item>
+    </string-array>
+
+
+    <!-- Default data -->
+    <string name="default_entry_title1">Purchased a fridge</string>
+    <string name="default_entry_note1">Kitchen appliance purchase</string>
+    <string name="default_entry_title2">Prescribed new medication</string>
+    <string name="default_entry_note2">Daily medication routine</string>
+    <string name="default_entry_title3">Purchased a boat</string>
+    <string name="default_entry_note3">Recreational purchase</string>
+    <string name="default_entry_title4">Changed the water filter</string>
+    <string name="default_entry_note4">Home maintenance task</string>
+    <string name="default_entry_title5">Bought a new dress</string>
+    <string name="default_entry_note5">Self-pamper purchase</string>
+    <string name="default_entry_title6">Bought garden plants</string>
+    <string name="default_entry_note6">Garden improvement</string>
+    <string name="default_entry_title7">Wardrobe delivery arrived</string>
+    <string name="default_entry_note7">Furniture delivery</string>
+    <string name="default_entry_title8">Renewed magazine subscription</string>
+    <string name="default_entry_note8">Subscription renewal</string>
+    <string name="default_entry_title9">Started yoga classes</string>
+    <string name="default_entry_note9">Fitness activity</string>
+    <string name="default_entry_title10">Painted the nursery</string>
+    <string name="default_entry_note10">Home improvement project</string>
+
 </resources>

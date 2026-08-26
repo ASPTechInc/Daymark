@@ -1,38 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--    Colours-->
-    <!--    <attr name="colour_primary" format="color"/>-->
-    <!--    <attr name="colour_primary_dark" format="color"/>-->
-    <!--    <attr name="colour_accent" format="color"/>-->
-    <!--    <attr name="colour_secondary" format="color"/>-->
-    <!--    <attr name="colour_tertiary" format="color"/>-->
-
-    <!--    &lt;!&ndash;    App related attributes&ndash;&gt;-->
-    <!--    <attr name="app_background" format="color"/>-->
-    <!--    <attr name="app_navbar" format="color"/>-->
-    <!--    <attr name="app_navbar_text" format="color"/>-->
-    <!--    <attr name="app_navbar_icon" format="color"/>-->
-    <!--    <attr name="app_surface" format="color"/>-->
-
-    <!--    <attr name="app_text_primary" format="color"/>-->
-    <!--    <attr name="app_text_secondary" format="color"/>-->
-
-    <!--    <attr name="app_divider" format="color"/>-->
-    <!--    <attr name="app_error" format="color"/>-->
-    <!--    <attr name="app_warning" format="color"/>-->
-    <!--    <attr name="app_success" format="color"/>-->
-    <!--    <attr name="app_info" format="color"/>-->
-
-    <!--    &lt;!&ndash;    Buttons&ndash;&gt;-->
-    <!--    <attr name="btn_primary_bg" format="color"/>-->
-    <!--    <attr name="btn_primary_icon" format="color"/>-->
-    <!--    <attr name="btn_primary_text" format="color"/>-->
-    <!--    <attr name="btn_secondary_bg" format="color"/>-->
-    <!--    <attr name="btn_secondary_icon" format="color"/>-->
-    <!--    <attr name="btn_secondary_text" format="color"/>-->
-    <!--    <attr name="btn_secondary_border" format="color"/>-->
-
+    <!-- Colours -->
     <attr name="colorError" format="color" />
+    <attr name="colorOnInfo" format="color" />
     <attr name="colorPrimary" format="color" />
     <attr name="colorOnPrimaryContainer" format="color" />
     <attr name="colorPrimaryContainer" format="color" />
@@ -42,9 +12,14 @@
 
     <!-- App bar / navigation -->
     <attr name="colorOnSurfaceContainer" format="color" />
-    <attr name="app_navbar_icon" format="color" />
+    <attr name="colorOnNavbar" format="color" />
+    <attr name="colorAppLockContainer" format="color" />
 
-    <!-- Menu-->
+    <!-- Menu -->
     <attr name="colorOnMenuContainer" format="color" />
     <attr name="colorMenuContainer" format="color" />
+
+    <!-- Checkbox colour -->
+    <attr name="colorCheckboxChecked" format="color" />
+    <attr name="colorCheckboxUnchecked" format="color" />
 </resources>

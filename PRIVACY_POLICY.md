@@ -55,7 +55,7 @@ Daymark is a general-purpose productivity app and is not specifically directed t
 
 Because Daymark is FOSS, you can inspect the source code to verify data handling behaviour:
 
-- Repository: https://github.com/Sherida101/Daymark
+- Repository: https://github.com/ASPTechInc/Daymark
 
 ## Changes to This Policy
 

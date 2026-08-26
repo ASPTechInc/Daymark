@@ -11,14 +11,17 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ActivityDao {
-    @Query("SELECT * FROM activities")
+    @Query("SELECT * FROM activities ORDER BY position ASC")
     fun getAllActivities(): Flow<List<Activity>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(activity: Activity)
+    @Query("SELECT * FROM activities ORDER BY position ASC")
+    suspend fun getAll(): List<Activity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(activities: List<Activity>)
+    suspend fun insert(activity: Activity): Long
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(activities: List<Activity>): List<Long>
 
     @Update
     suspend fun update(activity: Activity)

@@ -3,25 +3,29 @@ package com.asptechinc.daymark
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Typeface
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
 import androidx.core.content.edit
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,23 +35,36 @@ import com.asptechinc.daymark.models.Activity
 import com.asptechinc.daymark.repository.ActivityRepository
 import com.asptechinc.daymark.repository.MetadataRepository
 import com.asptechinc.daymark.ui.MainViewModel
+import com.asptechinc.daymark.utils.NotificationHelper
 import com.asptechinc.daymark.utils.ThemeManager
 import com.asptechinc.daymark.utils.i18n
 import com.asptechinc.daymark.utils.styleDialogue
 import com.asptechinc.daymark.utils.toOrdinalDateString
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.color.MaterialColors
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.time.LocalDateTime
+import com.asptechinc.daymark.utils.LayoutManager as AppLayoutManager
 
 class MainActivity : AppCompatActivity() {
     companion object {
         const val APP_PIN_UNLOCKED_ONCE_KEY = "app_pin_unlocked_once"
     }
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                Log.i("MainActivity", "Notification permission granted")
+            } else {
+                Log.i("MainActivity", "Notification permission denied")
+            }
+        }
 
     private val viewModel: MainViewModel by viewModels {
         val database = AppDatabase.getDatabase(application)
@@ -78,29 +95,28 @@ class MainActivity : AppCompatActivity() {
     private var emptyStateContainer: android.view.View? = null
     private var itemTouchHelper: ItemTouchHelper? = null
 
-    val prefs by lazy { getSharedPreferences("settings", MODE_PRIVATE)!! }
+    val prefs by lazy { getSharedPreferences(AppConfig.SETTINGS_PREFS, MODE_PRIVATE)!! }
 
-    // fixme i ran into some issues with this using a lambda..it also didn't like it if i just passed
-    // a method ref. i even tried holding a strong reference to it cuz android docs have it held in a weak hashmap
     val prefsChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            sharedPreferencesChanged(this@MainActivity, sharedPreferences, key)
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            sharedPreferencesChanged(this@MainActivity, key)
         }
 
     override fun onResume() {
         super.onResume()
 
         if (::adapter.isInitialized) {
-            loadSavedData(applicationContext)
+            updateLayoutConfiguration()
             adapter.notifyDataSetChanged()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         ThemeManager.applySavedTheme(this)
         super.onCreate(savedInstanceState)
 
-        val savedPin = prefs.getString(i18n(R.string.backup_key_app_pin), null)
+        val savedPin = prefs.getString(i18n(R.string.app_lock_pin_key), null)
         val unlockedForThisLaunch = prefs.getBoolean(APP_PIN_UNLOCKED_ONCE_KEY, false)
 
         if (!savedPin.isNullOrBlank() && !unlockedForThisLaunch) {
@@ -113,11 +129,47 @@ class MainActivity : AppCompatActivity() {
             prefs.edit { putBoolean(APP_PIN_UNLOCKED_ONCE_KEY, false) }
         }
 
+        NotificationHelper.createNotificationChannel(this)
+        checkNotificationPermission()
+
         showMainContent()
         observeViewModel()
-        checkMigration()
+
+        handleIntent(intent)
     }
 
+    private fun checkNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    /**
+     * Handles deep-links and widget intents, such as the Quick Add action.
+     */
+    private fun handleIntent(intent: Intent?) {
+        if (intent?.action == "com.asptechinc.daymark.ACTION_QUICK_ADD") {
+            intent.action = null // Clear action so it doesn't trigger again on rotation
+            onCreateNewFabClick()
+        }
+    }
+
+    /**
+     * Observes the ViewModel's state flows and updates the UI accordingly.
+     * Uses lifecycle-aware collection to prevent resource leaks.
+     */
     private fun observeViewModel() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -128,8 +180,10 @@ class MainActivity : AppCompatActivity() {
                         adapter.notifyDataSetChanged()
 
                         val isEmpty = activities.isEmpty()
-                        listView?.visibility = if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
-                        emptyStateContainer?.visibility = if (isEmpty) android.view.View.VISIBLE else android.view.View.GONE
+                        listView?.visibility =
+                            if (isEmpty) android.view.View.GONE else android.view.View.VISIBLE
+                        emptyStateContainer?.visibility =
+                            if (isEmpty) android.view.View.VISIBLE else android.view.View.GONE
                     }
                 }
                 launch {
@@ -148,25 +202,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkMigration() {
-        val settingsJsonValue = prefs.getString(AppConfig.SETTINGS_JSON_KEY, null)
-        if (settingsJsonValue != null) {
-            try {
-                // We previously had a format that crashed. Since the user said it's okay to clear data,
-                // we check if it's the old format and remove it.
-                // The crash was: Expected JsonObject, but had JsonArray as the serialized body of Activity at path: $.0
-                // This indicates the whole JSON might be an array or the 'activities' field is an array of arrays.
-
-                prefs.edit { remove(AppConfig.SETTINGS_JSON_KEY) }
-                Log.i(this::class.java.simpleName, "Cleared legacy migration data as requested.")
-            } catch (e: Exception) {
-                Log.e(this::class.java.simpleName, "Failed to clear legacy data", e)
-            }
-        }
-    }
-
     private fun showMainContent() {
-        Log.i(this::class.java.simpleName, "mainactivity getting created")
+        Log.i(this::class.java.simpleName, "Loading MainActivity")
 
         setContentView(R.layout.activity_main)
 
@@ -183,16 +220,31 @@ class MainActivity : AppCompatActivity() {
             setOnClickListener { onCreateNewFabClick() }
         }
 
-        listView?.addItemDecoration(com.asptechinc.daymark.Divider(this, LinearLayoutManager.VERTICAL))
+        val isGrid = AppLayoutManager.isGridLayout(this)
+        if (!isGrid) {
+            listView?.addItemDecoration(
+                Divider(
+                    this,
+                    LinearLayoutManager.VERTICAL,
+                ),
+            )
+        }
 
         prefs.registerOnSharedPreferenceChangeListener(prefsChangeListener)
 
         adapter =
-            ActivityAdapter(this, { position, menuId ->
+            ActivityAdapter({ position, menuId ->
                 val activity = adapter.activities[position]
                 when (menuId) {
                     R.id.edit -> editCounter(position)
-                    R.id.duplicate -> viewModel.addActivity(activity.copy(id = 0))
+                    R.id.duplicate ->
+                        viewModel.addActivity(
+                            activity.copy(
+                                id = 0,
+                                position = adapter.itemCount,
+                            ),
+                        )
+
                     R.id.share -> shareCounter(position)
                     R.id.archive -> viewModel.archiveActivity(activity)
                     R.id.delete -> viewModel.deleteActivity(activity)
@@ -203,9 +255,10 @@ class MainActivity : AppCompatActivity() {
 
         listView?.apply {
             adapter = this@MainActivity.adapter
-            layoutManager = LinearLayoutManager(applicationContext)
             itemAnimator = DefaultItemAnimator()
         }
+
+        updateLayoutConfiguration()
 
         itemTouchHelper =
             ItemTouchHelper(
@@ -213,15 +266,38 @@ class MainActivity : AppCompatActivity() {
                     ItemTouchHelper.UP or ItemTouchHelper.DOWN,
                     0,
                 ) {
+                    override fun isLongPressDragEnabled(): Boolean = false
+
                     override fun onMove(
                         recyclerView: RecyclerView,
                         viewHolder: RecyclerView.ViewHolder,
                         target: RecyclerView.ViewHolder,
                     ): Boolean {
-                        // Drag and drop is trickier with Room without an explicit order column
-                        // For now, let's keep it as is in memory but it won't persist order
-                        // unless we add a 'position' field to Activity.
-                        return false
+                        val from = viewHolder.bindingAdapterPosition
+                        val to = target.bindingAdapterPosition
+                        if (from == RecyclerView.NO_POSITION || to == RecyclerView.NO_POSITION) return false
+
+                        // Don't allow reordering if user has manual sorting (by name) or filters active?
+                        // For now, let's allow it as requested.
+                        val reordered =
+                            com.asptechinc.daymark.utils.ListReorderer.moveItem(
+                                adapter.activities,
+                                from,
+                                to,
+                            )
+                        adapter.activities.clear()
+                        adapter.activities.addAll(reordered)
+                        adapter.notifyItemMoved(from, to)
+                        return true
+                    }
+
+                    override fun clearView(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                    ) {
+                        super.clearView(recyclerView, viewHolder)
+                        // Reordering finished, persist to DB
+                        viewModel.reorderActivities(adapter.activities)
                     }
 
                     override fun onSwiped(
@@ -234,7 +310,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.activity_main_menu, menu)
         return true
     }
 
@@ -264,18 +340,50 @@ class MainActivity : AppCompatActivity() {
         createListItemLauncher.launch(intent)
     }
 
+    private fun updateLayoutConfiguration() {
+        val isGrid = AppLayoutManager.isGridLayout(this)
+
+        // Update adapter
+        if (::adapter.isInitialized) {
+            adapter.isGridLayout = isGrid
+        }
+
+        // Update LayoutManager
+        listView?.apply {
+            recycledViewPool.clear()
+            layoutManager =
+                if (isGrid) {
+                    GridLayoutManager(applicationContext, 2)
+                } else {
+                    LinearLayoutManager(applicationContext)
+                }
+        }
+
+        // Update Item Decoration (Dividers)
+        listView?.apply {
+            // Remove existing dividers to avoid duplicates or wrong dividers for grid
+            repeat(itemDecorationCount) {
+                removeItemDecorationAt(0)
+            }
+
+            if (!isGrid) {
+                addItemDecoration(
+                    Divider(
+                        this@MainActivity,
+                        LinearLayoutManager.VERTICAL,
+                    ),
+                )
+            }
+        }
+    }
+
     private fun sharedPreferencesChanged(
         context: Context,
-        sharedPreferences: SharedPreferences,
         key: String?,
     ) {
-        Log.i(
-            this::class.java.simpleName,
-            "SharedPreferences have changed. Reloading activities from settings",
-        )
-
-        // todo prolly add a "just saved don't reload" thing...
-        loadSavedData(context)
+        if (key == "layout_mode_index") {
+            updateLayoutConfiguration()
+        }
 
         adapter.notifyDataSetChanged()
     }
@@ -283,22 +391,22 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         when (item.itemId) {
             R.id.searchButton -> {
-                showSearch()
+                showSearchDialogue()
                 true
             }
 
             R.id.filterButton -> {
-                showFilter()
+                showFilterDialogue()
                 true
             }
 
             R.id.sortButton -> {
-                showSort()
+                showSortDialogue()
                 true
             }
 
             R.id.settingsButton -> {
-                showSettings()
+                showSettingsScreen()
                 true
             }
 
@@ -310,20 +418,24 @@ class MainActivity : AppCompatActivity() {
         categoryId: Int?,
         month: Int?,
         year: Int?,
+        showArchived: Boolean?,
+        showCompleted: Boolean?,
     ) {
-        viewModel.updateFilters(categoryId, month, year)
+        viewModel.updateFilters(categoryId, month, year, showArchived, showCompleted)
     }
 
-    private fun showFilter() {
+    private fun showFilterDialogue() {
         val dialogueView = LayoutInflater.from(this).inflate(R.layout.dialogue_filter, null)
 
         val categoryInput = dialogueView.findViewById<AutoCompleteTextView>(R.id.category_input)
         val monthInput = dialogueView.findViewById<AutoCompleteTextView>(R.id.month_input)
         val yearInput = dialogueView.findViewById<EditText>(R.id.year_input)
+        val archiveCheckbox = dialogueView.findViewById<MaterialCheckBox>(R.id.archived_checkbox)
+        val completedCheckbox = dialogueView.findViewById<MaterialCheckBox>(R.id.completed_checkbox)
 
         val categoryOptions =
             listOf(getString(R.string.filter_all_categories) to null) +
-                adapter.categories.map { it.name to it.id }
+                    adapter.categories.map { it.name to it.id }
 
         val currentOptions = viewModel.listOptions.value
         val selectedCategoryLabel =
@@ -342,7 +454,7 @@ class MainActivity : AppCompatActivity() {
         val monthNames = DateFormatSymbols.getInstance().months.take(12)
         val monthOptions =
             listOf(getString(R.string.filter_any_month) to null) +
-                monthNames.mapIndexed { index, monthName -> monthName to (index + 1) }
+                    monthNames.mapIndexed { index, monthName -> monthName to (index + 1) }
         val selectedMonthLabel =
             monthOptions.firstOrNull { it.second == currentOptions.month }?.first
                 ?: getString(R.string.filter_any_month)
@@ -356,6 +468,20 @@ class MainActivity : AppCompatActivity() {
         )
         monthInput.setText(selectedMonthLabel, false)
         yearInput.setText(currentOptions.year?.toString().orEmpty())
+
+        archiveCheckbox.checkedState =
+            when (currentOptions.showArchived) {
+                true -> MaterialCheckBox.STATE_CHECKED
+                false -> MaterialCheckBox.STATE_UNCHECKED
+                null -> MaterialCheckBox.STATE_INDETERMINATE
+            }
+
+        completedCheckbox.checkedState =
+            when (currentOptions.showCompleted) {
+                true -> MaterialCheckBox.STATE_CHECKED
+                false -> MaterialCheckBox.STATE_UNCHECKED
+                null -> MaterialCheckBox.STATE_INDETERMINATE
+            }
 
         val dialogue =
             MaterialAlertDialogBuilder(this)
@@ -376,11 +502,26 @@ class MainActivity : AppCompatActivity() {
                     val selectedMonthValue =
                         monthOptions.firstOrNull { it.first == monthInput.text.toString() }?.second
 
+                    val selectedShowArchived =
+                        when (archiveCheckbox.checkedState) {
+                            MaterialCheckBox.STATE_CHECKED -> true
+                            MaterialCheckBox.STATE_UNCHECKED -> false
+                            else -> null
+                        }
+
+                    val selectedShowCompleted =
+                        when (completedCheckbox.checkedState) {
+                            MaterialCheckBox.STATE_CHECKED -> true
+                            MaterialCheckBox.STATE_UNCHECKED -> false
+                            else -> null
+                        }
+
                     val typedYear =
                         yearInput.text
                             ?.toString()
                             ?.trim()
                             .orEmpty()
+
                     val selectedYearValue =
                         if (typedYear.isBlank()) {
                             null
@@ -388,18 +529,22 @@ class MainActivity : AppCompatActivity() {
                             typedYear.toIntOrNull()
                         }
 
-                    if (typedYear.isNotBlank() && selectedYearValue == null) {
-                        yearInput.error = getString(R.string.filter_year_invalid)
-                        return@setOnClickListener
-                    }
-
-                    if (selectedMonthValue == null && selectedYearValue != null) {
-                        yearInput.error = getString(R.string.filter_year_requires_month)
-                        return@setOnClickListener
+                    if (typedYear.isNotBlank()) {
+                        if (typedYear.length != 4 || selectedYearValue == null) {
+                            yearInput.error = getString(R.string.filter_year_invalid)
+                            return@setOnClickListener
+                        }
                     }
 
                     yearInput.error = null
-                    applyFilters(selectedCategory, selectedMonthValue, selectedYearValue)
+
+                    applyFilters(
+                        selectedCategory,
+                        selectedMonthValue,
+                        selectedYearValue,
+                        selectedShowArchived,
+                        selectedShowCompleted,
+                    )
                     dialogue.dismiss()
                 }
         }
@@ -413,7 +558,7 @@ class MainActivity : AppCompatActivity() {
         searchText = text
     }
 
-    private fun showSearch() {
+    private fun showSearchDialogue() {
         val dialogueView = LayoutInflater.from(this).inflate(R.layout.dialogue_search, null)
         val searchInput = dialogueView.findViewById<EditText>(R.id.search_input)
         searchInput.setText(searchText)
@@ -442,7 +587,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Sort
-    private fun showSort() {
+    private fun showSortDialogue() {
         viewModel.toggleSort()
     }
 
@@ -451,64 +596,9 @@ class MainActivity : AppCompatActivity() {
         searchText = ""
     }
 
-    private fun styleDialogueButtons(dialogue: androidx.appcompat.app.AlertDialog) {
-        val positiveButton = dialogue.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
-        val negativeButton = dialogue.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
-        val neutralButton = dialogue.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL)
-
-        val positiveColour =
-            MaterialColors.getColor(
-                this,
-                com.google.android.material.R.attr.colorOnTertiary,
-                getColor(R.color.primary),
-            )
-        val negativeColour =
-            MaterialColors.getColor(
-                this,
-                com.google.android.material.R.attr.colorSecondary,
-                getColor(R.color.secondary),
-            )
-        val neutralColour =
-            MaterialColors.getColor(
-                this,
-                com.google.android.material.R.attr.colorOnSurfaceVariant,
-                getColor(R.color.on_surface_variant),
-            )
-
-        listOf(positiveButton, negativeButton, neutralButton).forEach { button ->
-            button.setTypeface(Typeface.DEFAULT_BOLD)
-            button.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14f)
-        }
-
-        positiveButton.setTextColor(positiveColour)
-        negativeButton.setTextColor(negativeColour)
-        neutralButton.setTextColor(neutralColour)
-    }
-
-    private fun updateList() {
-        // ViewModel observes changes
-    }
-
-    private fun showSettings() {
+    private fun showSettingsScreen() {
         val intent = Intent(this@MainActivity, SettingsActivity::class.java)
         startActivity(intent)
-    }
-
-    private fun clearCounters() {
-        val builder = MaterialAlertDialogBuilder(this)
-
-        builder.setTitle(i18n(R.string.confirm_dialogue_title))
-        builder.setMessage(i18n(R.string.confirm_dialogue_prompt))
-
-        builder.setPositiveButton(i18n(R.string.confirm_dialogue_yes)) { dialogue, _ ->
-            viewModel.clearAllActivities()
-            dialogue.dismiss()
-        }
-
-        builder.setNegativeButton(i18n(R.string.confirm_dialogue_no)) { dialogue, _ -> dialogue.dismiss() }
-
-        val alert = builder.create()
-        alert.show()
     }
 
     // Menu options - list
@@ -577,17 +667,13 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent.createChooser(intent, null))
     }
 
-    private fun resetCounter(position: Int) {
-        val counter = adapter.activities[position]
-        viewModel.resetActivity(counter)
-    }
-
     private fun createListItemFinished(data: Intent) {
         // Add a new activity
         val activityName = data.getStringExtra("activityName") ?: return
         val notes = data.getStringExtra("notes") ?: return
         val startDateTime =
-            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java) ?: return
+            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java)
+                ?: return
         val endDateTime =
             IntentCompat.getSerializableExtra(data, "endDateTime", LocalDateTime::class.java)
 
@@ -605,6 +691,7 @@ class MainActivity : AppCompatActivity() {
                 archived = archived,
                 categoryId = categoryId,
                 tagIds = tagIds.toMutableList(),
+                position = adapter.itemCount,
             )
 
         viewModel.addActivity(newActivity)
@@ -616,7 +703,8 @@ class MainActivity : AppCompatActivity() {
         val newActivityName = data.getStringExtra("activityName") ?: return
         val newNotes = data.getStringExtra("notes") ?: return
         val newStartDateTime =
-            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java) ?: return
+            IntentCompat.getSerializableExtra(data, "startDateTime", LocalDateTime::class.java)
+                ?: return
         val newEndDateTime =
             IntentCompat.getSerializableExtra(data, "endDateTime", LocalDateTime::class.java)
 
@@ -635,13 +723,5 @@ class MainActivity : AppCompatActivity() {
                 tagIds = newTagIds,
             )
         viewModel.updateActivity(updated)
-    }
-
-    private fun setActivities(newActivities: List<Activity>) {
-        viewModel.importActivities(newActivities)
-    }
-
-    private fun loadSavedData(context: Context) {
-        // Activities handled by ViewModel
     }
 }

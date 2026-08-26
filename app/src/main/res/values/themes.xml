@@ -39,7 +39,8 @@
 
         <item name="colorSurfaceContainer">@color/surface_container</item>
         <item name="colorOnSurfaceContainer">@color/on_surface_container</item>
-        <item name="app_navbar_icon">@color/navbar_icon</item>
+        <item name="colorOnNavbar">@color/navbar_icon</item>
+        <item name="colorAppLockContainer">@color/app_lock_container</item>
 
         <!-- Outline -->
         <item name="colorOutline">@color/outline</item>
@@ -48,10 +49,16 @@
         <item name="colorOnMenuContainer">@color/on_menu_container</item>
         <item name="colorMenuContainer">@color/menu_container</item>
 
+        <!-- Checkbox colour -->
+        <item name="colorCheckboxChecked">@color/checkbox_checked</item>
+        <item name="colorCheckboxUnchecked">@color/checkbox_unchecked</item>
 
-        <!-- Error -->
+        <!-- Status: Error -->
         <item name="colorError">@color/error</item>
         <item name="colorOnError">@color/on_error</item>
+
+        <!-- Status: Info -->
+        <item name="colorOnInfo">@color/on_info</item>
     </style>
 
     <!-- App theme -->
@@ -83,6 +90,7 @@
         <item name="itemTextAppearance">?attr/textAppearanceBodyMedium</item>
     </style>
 
+    <!-- App theme: Popup overlay -->
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3">
         <item name="popupMenuStyle">@style/Widget.AppTheme.PopupMenu</item>
         <item name="colorSurface">@color/surface_container</item>
@@ -100,8 +108,15 @@
     </style>
 
     <!-- Theme: App PIN -->
-    <style name="Widget.Daymark.AppLockKeyButton" parent="Widget.Material3.Button.TextButton">
+    <style name="Widget.Daymark.AppLockKeyButton" parent="Widget.Material3.Button.TonalButton">
         <item name="android:textSize">28sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="cornerRadius">36dp</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="backgroundTint">#38383A</item>
     </style>
 
     <!-- Theme: Dialogue -->
@@ -114,10 +129,12 @@
         </item>
     </style>
 
+    <!-- Theme: Dialogue title text -->
     <style name="TextAppearance.Daymark.DialogTitle" parent="TextAppearance.Material3.TitleLarge">
         <item name="android:textColor">?attr/colorOnSurfaceContainer</item>
     </style>
 
+    <!-- Theme: Dialogue body text -->
     <style name="TextAppearance.Daymark.DialogBody" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">?attr/colorOnSurfaceContainer</item>
     </style>

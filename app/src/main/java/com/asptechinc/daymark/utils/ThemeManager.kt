@@ -1,20 +1,23 @@
 package com.asptechinc.daymark.utils
 
 import android.content.Context
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.edit
+import com.asptechinc.daymark.config.AppConfig
 
 object ThemeManager {
-    private const val SETTINGS_PREFS = "settings"
     private const val THEME_MODE_INDEX_KEY = "theme_mode_index"
 
     fun applySavedTheme(context: Context) {
-        AppCompatDelegate.setDefaultNightMode(modeForIndex(getSavedThemeIndex(context)))
+        val index = getSavedThemeIndex(context)
+        Log.i("ThemeManager", "Applying saved theme (index: $index)")
+        AppCompatDelegate.setDefaultNightMode(modeForIndex(index))
     }
 
     fun getSavedThemeIndex(context: Context): Int =
         context
-            .getSharedPreferences(SETTINGS_PREFS, Context.MODE_PRIVATE)
+            .getSharedPreferences(AppConfig.SETTINGS_PREFS, Context.MODE_PRIVATE)
             .getInt(THEME_MODE_INDEX_KEY, 0)
             .coerceIn(0, 2)
 
@@ -22,12 +25,13 @@ object ThemeManager {
         context: Context,
         index: Int,
     ) {
-        val normalizedIndex = index.coerceIn(0, 2)
+        val normalisedIndex = index.coerceIn(0, 2)
+        Log.i("ThemeManager", "Setting theme to index: $normalisedIndex")
         context
-            .getSharedPreferences(SETTINGS_PREFS, Context.MODE_PRIVATE)
-            .edit { putInt(THEME_MODE_INDEX_KEY, normalizedIndex) }
+            .getSharedPreferences(AppConfig.SETTINGS_PREFS, Context.MODE_PRIVATE)
+            .edit { putInt(THEME_MODE_INDEX_KEY, normalisedIndex) }
 
-        AppCompatDelegate.setDefaultNightMode(modeForIndex(normalizedIndex))
+        AppCompatDelegate.setDefaultNightMode(modeForIndex(normalisedIndex))
     }
 
     private fun modeForIndex(index: Int): Int =

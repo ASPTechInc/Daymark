@@ -24,8 +24,6 @@
             tools:background="@color/surface_container" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
     <LinearLayout
         android:id="@+id/empty_state_container"
         android:layout_width="wrap_content"
@@ -37,8 +35,8 @@
 
         <ImageView
             android:id="@+id/empty_state_image"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="@dimen/layout_dimension_180"
+            android:layout_height="@dimen/layout_dimension_180"
             android:contentDescription="@string/no_data_image_alt"
             android:src="@drawable/no_data" />
 
@@ -46,28 +44,31 @@
             android:id="@+id/empty_state_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/layout_dimension_16"
             android:text="@string/empty_state_no_activities"
             android:textAppearance="?attr/textAppearanceTitleMedium"
             android:textColor="?attr/colorOnSurface" />
     </LinearLayout>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/layout_dimension_10"
+        android:paddingBottom="@dimen/layout_dimension_90"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/margin_16"
-        android:contentDescription="@string/btn_add_activity_desc"
+        android:layout_margin="@dimen/layout_dimension_16"
+        android:contentDescription="@string/content_desc_btn_add_activity"
         app:backgroundTint="?attr/colorPrimaryContainer"
         app:srcCompat="@drawable/ic_plus"
         app:tint="?attr/colorOnPrimaryContainer" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize"
-        android:paddingTop="@dimen/padding_10"
-        android:scrollbars="vertical" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

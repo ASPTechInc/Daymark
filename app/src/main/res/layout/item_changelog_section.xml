@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="@dimen/layout_dimension_8"
     android:orientation="vertical">
 
     <TextView
@@ -19,7 +19,7 @@
         android:id="@+id/items_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/layout_dimension_4"
         android:orientation="vertical" />
 
 </LinearLayout>

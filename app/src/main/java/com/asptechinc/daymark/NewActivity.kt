@@ -1,18 +1,20 @@
 package com.asptechinc.daymark
 
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.IntentCompat
+import androidx.lifecycle.lifecycleScope
+import com.asptechinc.daymark.data.AppDatabase
 import com.asptechinc.daymark.utils.ThemeManager
 import com.asptechinc.daymark.utils.datePicked
 import com.asptechinc.daymark.utils.formatDate
@@ -20,6 +22,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
 class NewActivity : AppCompatActivity() {
@@ -32,14 +35,28 @@ class NewActivity : AppCompatActivity() {
     private lateinit var archivedCheckBox: MaterialCheckBox
     private lateinit var categoryDropdown: AutoCompleteTextView
     private lateinit var tagChipGroup: ChipGroup
+    private lateinit var tagChipExample: Chip
     private lateinit var activityNameEditText: EditText
     private lateinit var notesEditText: EditText
+
+    private var availableCategoryNames = ArrayList<String>()
+    private var availableCategoryIds = ArrayList<Int>()
+
+    private var selectedCategoryId: Int? = null
+    private var selectedTagIds = mutableListOf<Int>()
+
+    override fun onResume() {
+        super.onResume()
+        // Refresh categories and tags in case they were modified in Settings
+        loadInitialDataFromDb(selectedCategoryId, selectedTagIds)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager.applySavedTheme(this)
         super.onCreate(savedInstanceState)
 
         val isEditing = intent.getBooleanExtra("isEditing", false)
+        Log.i("NewActivity", "Creating activity screen (isEditing: $isEditing)")
 
         activityInit(isEditing)
 
@@ -64,7 +81,7 @@ class NewActivity : AppCompatActivity() {
         val startDateDialog =
             DatePickerDialog(
                 this,
-                OnDateSetListener { _, year, month, day ->
+                { _, year, month, day ->
                     startDateTime = datePicked(year, month + 1, day)
                     startDateButton.text = formatDate(startDateTime)
                 },
@@ -83,13 +100,14 @@ class NewActivity : AppCompatActivity() {
             }
 
         // End date
-        endDateTime = IntentCompat.getSerializableExtra(intent, "endDateTime", LocalDateTime::class.java)
-            ?: LocalDateTime.now()
+        endDateTime =
+            IntentCompat.getSerializableExtra(intent, "endDateTime", LocalDateTime::class.java)
+                ?: LocalDateTime.now()
 
         val endDateDialog =
             DatePickerDialog(
                 this,
-                OnDateSetListener { _, year, month, day ->
+                { _, year, month, day ->
                     endDateTime = datePicked(year, month + 1, day)
                     endDateButton.text = formatDate(endDateTime)
                 },
@@ -112,42 +130,23 @@ class NewActivity : AppCompatActivity() {
 
         categoryDropdown = findViewById(R.id.category_dropdown)
         tagChipGroup = findViewById(R.id.tag_chip_group)
+        tagChipExample = findViewById(R.id.tag_chip_example)
 
-        val availableCategoryNames = intent.getStringArrayListExtra("availableCategoryNames")
-        val availableCategoryIds = intent.getIntegerArrayListExtra("availableCategoryIds")
-        val availableTagNames = intent.getStringArrayListExtra("availableTagNames")
-        val availableTagIds = intent.getIntegerArrayListExtra("availableTagIds")
-        val selectedCategoryId = intent.getIntExtra("categoryId", -1).takeIf { it != -1 }
-        val selectedTagIds = intent.getIntegerArrayListExtra("tagIds") ?: arrayListOf()
+        selectedCategoryId = intent.getIntExtra("categoryId", -1).takeIf { it != -1 }
+        selectedTagIds = intent.getIntegerArrayListExtra("tagIds") ?: mutableListOf()
 
-        if (!availableCategoryNames.isNullOrEmpty() && !availableCategoryIds.isNullOrEmpty()) {
-            val categoryNames = availableCategoryNames.toList()
-            val categoryAdapter =
-                ArrayAdapter(
-                    this,
-                    android.R.layout.simple_dropdown_item_1line,
-                    categoryNames,
-                )
-            categoryDropdown.setAdapter(categoryAdapter)
-
-            val selectedIndex =
-                availableCategoryIds.indexOfFirst { it == selectedCategoryId }
-            if (selectedIndex >= 0) {
-                categoryDropdown.setText(categoryNames[selectedIndex], false)
+        findViewById<View>(R.id.btn_manage_categories).setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java).apply {
+                putExtra("action", "manage_categories")
             }
+            startActivity(intent)
         }
 
-        if (!availableTagNames.isNullOrEmpty() && !availableTagIds.isNullOrEmpty()) {
-            for (index in availableTagNames.indices) {
-                val chip =
-                    Chip(this).apply {
-                        text = availableTagNames[index]
-                        isCheckable = true
-                        isChecked = selectedTagIds.contains(availableTagIds[index])
-                        tag = availableTagIds[index]
-                    }
-                tagChipGroup.addView(chip)
+        findViewById<View>(R.id.btn_manage_tags).setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java).apply {
+                putExtra("action", "manage_tags")
             }
+            startActivity(intent)
         }
 
         // Save button
@@ -155,8 +154,8 @@ class NewActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
             val selectedCategoryIdValue =
                 categoryDropdown.text?.toString()?.let { categoryName ->
-                    val index = availableCategoryNames?.indexOf(categoryName) ?: -1
-                    if (index >= 0) availableCategoryIds?.get(index) else null
+                    val index = availableCategoryNames.indexOf(categoryName)
+                    if (index >= 0) availableCategoryIds[index] else null
                 } ?: -1
 
             val selectedTagIdsValue =
@@ -191,6 +190,63 @@ class NewActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadInitialDataFromDb(selectedCategoryId: Int?, selectedTagIds: List<Int>) {
+        lifecycleScope.launch {
+            val db = AppDatabase.getDatabase(this@NewActivity)
+            val categories = db.categoryDao().getAll()
+            val tags = db.tagDao().getAll()
+
+            populateSpinners(
+                ArrayList(categories.map { it.name }),
+                ArrayList(categories.map { it.id }),
+                ArrayList(tags.map { it.name }),
+                ArrayList(tags.map { it.id }),
+                selectedCategoryId,
+                selectedTagIds
+            )
+        }
+    }
+
+    private fun populateSpinners(
+        categoryNames: ArrayList<String>,
+        categoryIds: ArrayList<Int>,
+        tagNames: ArrayList<String>,
+        tagIds: ArrayList<Int>,
+        selectedCategoryId: Int?,
+        selectedTagIds: List<Int>
+    ) {
+        this.availableCategoryNames = categoryNames
+        this.availableCategoryIds = categoryIds
+
+        val categoryAdapter =
+            ArrayAdapter(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                categoryNames,
+            )
+        categoryDropdown.setAdapter(categoryAdapter)
+
+        val selectedIndex =
+            categoryIds.indexOfFirst { it == selectedCategoryId }
+        if (selectedIndex >= 0) {
+            categoryDropdown.setText(categoryNames[selectedIndex], false)
+        }
+
+        tagChipGroup.removeAllViews()
+        for (index in tagNames.indices) {
+            val chip =
+                Chip(this).apply {
+                    text = tagNames[index]
+                    isCheckable = true
+                    isChecked = selectedTagIds.contains(tagIds[index])
+                    tag = tagIds[index]
+                }
+            tagChipGroup.addView(chip)
+        }
+        
+        tagChipExample.visibility = if (tagNames.isEmpty()) View.VISIBLE else View.GONE
+    }
+
     inner class TextChangedListener : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
             val saveButton = this@NewActivity.findViewById<Button>(R.id.saveButton)
@@ -218,12 +274,6 @@ class NewActivity : AppCompatActivity() {
 
         setSupportActionBar(toolbar)
 
-        // Replace ellipsis in toolbar with a tune icon
-        toolbar.overflowIcon =
-            AppCompatResources.getDrawable(
-                this,
-                R.drawable.ic_tune,
-            )
         toolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.settingsButton -> {
@@ -234,7 +284,7 @@ class NewActivity : AppCompatActivity() {
                 else -> false
             }
         }
-        toolbar.inflateMenu(R.menu.menu_toolbar)
+        toolbar.inflateMenu(R.menu.activity_new_menu)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -245,5 +295,10 @@ class NewActivity : AppCompatActivity() {
             } else {
                 getString(R.string.screen_new_activity)
             }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 }

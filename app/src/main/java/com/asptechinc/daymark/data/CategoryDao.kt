@@ -11,8 +11,11 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
-    @Query("SELECT * FROM categories")
+    @Query("SELECT * FROM categories ORDER BY name COLLATE NOCASE ASC")
     fun getAllCategories(): Flow<List<Category>>
+
+    @Query("SELECT * FROM categories ORDER BY name COLLATE NOCASE ASC")
+    suspend fun getAll(): List<Category>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(category: Category)

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/scroll_view"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="@dimen/layout_dimension_24">
 
         <!-- Start Date -->
         <TextView
@@ -21,7 +23,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_dimension_8"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -54,19 +56,19 @@
 
             <ImageButton
                 android:id="@+id/btn_pick_start"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/layout_dimension_48"
+                android:layout_height="@dimen/layout_dimension_48"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/btn_start_date"
                 android:src="@drawable/ic_dates"
-                app:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorOnMenuContainer" />
         </LinearLayout>
 
         <!-- End Date -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/layout_dimension_16"
             android:text="@string/calculator_end_date"
             android:textAppearance="?attr/textAppearanceTitleSmall"
             android:textColor="?attr/colorPrimary" />
@@ -74,7 +76,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_dimension_8"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -107,42 +109,49 @@
 
             <ImageButton
                 android:id="@+id/btn_pick_end"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/layout_dimension_48"
+                android:layout_height="@dimen/layout_dimension_48"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/btn_end_date"
                 android:src="@drawable/ic_dates"
-                app:tint="?attr/colorPrimary" />
+                app:tint="?attr/colorOnMenuContainer" />
         </LinearLayout>
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb_include_end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/layout_dimension_8"
             android:text="@string/calculator_include_end_date" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_calculate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/layout_dimension_16"
             android:text="@string/calculator_btn_calculate"
             android:textColor="?attr/colorOnPrimaryContainer"
             app:backgroundTint="?attr/colorPrimaryContainer" />
 
-        <!-- Results Section -->
+        <!-- Results section -->
         <LinearLayout
             android:id="@+id/results_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="@dimen/layout_dimension_24"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
+                android:background="?attr/colorOutline" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/layout_dimension_40"
                 android:text="@string/calculator_result_title"
                 android:textAppearance="?attr/textAppearanceTitleMedium"
                 android:textColor="?attr/colorPrimary" />
@@ -150,42 +159,42 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:background="?attr/colorOutlineVariant" />
 
             <TextView
                 android:id="@+id/result_breakdown"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="@dimen/layout_dimension_12"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <TextView
                 android:id="@+id/result_weeks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <TextView
                 android:id="@+id/result_business_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <TextView
                 android:id="@+id/result_weekends"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:textAppearance="?attr/textAppearanceBodyMedium" />
 
             <TextView
                 android:id="@+id/result_total_days"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="@dimen/layout_dimension_4"
                 android:textAppearance="?attr/textAppearanceTitleSmall"
                 android:textColor="?attr/colorOnSurface" />
 

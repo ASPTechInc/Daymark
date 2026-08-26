@@ -3,10 +3,14 @@ package com.asptechinc.daymark
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
+import com.asptechinc.daymark.config.AppConfig
 import com.asptechinc.daymark.utils.ThemeManager
 import com.asptechinc.daymark.utils.i18n
 
@@ -17,11 +21,12 @@ class AppLockActivity : AppCompatActivity() {
     private val maxPinLength = 16
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         ThemeManager.applySavedTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app_lock)
 
-        prefs = getSharedPreferences("settings", MODE_PRIVATE)
+        prefs = getSharedPreferences(AppConfig.SETTINGS_PREFS, MODE_PRIVATE)
         pinDisplay = findViewById(R.id.pin_display)
 
         val clearButton = findViewById<Button>(R.id.btn_clear)
@@ -68,12 +73,20 @@ class AppLockActivity : AppCompatActivity() {
     }
 
     private fun validatePin() {
-        val savedPin = prefs.getString(i18n(R.string.backup_key_app_pin), null)
+        val savedPin = prefs.getString(i18n(R.string.app_lock_pin_key), null)
         if (savedPin != null && enteredPin.toString() == savedPin) {
+            Log.i("AppLockActivity", "PIN validation successful")
             prefs.edit { putBoolean(MainActivity.APP_PIN_UNLOCKED_ONCE_KEY, true) }
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         } else {
+            Log.i("AppLockActivity", i18n(R.string.toast_app_lock_pin_invalid))
+            Toast
+                .makeText(
+                    this,
+                    i18n(R.string.toast_app_lock_pin_invalid),
+                    Toast.LENGTH_LONG,
+                ).show()
             clearPin()
         }
     }

@@ -34,10 +34,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingStart="@dimen/padding_16"
-            android:paddingTop="@dimen/padding_16"
-            android:paddingEnd="@dimen/padding_16"
-            android:paddingBottom="@dimen/padding_24">
+            android:paddingStart="@dimen/layout_dimension_16"
+            android:paddingTop="@dimen/layout_dimension_16"
+            android:paddingEnd="@dimen/layout_dimension_16"
+            android:paddingBottom="@dimen/layout_dimension_90">
 
             <!--  Activity name -->
             <TextView
@@ -52,7 +52,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/layout_dimension_8"
                 android:hint="@string/activity_name_hint"
                 android:textColorHint="?attr/colorOnTertiary">
 
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints=""
                     android:inputType="text"
-                    android:minHeight="48dp"
+                    android:minHeight="@dimen/layout_dimension_48"
                     android:textColor="?attr/colorOnSurface" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -74,13 +74,13 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/activity_notes_label"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
+                android:textSize="@dimen/text_size_16"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/layout_dimension_8"
                 android:hint="@string/activity_notes_hint"
                 android:textColorHint="?attr/colorOnTertiary">
 
@@ -95,34 +95,60 @@
                     android:maxLines="6"
                     android:minHeight="120dp"
                     android:minLines="4"
-                    android:padding="12dp" />
+                    android:padding="@dimen/layout_dimension_12" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Archived -->
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="@string/activity_archived_label"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="@dimen/layout_dimension_20"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/archived_checkbox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checked="false" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_archived_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/archived_checkbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+            </LinearLayout>
 
             <!--  Category -->
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/activity_category_label"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/categoryLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/activity_category_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_manage_categories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:text="@string/settings_manage_categories"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/category_layout"
@@ -130,6 +156,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/activity_category_hint"
+                android:labelFor="@+id/category_dropdown"
                 android:textColorHint="?attr/colorOnTertiary">
 
                 <AutoCompleteTextView
@@ -141,14 +168,32 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--  Tags -->
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:text="@string/activity_tags_label"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/activity_tags_label"
+                    android:textColor="?attr/colorOnSurface"
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/btn_manage_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:padding="4dp"
+                    android:text="@string/settings_manage_tags"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/tag_chip_group"
@@ -161,7 +206,9 @@
                     android:id="@+id/tag_chip_example"
                     style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/activity_tags_example"
+                    android:textColor="?attr/colorOnTertiary" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -169,7 +216,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/layout_dimension_24"
                 android:baselineAligned="false"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
@@ -187,14 +234,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/activity_start_date_label"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_16"
                         android:textStyle="bold" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/startDateButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/layout_dimension_8"
                         android:text="@string/btn_start_date"
                         android:textColor="?attr/colorOnPrimaryContainer"
                         app:backgroundTint="?attr/colorPrimaryContainer" />
@@ -213,14 +260,14 @@
                         android:layout_height="wrap_content"
                         android:text="@string/activity_end_date_label"
                         android:textColor="?attr/colorOnSurface"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/text_size_16"
                         android:textStyle="bold" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/endDateButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="@dimen/layout_dimension_8"
                         android:text="@string/btn_end_date"
                         android:textColor="?attr/colorOnPrimaryContainer"
                         app:backgroundTint="?attr/colorPrimaryContainer" />
@@ -231,7 +278,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/layout_dimension_30"
                 android:orientation="horizontal">
 
                 <!-- Cancel button -->
@@ -243,12 +290,12 @@
                     android:text="@string/btn_cancel"
                     android:textColor="?attr/colorOnSecondaryContainer"
                     app:backgroundTint="?attr/colorSecondaryContainer"
-                    app:cornerRadius="4dp"
+                    app:cornerRadius="@dimen/layout_dimension_4"
                     app:strokeColor="?attr/colorOutline"
-                    app:strokeWidth="2dp" />
+                    app:strokeWidth="@dimen/layout_dimension_2" />
 
                 <Space
-                    android:layout_width="12dp"
+                    android:layout_width="@dimen/layout_dimension_12"
                     android:layout_height="wrap_content" />
 
                 <!-- Save button -->

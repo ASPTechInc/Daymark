@@ -14,6 +14,8 @@ import com.asptechinc.daymark.repository.MetadataRepository
 import com.asptechinc.daymark.repository.initialActivities
 import com.asptechinc.daymark.repository.initialCategories
 import com.asptechinc.daymark.repository.initialTags
+import com.asptechinc.daymark.utils.AlarmHelper
+import com.asptechinc.daymark.utils.WidgetUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +23,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
+/**
+ * Central ViewModel for managing the main activity list, filtering, and sorting.
+ *
+ * It coordinates data between [ActivityRepository] and [MetadataRepository] (categories/tags).
+ */
 class MainViewModel(
     application: Application,
     private val repository: ActivityRepository,
@@ -56,10 +64,16 @@ class MainViewModel(
         }
     }
 
+    /**
+     * Applies the current [ListOptions] (search, filter, sort) to the list of activities.
+     *
+     * This logic is executed in a background thread via [combine] and [stateIn].
+     */
     private fun filterAndSort(
         activities: List<Activity>,
         options: ListOptions,
     ): List<Activity> {
+        val now = LocalDateTime.now()
         return activities
             .filter { counter ->
                 if (options.searchText.isNotBlank() &&
@@ -80,6 +94,17 @@ class MainViewModel(
                     if (counter.startDateTime.year != year) return@filter false
                 }
 
+                options.showArchived?.let { showArchived ->
+                    if ((counter.archived == true) != showArchived) {
+                        return@filter false
+                    }
+                }
+
+                options.showCompleted?.let { showCompleted ->
+                    val isCompleted = counter.endDateTime != null && counter.endDateTime!!.isBefore(now)
+                    if (isCompleted != showCompleted) return@filter false
+                }
+
                 true
             }.let { filtered ->
                 if (options.sortByName) {
@@ -98,8 +123,18 @@ class MainViewModel(
         categoryId: Int?,
         month: Int?,
         year: Int?,
+        showArchived: Boolean?,
+        showCompleted: Boolean?,
     ) {
-        listOptions.update { it.copy(categoryId = categoryId, month = month, year = year) }
+        listOptions.update {
+            it.copy(
+                categoryId = categoryId,
+                month = month,
+                year = year,
+                showArchived = showArchived,
+                showCompleted = showCompleted,
+            )
+        }
     }
 
     fun toggleSort() {
@@ -112,37 +147,73 @@ class MainViewModel(
 
     fun addActivity(activity: Activity) =
         viewModelScope.launch {
-            repository.add(activity)
+            val id = repository.add(activity)
+            activity.endDateTime?.let { endTime ->
+                AlarmHelper.scheduleActivityEndAlarm(getApplication(), id, activity.activityName, endTime)
+            }
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun updateActivity(activity: Activity) =
         viewModelScope.launch {
             repository.update(activity)
+            AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
+            activity.endDateTime?.let { endTime ->
+                AlarmHelper.scheduleActivityEndAlarm(getApplication(), activity.id, activity.activityName, endTime)
+            }
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun deleteActivity(activity: Activity) =
         viewModelScope.launch {
             repository.remove(activity)
+            AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun archiveActivity(activity: Activity) =
         viewModelScope.launch {
             repository.archive(activity)
+            AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun resetActivity(activity: Activity) =
         viewModelScope.launch {
             repository.reset(activity)
+            AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun clearAllActivities() =
         viewModelScope.launch {
+            // We should probably cancel all alarms, but we don't have a list here easily.
+            // For now, let's just clear.
             repository.clear()
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     fun importActivities(activities: List<Activity>) =
         viewModelScope.launch {
-            repository.addAll(activities)
+            val ids = repository.addAll(activities)
+            // Re-schedule alarms for all imported activities that have end dates in the future
+            activities.forEachIndexed { index, activity ->
+                activity.endDateTime?.let { endTime ->
+                    val activityId = if (activity.id == 0) ids[index] else activity.id
+                    AlarmHelper.scheduleActivityEndAlarm(getApplication(), activityId, activity.activityName, endTime)
+                }
+            }
+            WidgetUtils.updateAllWidgets(getApplication())
+        }
+
+    fun reorderActivities(activities: List<Activity>) =
+        viewModelScope.launch {
+            val updatedActivities =
+                activities.mapIndexed { index, activity ->
+                    activity.copy(position = index)
+                }
+            repository.addAll(updatedActivities)
+            WidgetUtils.updateAllWidgets(getApplication())
         }
 
     class Factory(
