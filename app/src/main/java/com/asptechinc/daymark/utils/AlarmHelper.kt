@@ -21,7 +21,7 @@ object AlarmHelper {
         context: Context,
         activityId: Int,
         activityName: String,
-        endTime: LocalDateTime
+        endTime: LocalDateTime,
     ) {
         val prefs = context.getSharedPreferences(AppConfig.SETTINGS_PREFS, Context.MODE_PRIVATE)
         val notificationsEnabled =
@@ -34,17 +34,19 @@ object AlarmHelper {
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(context, ActivityEndReceiver::class.java).apply {
-            putExtra("ACTIVITY_ID", activityId)
-            putExtra("ACTIVITY_NAME", activityName)
-        }
+        val intent =
+            Intent(context, ActivityEndReceiver::class.java).apply {
+                putExtra("ACTIVITY_ID", activityId)
+                putExtra("ACTIVITY_NAME", activityName)
+            }
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            activityId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                activityId,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
 
         val triggerAtMillis = endTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
         val now = System.currentTimeMillis()
@@ -55,13 +57,13 @@ object AlarmHelper {
                 alarmManager.setExactAndAllowWhileIdle(
                     AlarmManager.RTC_WAKEUP,
                     triggerAtMillis,
-                    pendingIntent
+                    pendingIntent,
                 )
             } else {
                 alarmManager.setExact(
                     AlarmManager.RTC_WAKEUP,
                     triggerAtMillis,
-                    pendingIntent
+                    pendingIntent,
                 )
             }
         } else {
@@ -69,15 +71,19 @@ object AlarmHelper {
         }
     }
 
-    fun cancelActivityEndAlarm(context: Context, activityId: Int) {
+    fun cancelActivityEndAlarm(
+        context: Context,
+        activityId: Int,
+    ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, ActivityEndReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            activityId,
-            intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
-        )
+        val pendingIntent =
+            PendingIntent.getBroadcast(
+                context,
+                activityId,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE,
+            )
 
         if (pendingIntent != null) {
             Log.i("AlarmHelper", "Canceling alarm for activity ID: $activityId")
@@ -102,7 +108,7 @@ object AlarmHelper {
                             context,
                             activity.id,
                             activity.activityName,
-                            endTime
+                            endTime,
                         )
                     }
                 }

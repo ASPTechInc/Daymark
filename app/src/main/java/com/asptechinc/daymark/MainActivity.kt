@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher =
         registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
+            ActivityResultContracts.RequestPermission(),
         ) { isGranted: Boolean ->
             if (isGranted) {
                 Log.i("MainActivity", "Notification permission granted")
@@ -142,7 +142,7 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.POST_NOTIFICATIONS
+                    android.Manifest.permission.POST_NOTIFICATIONS,
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
@@ -435,7 +435,7 @@ class MainActivity : AppCompatActivity() {
 
         val categoryOptions =
             listOf(getString(R.string.filter_all_categories) to null) +
-                    adapter.categories.map { it.name to it.id }
+                adapter.categories.map { it.name to it.id }
 
         val currentOptions = viewModel.listOptions.value
         val selectedCategoryLabel =
@@ -454,7 +454,7 @@ class MainActivity : AppCompatActivity() {
         val monthNames = DateFormatSymbols.getInstance().months.take(12)
         val monthOptions =
             listOf(getString(R.string.filter_any_month) to null) +
-                    monthNames.mapIndexed { index, monthName -> monthName to (index + 1) }
+                monthNames.mapIndexed { index, monthName -> monthName to (index + 1) }
         val selectedMonthLabel =
             monthOptions.firstOrNull { it.second == currentOptions.month }?.first
                 ?: getString(R.string.filter_any_month)

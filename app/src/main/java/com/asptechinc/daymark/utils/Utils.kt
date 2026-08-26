@@ -92,15 +92,14 @@ fun getActivityRelativeText(
     endDateTime: LocalDateTime?,
     currentDate: LocalDateTime,
     timeUnitIndex: Int,
-): String {
-    return endDateTime?.let {
+): String =
+    endDateTime?.let {
         if (it.isAfter(currentDate)) {
             "Ends ${relativeDateText(it, currentDate, timeUnitIndex)}"
         } else {
             "Ended ${relativeDateText(it, currentDate, timeUnitIndex)}"
         }
     } ?: relativeDateText(startDateTime, currentDate, timeUnitIndex)
-}
 
 fun LocalDateTime.toOrdinalDateString(): String {
     val day = dayOfMonth

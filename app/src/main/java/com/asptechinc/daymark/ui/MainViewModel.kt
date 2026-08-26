@@ -154,7 +154,7 @@ class MainViewModel(
                     getApplication(),
                     id,
                     activity.activityName,
-                    endTime
+                    endTime,
                 )
             }
             WidgetUtils.updateAllWidgets(getApplication())
@@ -169,7 +169,7 @@ class MainViewModel(
                     getApplication(),
                     activity.id,
                     activity.activityName,
-                    endTime
+                    endTime,
                 )
             }
             WidgetUtils.updateAllWidgets(getApplication())

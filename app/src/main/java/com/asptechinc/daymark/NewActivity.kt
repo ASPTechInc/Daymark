@@ -136,16 +136,18 @@ class NewActivity : AppCompatActivity() {
         selectedTagIds = intent.getIntegerArrayListExtra("tagIds") ?: mutableListOf()
 
         findViewById<View>(R.id.btn_manage_categories).setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java).apply {
-                putExtra("action", "manage_categories")
-            }
+            val intent =
+                Intent(this, SettingsActivity::class.java).apply {
+                    putExtra("action", "manage_categories")
+                }
             startActivity(intent)
         }
 
         findViewById<View>(R.id.btn_manage_tags).setOnClickListener {
-            val intent = Intent(this, SettingsActivity::class.java).apply {
-                putExtra("action", "manage_tags")
-            }
+            val intent =
+                Intent(this, SettingsActivity::class.java).apply {
+                    putExtra("action", "manage_tags")
+                }
             startActivity(intent)
         }
 
@@ -190,7 +192,10 @@ class NewActivity : AppCompatActivity() {
         }
     }
 
-    private fun loadInitialDataFromDb(selectedCategoryId: Int?, selectedTagIds: List<Int>) {
+    private fun loadInitialDataFromDb(
+        selectedCategoryId: Int?,
+        selectedTagIds: List<Int>,
+    ) {
         lifecycleScope.launch {
             val db = AppDatabase.getDatabase(this@NewActivity)
             val categories = db.categoryDao().getAll()
@@ -202,7 +207,7 @@ class NewActivity : AppCompatActivity() {
                 ArrayList(tags.map { it.name }),
                 ArrayList(tags.map { it.id }),
                 selectedCategoryId,
-                selectedTagIds
+                selectedTagIds,
             )
         }
     }
@@ -213,7 +218,7 @@ class NewActivity : AppCompatActivity() {
         tagNames: ArrayList<String>,
         tagIds: ArrayList<Int>,
         selectedCategoryId: Int?,
-        selectedTagIds: List<Int>
+        selectedTagIds: List<Int>,
     ) {
         this.availableCategoryNames = categoryNames
         this.availableCategoryIds = categoryIds
@@ -243,7 +248,7 @@ class NewActivity : AppCompatActivity() {
                 }
             tagChipGroup.addView(chip)
         }
-        
+
         tagChipExample.visibility = if (tagNames.isEmpty()) View.VISIBLE else View.GONE
     }
 

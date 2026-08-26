@@ -7,7 +7,10 @@ import android.util.Log
 import com.asptechinc.daymark.utils.NotificationHelper
 
 class ActivityEndReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         val activityId = intent.getIntExtra("ACTIVITY_ID", -1)
         val activityName = intent.getStringExtra("ACTIVITY_NAME") ?: "An activity"
 

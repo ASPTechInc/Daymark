@@ -7,7 +7,10 @@ import android.util.Log
 import com.asptechinc.daymark.utils.AlarmHelper
 
 class BootReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
             Log.i("BootReceiver", "Device rebooted, rescheduling alarms")
             AlarmHelper.rescheduleAllAlarms(context)

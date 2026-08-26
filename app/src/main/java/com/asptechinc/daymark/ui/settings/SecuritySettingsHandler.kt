@@ -26,7 +26,15 @@ class SecuritySettingsHandler(
         val firstInput = EditText(context)
         val confirmInput = EditText(context)
 
-        firstInput.setHint(if (currentPin == null) R.string.dialogue_app_pin_input_hint_new_pin else R.string.dialogue_app_pin_input_hint_change_pin)
+        firstInput.setHint(
+            if (currentPin ==
+                null
+            ) {
+                R.string.dialogue_app_pin_input_hint_new_pin
+            } else {
+                R.string.dialogue_app_pin_input_hint_change_pin
+            },
+        )
         firstInput.setHintTextColor(
             MaterialColors.getColor(
                 context,
@@ -150,9 +158,7 @@ class SecuritySettingsHandler(
         dialogue.show()
     }
 
-    fun handleAppLock(
-        appPinPreference: SwitchPreferenceCompat?
-    ) {
+    fun handleAppLock(appPinPreference: SwitchPreferenceCompat?) {
         val context = fragment.requireContext()
         val prefs = context.getSharedPreferences(AppConfig.SETTINGS_PREFS, Context.MODE_PRIVATE)
         val currentPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
@@ -207,6 +213,5 @@ class SecuritySettingsHandler(
             }
             true
         }
-
     }
 }

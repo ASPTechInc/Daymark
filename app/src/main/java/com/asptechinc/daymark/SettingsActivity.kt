@@ -156,13 +156,12 @@ class SettingsActivity : AppCompatActivity() {
             return builder.toString()
         }
 
-        private fun escapeCsvField(field: String): String {
-            return if (field.contains(",") || field.contains("\"") || field.contains("\n")) {
+        private fun escapeCsvField(field: String): String =
+            if (field.contains(",") || field.contains("\"") || field.contains("\n")) {
                 "\"" + field.replace("\"", "\"\"") + "\""
             } else {
                 field
             }
-        }
 
         private val generalHandler by lazy { GeneralSettingsHandler(this) }
         private val calculatorHandler by lazy { CalculatorSettingsHandler(this) }

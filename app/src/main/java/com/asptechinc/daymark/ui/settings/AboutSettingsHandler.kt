@@ -55,45 +55,49 @@ class AboutSettingsHandler(
                 isChecked = prefs.getBoolean(prefKey, false)
 
                 // Define the states for the switch
-                val states = arrayOf(
-                    intArrayOf(android.R.attr.state_checked),   // Checked state
-                    intArrayOf(-android.R.attr.state_checked)   // Unchecked state
-                )
+                val states =
+                    arrayOf(
+                        intArrayOf(android.R.attr.state_checked), // Checked state
+                        intArrayOf(-android.R.attr.state_checked), // Unchecked state
+                    )
 
                 // Set the Thumb colour (i.e. the moving circle)
-                val thumbColours = intArrayOf(
-                    MaterialColors.getColor(
-                        this,
-                        com.google.android.material.R.attr.colorOnTertiary
-                    ), // Checked colour
-                    MaterialColors.getColor(
-                        this,
-                        com.google.android.material.R.attr.colorSurfaceVariant
-                    )  // Unchecked colour
-                )
+                val thumbColours =
+                    intArrayOf(
+                        MaterialColors.getColor(
+                            this,
+                            com.google.android.material.R.attr.colorOnTertiary,
+                        ), // Checked colour
+                        MaterialColors.getColor(
+                            this,
+                            com.google.android.material.R.attr.colorSurfaceVariant,
+                        ), // Unchecked colour
+                    )
                 thumbTintList = ColorStateList(states, thumbColours)
 
                 // Set the Track colour (i.e. the background bar)
-                val trackColours = intArrayOf(
-                    MaterialColors.getColor(
-                        this,
-                        com.google.android.material.R.attr.colorPrimaryContainer
-                    ), // Checked colour
-                    MaterialColors.getColor(
-                        this,
-                        R.attr.colorCheckboxUnchecked
-                    )    // Unchecked colour
-                )
+                val trackColours =
+                    intArrayOf(
+                        MaterialColors.getColor(
+                            this,
+                            com.google.android.material.R.attr.colorPrimaryContainer,
+                        ), // Checked colour
+                        MaterialColors.getColor(
+                            this,
+                            R.attr.colorCheckboxUnchecked,
+                        ), // Unchecked colour
+                    )
                 trackTintList = ColorStateList(states, trackColours)
             }
         val margin = context.resources.getDimensionPixelSize(R.dimen.layout_dimension_24)
         val params =
-            FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT,
-            ).apply {
-                setMargins(margin, margin / 3, margin, margin / 3)
-            }
+            FrameLayout
+                .LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                ).apply {
+                    setMargins(margin, margin / 3, margin, margin / 3)
+                }
         container.addView(switch, params)
 
         val dialogue =
@@ -213,35 +217,46 @@ class AboutSettingsHandler(
         val mitUrl = context.getString(R.string.oss_licence_mit_url)
         val eplUrl = context.getString(R.string.oss_licence_epl_url)
 
-        val message = SpannableStringBuilder().apply {
-            append("Daymark is built using the following open source libraries:\n\n")
+        val message =
+            SpannableStringBuilder().apply {
+                append("Daymark is built using the following open source libraries:\n\n")
 
-            fun appendLibrary(name: String, license: String, url: String) {
-                append("• $name (")
-                val start = length
-                append(license)
-                setSpan(object : ClickableSpan() {
-                    override fun onClick(widget: View) {
-                        openExternalUrl(url)
-                    }
-                }, start, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                append(")\n")
+                fun appendLibrary(
+                    name: String,
+                    license: String,
+                    url: String,
+                ) {
+                    append("• $name (")
+                    val start = length
+                    append(license)
+                    setSpan(
+                        object : ClickableSpan() {
+                            override fun onClick(widget: View) {
+                                openExternalUrl(url)
+                            }
+                        },
+                        start,
+                        length,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
+                    )
+                    append(")\n")
+                }
+
+                appendLibrary("Android Jetpack", "Apache 2.0", apacheUrl)
+                appendLibrary("Material Components", "Apache 2.0", apacheUrl)
+                appendLibrary("Room Persistence Library", "Apache 2.0", apacheUrl)
+                appendLibrary("Kotlin Coroutines", "Apache 2.0", apacheUrl)
+                appendLibrary("Kotlinx Serialization", "Apache 2.0", apacheUrl)
+                appendLibrary("Mockito", "MIT", mitUrl)
+                appendLibrary("JUnit", "EPL 1.0", eplUrl)
             }
 
-            appendLibrary("Android Jetpack", "Apache 2.0", apacheUrl)
-            appendLibrary("Material Components", "Apache 2.0", apacheUrl)
-            appendLibrary("Room Persistence Library", "Apache 2.0", apacheUrl)
-            appendLibrary("Kotlin Coroutines", "Apache 2.0", apacheUrl)
-            appendLibrary("Kotlinx Serialization", "Apache 2.0", apacheUrl)
-            appendLibrary("Mockito", "MIT", mitUrl)
-            appendLibrary("JUnit", "EPL 1.0", eplUrl)
-        }
-
-        val dialogue = MaterialAlertDialogBuilder(context)
-            .setTitle(R.string.settings_label_oss_licences)
-            .setMessage(message)
-            .setPositiveButton(R.string.btn_okay, null)
-            .create()
+        val dialogue =
+            MaterialAlertDialogBuilder(context)
+                .setTitle(R.string.settings_label_oss_licences)
+                .setMessage(message)
+                .setPositiveButton(R.string.btn_okay, null)
+                .create()
 
         dialogue.setOnShowListener {
             styleDialogue(dialogue)
@@ -250,5 +265,4 @@ class AboutSettingsHandler(
         }
         dialogue.show()
     }
-
 }
