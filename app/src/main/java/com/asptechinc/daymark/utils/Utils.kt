@@ -95,10 +95,12 @@ fun getActivityRelativeText(
     timeUnitIndex: Int,
 ): String =
     endDateTime?.let {
+        val relativeText = relativeDateText(it, currentDate, timeUnitIndex)
+        val formattedRelativeText = relativeText.replaceFirstChar { char -> char.lowercase() }
         if (it.isAfter(currentDate)) {
-            "Ends ${relativeDateText(it, currentDate, timeUnitIndex)}"
+            "Ends $formattedRelativeText"
         } else {
-            "Ended ${relativeDateText(it, currentDate, timeUnitIndex)}"
+            "Ended $formattedRelativeText"
         }
     } ?: relativeDateText(startDateTime, currentDate, timeUnitIndex)
 
