@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Lists/arrays -->
+    <string-array name="app_theme_options">
+        <item>Follow system</item>
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
+    <string-array name="app_layout_mode">
+        <item>List</item>
+        <item>Grid</item>
+    </string-array>
+
+    <string-array name="app_time_period">
+        <item>Year, month, week, day</item>
+        <item>Year only</item>
+        <item>Month only</item>
+        <item>Week only</item>
+        <item>Day only</item>
+    </string-array>
+</resources>

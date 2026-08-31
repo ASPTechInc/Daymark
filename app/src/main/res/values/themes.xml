@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme -->
+    <!-- App theme -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customise your theme here -->
+        <!-- Primary -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
+
+        <item name="colorPrimaryContainer">@color/primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/on_primary_container</item>
+
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
+
+        <item name="colorSecondaryContainer">@color/secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/on_secondary_container</item>
+
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/tertiary</item>
+        <item name="colorOnTertiary">@color/on_tertiary</item>
+
+
+        <!-- Surface -->
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
+
+        <item name="colorSurfaceVariant">@color/surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/on_surface_variant</item>
+
+        <!-- App bar / navigation -->
+        <item name="android:windowBackground">@color/surface</item>
+        <item name="toolbarStyle">@style/AppToolbar</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.PopupOverlay</item>
+
+        <item name="colorSurfaceContainer">@color/surface_container</item>
+        <item name="colorOnSurfaceContainer">@color/on_surface_container</item>
+        <item name="colorOnNavbar">@color/navbar_icon</item>
+        <item name="colorAppLockContainer">@color/app_lock_container</item>
+
+        <!-- Outline -->
+        <item name="colorOutline">@color/outline</item>
+
+        <!-- Menu -->
+        <item name="colorOnMenuContainer">@color/on_menu_container</item>
+        <item name="colorMenuContainer">@color/menu_container</item>
+
+        <!-- Checkbox colour -->
+        <item name="colorCheckboxChecked">@color/checkbox_checked</item>
+        <item name="colorCheckboxUnchecked">@color/checkbox_unchecked</item>
+
+        <!-- Status: Error -->
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
+
+        <!-- Status: Info -->
+        <item name="colorOnInfo">@color/on_info</item>
+    </style>
+
+    <!-- App theme -->
+
+    <!-- App theme -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar">
+        <item name="colorControlNormal">?attr/colorOnSurfaceContainer</item>
+        <item name="titleTextColor">?attr/colorOnSurfaceContainer</item>
+        <item name="android:textColor">?attr/colorOnSurfaceContainer</item>
+        <item name="iconTint">?attr/colorOnSurfaceContainer</item>
+    </style>
+
+    <!-- Theme: App toolbar -->
+    <style name="AppToolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">?attr/colorSurfaceContainer</item>
+        <item name="titleTextColor">?attr/colorOnSurfaceContainer</item>
+    </style>
+
+    <!-- App theme: Popup menu -->
+    <style name="Widget.AppTheme.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@color/surface_container</item>
+        <item name="android:background">@color/surface_container</item>
+        <item name="background">@color/surface_container</item>
+        <item name="android:textColor">?attr/colorOnSurfaceContainer</item>
+        <item name="itemTextAppearance">?attr/textAppearanceBodyMedium</item>
+    </style>
+
+    <!-- App theme: Popup overlay -->
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3">
+        <item name="popupMenuStyle">@style/Widget.AppTheme.PopupMenu</item>
+        <item name="colorSurface">@color/surface_container</item>
+        <item name="colorOnSurface">@color/on_surface_container</item>
+        <item name="colorControlNormal">?attr/colorOnMenuContainer</item>
+        <item name="android:windowBackground">@color/surface_container</item>
+        <item name="android:textColor">?attr/colorOnSurfaceContainer</item>
+    </style>
+
+    <!-- Theme: Settings -->
+    <style name="SettingsCategoryTitleAppearance" parent="TextAppearance.Material3.TitleMedium">
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Theme: App PIN -->
+    <style name="Widget.Daymark.AppLockKeyButton" parent="Widget.Material3.Button.TonalButton">
+        <item name="android:textSize">28sp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:padding">0dp</item>
+        <item name="cornerRadius">36dp</item>
+        <item name="android:textColor">?attr/colorOnTertiary</item>
+        <item name="strokeColor">?attr/colorOutline</item>
+        <item name="backgroundTint">#38383A</item>
+    </style>
+
+    <!-- Theme: Dialogue -->
+
+    <!-- Theme: Dialogue title text -->
+
+    <!-- Theme: Dialogue body text -->
+
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colours -->
+    <attr name="colorError" format="color" />
+    <attr name="colorOnInfo" format="color" />
+    <attr name="colorPrimary" format="color" />
+    <attr name="colorOnPrimaryContainer" format="color" />
+    <attr name="colorPrimaryContainer" format="color" />
+    <attr name="colorOnSecondaryContainer" format="color" />
+    <attr name="colorSecondaryContainer" format="color" />
+    <attr name="colorOnSecondary" format="color" />
+
+    <!-- App bar / navigation -->
+    <attr name="colorOnSurfaceContainer" format="color" />
+    <attr name="colorOnNavbar" format="color" />
+    <attr name="colorAppLockContainer" format="color" />
+
+    <!-- Menu -->
+    <attr name="colorOnMenuContainer" format="color" />
+    <attr name="colorMenuContainer" format="color" />
+
+    <!-- Checkbox colour -->
+    <attr name="colorCheckboxChecked" format="color" />
+    <attr name="colorCheckboxUnchecked" format="color" />
+</resources>

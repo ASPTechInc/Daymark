@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.asptechinc.daymark.MainActivity"
+    tools:theme="@style/AppTheme">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorSurfaceContainer"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:theme="@style/AppTheme.AppBarOverlay"
+            app:titleTextColor="?attr/colorOnSurfaceContainer"
+            tools:background="@color/surface_container" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <TextView
+        android:id="@+id/empty_state_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:drawablePadding="@dimen/layout_dimension_16"
+        android:gravity="center"
+        android:text="@string/empty_state_no_activities"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textColor="?attr/colorOnSurface"
+        android:visibility="gone"
+        app:drawableTopCompat="@drawable/no_data" />
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingTop="@dimen/layout_dimension_10"
+        android:paddingBottom="@dimen/layout_dimension_90"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/layout_dimension_16"
+        android:contentDescription="@string/content_desc_btn_add_activity"
+        app:backgroundTint="?attr/colorPrimaryContainer"
+        app:srcCompat="@drawable/ic_plus"
+        app:tint="?attr/colorOnPrimaryContainer" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

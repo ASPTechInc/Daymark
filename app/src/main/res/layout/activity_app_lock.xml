@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorAppLockContainer"
+    android:fitsSystemWindows="true"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="@dimen/layout_dimension_24">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_dimension_40"
+        android:drawablePadding="@dimen/layout_dimension_10"
+        android:gravity="center"
+        android:text="@string/app_lock_title"
+        android:textColor="?attr/colorOnInfo"
+        android:textSize="@dimen/text_size_32"
+        app:drawableTint="?attr/colorOnInfo"
+        app:drawableTopCompat="@drawable/ic_lock" />
+
+    <TextView
+        android:id="@+id/pin_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_dimension_90"
+        android:drawablePadding="@dimen/layout_dimension_10"
+        android:gravity="center"
+        android:letterSpacing="0.4"
+        android:text=""
+        android:textColor="?attr/colorOnInfo"
+        android:textSize="@dimen/text_size_32" />
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:orientation="horizontal"
+        android:rowCount="4">
+
+        <Button
+            android:id="@+id/btn_1"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_1" />
+
+        <Button
+            android:id="@+id/btn_2"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_2" />
+
+        <Button
+            android:id="@+id/btn_3"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_3" />
+
+        <Button
+            android:id="@+id/btn_4"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_4" />
+
+        <Button
+            android:id="@+id/btn_5"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_5" />
+
+        <Button
+            android:id="@+id/btn_6"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_6" />
+
+        <Button
+            android:id="@+id/btn_7"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_7" />
+
+        <Button
+            android:id="@+id/btn_8"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_8" />
+
+        <Button
+            android:id="@+id/btn_9"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_9" />
+
+        <Button
+            android:id="@+id/btn_clear"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_clear_btn"
+            android:textColor="?attr/colorOnMenuContainer"
+            app:backgroundTint="?attr/colorSecondaryContainer"
+            app:cornerRadius="@dimen/layout_dimension_6"
+            app:strokeColor="?attr/colorOutline"
+            app:strokeWidth="@dimen/layout_dimension_2" />
+
+        <Button
+            android:id="@+id/btn_0"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_num_0" />
+
+        <Button
+            android:id="@+id/btn_enter"
+            style="@style/Widget.Daymark.AppLockKeyButton"
+            android:layout_width="@dimen/layout_dimension_72"
+            android:layout_height="@dimen/layout_dimension_72"
+            android:layout_margin="@dimen/layout_dimension_6"
+            android:text="@string/keypad_confirm_btn"
+            app:backgroundTint="?attr/colorPrimaryContainer"
+            app:tint="?attr/colorOnPrimaryContainer" />
+    </GridLayout>
+</LinearLayout>

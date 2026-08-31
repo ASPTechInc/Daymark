@@ -1,0 +1,138 @@
+import java.text.SimpleDateFormat
+
+interface BuildTimeParameters extends ValueSourceParameters {}
+
+abstract class BuildTimeValueSource implements ValueSource<String, BuildTimeParameters> {
+    @Override
+    String obtain() {
+        return new SimpleDateFormat("MM.dd.yy HH:mm", Locale.UK).format(new Date())
+    }
+}
+
+
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.ktlint)
+    alias(libs.plugins.ben.manes.versions)
+    alias(libs.plugins.ksp)
+}
+
+android {
+    namespace = "com.asptechinc.daymark"
+    compileSdk = 37
+
+    defaultConfig {
+        applicationId = "com.asptechinc.daymark"
+        minSdk = 26
+        targetSdk = 37
+        versionCode = 1
+        versionName = "1.0"
+
+        def buildTime = providers.of(BuildTimeValueSource.class) {}.get()
+        buildConfigField 'String', 'BUILD_TIME', "\"$buildTime\""
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            def signingPropsFile = layout.projectDirectory.file("keystore.properties")
+            if (signingPropsFile.asFile.exists()) {
+                def props = new Properties()
+                providers.fileContents(signingPropsFile).asBytes.map {
+                    new ByteArrayInputStream(it).withCloseable { props.load(it) }
+                    return props
+                }.getOrElse(new Properties())
+
+                storeFile = props.getProperty("storeFile") ? file(props.getProperty("storeFile")) : null
+                storePassword = props.getProperty("storePassword")
+                keyAlias = props.getProperty("keyAlias")
+                keyPassword = props.getProperty("keyPassword")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Only use release signing if the keystore file is present
+            if (signingConfigs.release.storeFile != null && signingConfigs.release.storeFile.exists()) {
+                signingConfig = signingConfigs.release
+            } else {
+                signingConfig = signingConfigs.debug
+            }
+        }
+    }
+
+    buildFeatures {
+        compose = true
+        buildConfig = true
+    }
+
+    packaging {
+        resources {
+            resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
+    sourceSets {
+        named("main") {
+            assets.srcDirs("src/generated/assets")
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+}
+
+tasks.register('copyChangelog', Copy) {
+    from("${project.rootDir}/CHANGELOG.md")
+    into("${project.projectDir}/src/generated/assets")
+}
+
+tasks.named("preBuild").configure {
+    dependsOn(copyChangelog)
+}
+
+//To update dependencies run, ./gradlew dependencyUpdates
+dependencies {
+    // Persistence & Serialisation
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.kotlinx.serialization.json)
+
+    // UI
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.browser)
+    implementation(libs.material)
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.androidx.preference.ktx)
+    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.androidx.fragment.ktx)
+
+    // Compose
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.material3)
+
+    // FOSS development alert dialog with a deprecation warning
+    implementation(libs.free.droid.warn)
+
+    // Testing
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
+    testImplementation libs.kotlinx.coroutines.test
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.test.rules
+    androidTestImplementation libs.androidx.espresso.core
+    ksp(libs.androidx.room.compiler)
+}

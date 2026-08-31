@@ -1,0 +1,199 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Launch Android app (emulator)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "until \"$ADB_COMMAND\" shell pm list packages | grep -q \"$APP_PACKAGE_NAME\"; do sleep 1; done; adb shell am start -n \"$APP_PACKAGE_NAME/$MAIN_ACTIVITY\""
+      ],
+      "options": {
+        "env": {
+          "APP_PACKAGE_NAME": "com.asptechinc.daymark",
+          "MAIN_ACTIVITY": ".MainActivity",
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "dependsOn": [
+        "Start Android emulator",
+        "Wait for Android emulator",
+        "Install Android app (emulator)",
+        "Verify Android app installation"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch Android app (connected device)",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "until \"$ADB_COMMAND\" shell pm list packages | grep -q \"$APP_PACKAGE_NAME\"; do sleep 1; done; \"$ADB_COMMAND\" shell am start -n \"$APP_PACKAGE_NAME/$MAIN_ACTIVITY\""
+      ],
+      "options": {
+        "env": {
+          "APP_PACKAGE_NAME": "com.asptechinc.daymark",
+          "MAIN_ACTIVITY": ".MainActivity",
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "dependsOn": [
+        "Verify connected Android device",
+        "Install Android app (connected device)",
+        "Verify Android app installation"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Launch Android app (auto)",
+      "type": "shell",
+      "command": "${workspaceFolder}/tools/run-android.sh",
+      "options": {
+        "env": {
+          "ANDROID_HOME": "${env:HOME}/Android/Sdk",
+          "APP_PACKAGE_NAME": "com.asptechinc.daymark",
+          "EMULATOR_NAME": "Medium_Phone",
+          "EMULATOR_COMMAND": "${env:HOME}/Android/Sdk/emulator/emulator",
+          "MAIN_ACTIVITY": ".MainActivity"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Android app (emulator)",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": [
+        "installDebug"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Android app (connected device)",
+      "type": "shell",
+      "command": "./gradlew",
+      "args": [
+        "installDebug"
+      ],
+      "dependsOn": [],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Verify Android app installation",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "\"$ADB_COMMAND\" shell pm list packages | grep -q \"$APP_PACKAGE_NAME\" && echo \"App is installed: $APP_PACKAGE_NAME\" || echo \"App is NOT installed: $APP_PACKAGE_NAME\""
+      ],
+      "options": {
+        "env": {
+          "ANDROID_HOME": "${env:HOME}/Android/Sdk",
+          "APP_PACKAGE_NAME": "com.asptechinc.daymark",
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Verify connected Android device",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "if \"$ADB_COMMAND\" devices | grep -v emulator | grep -q \"device$\"; then echo \"Physical device connected\"; else echo \"No physical device connected\"; exit 1; fi"
+      ],
+      "options": {
+        "env": {
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Start Android emulator",
+      "type": "shell",
+      "command": "${env:HOME}/Android/Sdk/emulator/emulator",
+      "args": [
+        "-avd",
+        "$EMULATOR_DEVICE_NAME",
+        "-no-snapshot"
+      ],
+      "options": {
+        "env": {
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb",
+          "EMULATOR_COMMAND": "${env:HOME}/Android/Sdk/emulator/emulator",
+          "EMULATOR_DEVICE_NAME": "Medium_Phone"
+        }
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "android-emulator",
+        "pattern": {
+          "regexp": "^$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "INFO.*Boot completed.*"
+        }
+      }
+    },
+    {
+      "label": "Wait for Android emulator",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "\"$ADB_COMMAND\" wait-for-device; while [ \"$(\"$ADB_COMMAND\" get-state 2>/dev/null)\" != \"device\" ]; do echo Waiting for device state; sleep 5; done; while [ \"$(\"$ADB_COMMAND\" shell getprop sys.boot_completed 2>/dev/null | tr -d '\\r')\" != \"1\" ]; do echo Waiting for Android boot; sleep 5; done; echo Emulator ready"
+      ],
+      "options": {
+        "env": {
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Stop Android emulator",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "if \"$ADB_COMMAND\" devices | grep -q \"emulator\"; then \"$ADB_COMMAND\" emu kill; echo \"Emulator stopped\"; else echo \"No emulator running\"; fi"
+      ],
+      "options": {
+        "env": {
+          "ADB_COMMAND": "${env:HOME}/Android/Sdk/platform-tools/adb"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Force stop Android emulator",
+      "type": "shell",
+      "command": "pkill",
+      "args": [
+        "-f",
+        "emulator"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "Restart Android emulator",
+      "dependsOn": [
+        "Stop Android emulator",
+        "Force stop Android emulator",
+        "Start Android emulator",
+        "Wait for Android emulator"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    }
+  ]
+}
