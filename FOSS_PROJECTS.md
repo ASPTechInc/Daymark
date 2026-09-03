@@ -19,6 +19,10 @@ of interest.
 
 - [iCare](https://github.com/ASPTechInc/iCare) - An open-source hospital management website written
   in Python.
+- [Lexivo](https://github.com/ASPTechInc/Lexivo) - A cross-platform word puzzle game built with
+  Rust and [egui/eframe](https://github.com/emilk/egui/) that challenges players to solve linguistic
+  puzzles by transforming words through single-letter, double-letter or triple-letter changes and
+  anagrams.
 
 - [LITUK_quiz](https://github.com/ASPTechInc/LITUK_quiz) - The Life in the United Kingdom (LITUK)
   quiz application prepares applicants for the LITUK test which is a requirement for the Indefinite
