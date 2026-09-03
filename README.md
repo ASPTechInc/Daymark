@@ -22,6 +22,7 @@
 - [F-Droid Metadata](#f-droid-metadata)
 - [Contributing](#contributing)
 - [Licence](#licence)
+- [Other projects](#other-projects)
 - [Support](#support)
 
 ---
@@ -342,6 +343,12 @@ For useful notes, refer to [DEVELOPER_NOTES.md](docs/DEVELOPER_NOTES.md)
 ## Licence
 
 The project is open-source under the [MIT Licence](LICENSE).
+
+---
+
+## Other projects
+
+View the [other projects by ASPTechnologies Incorporation](./FOSS_PROJECTS.md) on GitHub.
 
 ---
 
