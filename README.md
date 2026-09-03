@@ -6,6 +6,8 @@
 
 ![Continuous Integration](https://github.com/ASPTechInc/Daymark/actions/workflows/ci.yml/badge.svg)
 
+[![Open Source](https://img.shields.io/badge/Open%20Source-MIT%20License-green.svg)](LICENSE)
+
 ## Table of Contents
 
 - [Overview](#overview)
@@ -23,6 +25,7 @@
 - [Support](#support)
 
 ---
+
 [⬇️ Go to bottom](#bottom)
 
 ## Overview
