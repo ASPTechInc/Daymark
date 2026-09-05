@@ -8,6 +8,9 @@
     - [Code analysis](#code-analysis)
     - [Gradle tools](#gradle-tools)
 - [Releasing the application notes](#releasing-the-application-notes)
+- [Resizing app logo for Android compatibility](#resizing-app-logo-for-android-compatibility)
+    - [Creating the adaptive icon structure](#create-adaptive-icon-structure)
+    - [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo)
 
 ---
 
@@ -201,5 +204,577 @@ git checkout main
 git tag v1.0.0
 git push origin v1.0.0
 ```
+
+---
+
+## Resizing app logo for Android compatibility
+
+### Create adaptive icon structure
+
+The **`ic_launcher.xml` and `ic_launcher_round.xml` are the adaptive-icon definitions**, while the actual white background and padded logo live separately in your project.
+
+A typical structure is:
+
+```text
+app/
+└── src/
+    └── main/
+        └── res/
+            │
+            ├── drawable/
+            │   └── ic_launcher_foreground.png   ← or a XML file
+            │
+            ├── mipmap-anydpi-v26/
+            │   ├── ic_launcher.xml
+            │   └── ic_launcher_round.xml
+            │
+            └── mipmap-.../
+            │    └── legacy PNG icons like mipmap-mdpi/ic_launcher.png etc
+            │
+            ├── values/
+            │   └── colours.xml    ← includes a colour resource for ic_launcher_background
+```
+
+#### Step 1. Create `ic_launcher.xml`
+
+Create:
+
+```text
+app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml
+```
+
+Put this inside:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+---
+
+#### Step 2. Create `ic_launcher_round.xml`
+
+Create:
+
+```text
+app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml
+```
+
+Put the **same thing** inside it as the previous step:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/ic_launcher_background" />
+    <foreground android:drawable="@drawable/ic_launcher_foreground" />
+</adaptive-icon>
+```
+
+The distinction is that Android may use `ic_launcher` for the normal icon and `ic_launcher_round` where a launcher specifically requests the round variant.
+
+---
+
+#### Step 3. Create a white background for the app icon
+
+Create:
+
+```text
+app/src/main/res/values/colours.xml
+```
+
+Place this inside of it:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ic_launcher_background">#FFFFFF</color>
+</resources>
+```
+
+So:
+
+```text
+@color/ic_launcher_background
+          │
+          ▼
+    #FFFFFF
+```
+
+This gives the adaptive icon a **white background**.
+
+---
+
+#### Step 4. The foreground i.e. the logo with transparent padding around it
+
+Create:
+
+```text
+app/src/main/res/drawable/ic_launcher_foreground.png
+```
+
+For example:
+
+```text
+res/
+└── drawable/
+    └── ic_launcher_foreground.png
+```
+
+That PNG should contain **your logo with transparent space around it**.
+
+Refer to [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo) to properly size your logo within the 512 × 512 PNG.
+
+For example, imagine a PNG that is 512 × 512.
+
+Don't make the logo occupy all 512 × 512:
+
+```text
+┌─────────────────────┐
+│█████████████████████│
+│█████████████████████│
+│█████████████████████│
+│█████████████████████│
+└─────────────────────┘
+```
+
+Instead, make the actual logo smaller to about 350 x 350 size:
+
+```text
+┌─────────────────────┐
+│                     │
+│                     │
+│       ███████       │
+│      █████████      │
+│       ███████       │
+│                     │
+│                     │
+└─────────────────────┘
+```
+
+The transparent area is intentional.
+
+Then:
+
+```xml
+<foreground android:drawable="@drawable/ic_launcher_foreground" />
+```
+
+means:
+
+> Take this image and put it on top of the white background.
+
+---
+
+#### Step 5. What about the existing `mipmap-*` PNGs?
+
+This is the part that can be confusing.
+
+You may currently have:
+
+```text
+mipmap-mdpi/ic_launcher.png
+mipmap-hdpi/ic_launcher.png
+mipmap-xhdpi/ic_launcher.png
+mipmap-xxhdpi/ic_launcher.png
+mipmap-xxxhdpi/ic_launcher.png
+```
+
+Those are **legacy launcher icons**.
+
+The adaptive icon:
+
+```text
+mipmap-anydpi-v26/ic_launcher.xml
+```
+
+is used on **Android 8.0/API 26 and newer**.
+
+The `-v26` is significant:
+
+```text
+mipmap-anydpi-v26
+              ↑
+         Android 8+
+```
+
+For older Android versions, the PNGs are used.
+
+So if you want your application to look correct on **older Android versions too**, you should update the legacy PNGs as well.
+
+But you don't necessarily need to manually create five different logos.
+
+You can generate the appropriate density PNGs from your source artwork.
+
+---
+
+#### Step 6. Important note: Adaptive icons have a "safe zone"
+
+
+Android adaptive icons aren't simply:
+
+```text
+┌───────────────┐
+│               │
+│     LOGO      │
+│               │
+└───────────────┘
+```
+
+The launcher can apply different masks:
+
+```text
+       square
+    ┌───────────┐
+    │           │
+    │   LOGO    │
+    │           │
+    └───────────┘
+
+       circle
+       ╭───────╮
+      /         \
+     |   LOGO    |
+      \         /
+       ╰───────╯
+
+    rounded square
+    ╭───────────╮
+    │           │
+    │   LOGO    │
+    │           │
+    ╰───────────╯
+```
+
+The launcher controls the final mask.
+
+Therefore, your logo needs sufficient padding so that it remains visually comfortable under different masks.
+
+---
+
+### Using GIMP to resize the logo
+
+A 512×512 size logo or of any other size can be resized with GIMP while keeping the canvas at 512×512 while making the actual logo smaller by adding transparent padding around it. It can be done using GIMP.
+
+
+#### Expected result
+
+Start with:
+
+```text
+512 × 512 PNG
+┌──────────────────────────────┐
+│                              │
+│      ██████████████████      │
+│      ██████████████████      │
+│      ██████████████████      │
+│                              │
+└──────────────────────────────┘
+```
+
+Make it something like:
+
+```text
+512 × 512 PNG
+┌──────────────────────────────┐
+│                              │
+│                              │
+│          ████████            │
+│          ████████            │
+│          ████████            │
+│                              │
+│                              │
+└──────────────────────────────┘
+```
+
+The area around the logo remains **transparent**.
+
+Then Android puts that foreground over the white background.
+
+
+#### Step 1. Open your logo in GIMP
+
+In GIMP:
+
+**File → Open**
+
+Select your 512×512 PNG.
+
+First check:
+
+**Image → Image Properties**
+
+You should see:
+
+```text
+Width: 512 px
+Height: 512 px
+```
+
+---
+
+#### Step 2. Make sure the image has transparency
+
+Look at the Layers panel.
+
+Right-click your logo layer.
+
+If you see:
+
+**Add Alpha Channel**
+
+click it.
+
+If you instead see:
+
+**Remove Alpha Channel**
+
+then the layer already has transparency.
+
+---
+
+#### Step 3. Duplicate the original layer
+
+Before changing anything, duplicate the layer to have a backup if anything goes wrong:
+
+**Layer → Duplicate Layer**
+
+You'll now have something like:
+
+```text
+Layers
+────────────────────
+Logo copy       ← work on this
+Logo            ← original backup
+────────────────────
+```
+
+You can hide the original layer by clicking its eye icon.
+
+---
+
+#### Step 4. Scale the logo itself using Layer
+
+Select the logo layer and use:
+
+**Layer → Scale Layer**
+
+You'll get a dialog.
+
+If your current logo layer is 512×512, you can change it to something smaller.
+350 px x 350 px is the recommended resize option.
+
+For example:
+
+```text
+Width: 350 px
+Height: 350 px
+```
+
+Make sure the **chain/link icon is locked**, so the aspect ratio stays correct.
+
+Then click:
+
+**Scale**
+
+Now your logo layer is 350×350.
+
+---
+
+#### Step 5. Centre the smaller logo
+
+Use:
+
+**Layer → Layer to Image Size**
+
+This makes the layer's canvas 512×512 again while preserving the smaller logo.
+
+Then use:
+
+**Alignment Tool**
+
+or manually position the logo in the center.
+
+An easier method in recent GIMP versions is:
+
+**Tools → Transform Tools → Align**
+
+Select the logo layer and align it:
+
+```text
+Horizontal: Center
+Vertical: Center
+```
+
+You want:
+
+```text
+512 × 512 canvas
+
+┌──────────────────────────────┐
+│                              │
+│                              │
+│           ██████             │
+│          ████████            │
+│           ██████             │
+│                              │
+│                              │
+└──────────────────────────────┘
+```
+
+---
+
+#### Step 6. Alternatively, use GIMP's Scale Tool
+
+
+Select the **Scale Tool**:
+
+**Tools → Transform Tools → Scale**
+
+Then click on your logo.
+
+You can interactively shrink it.
+
+For example, start with:
+
+```text
+512 × 512
+```
+
+and experiment with:
+
+```text
+400 × 400
+350 × 350
+300 × 300
+```
+
+until the visual size looks right.
+
+Remember: **the actual logo doesn't necessarily need to be a particular pixel size**. What matters is how large it appears once Android applies its launcher mask.
+
+---
+
+#### Step 7. Important: Don't make the white background part of the PNG
+
+This is particularly important for the adaptive icon setup.
+
+Your final foreground PNG should look like:
+
+```text
+ic_launcher_foreground.png
+
+512 × 512
+
+┌──────────────────────────────┐
+│                              │
+│                              │
+│           YOUR               │
+│           LOGO               │
+│                              │
+│                              │
+└──────────────────────────────┘
+
+       transparent
+```
+
+**Not:**
+
+```text
+┌──────────────────────────────┐
+│            WHITE             │
+│                              │
+│           LOGO               │
+│                              │
+│            WHITE             │
+└──────────────────────────────┘
+```
+
+The white comes from:
+
+```xml
+<background android:drawable="@color/ic_launcher_background" />
+```
+
+---
+
+#### Step 8. Export it from GIMP
+
+Once you're happy with the size:
+
+**File → Export As**
+
+Name it:
+
+```text
+ic_launcher_foreground.png
+```
+
+Put it in:
+
+```text
+app/src/main/res/drawable/
+```
+
+So you have:
+
+```text
+app/
+└── src/
+    └── main/
+        └── res/
+            └── drawable/
+                └── ic_launcher_foreground.png
+```
+
+When exporting, make sure you're keeping the **alpha/transparency**.
+
+If GIMP shows an option related to saving transparency, don't remove it.
+
+---
+
+#### Step 9. What size should the logo be?
+
+For a 512×512 foreground, start around:
+
+##### Option A — moderately small
+
+```text
+Logo: ~350 × 350
+Canvas: 512 × 512
+```
+
+##### Option B — noticeably smaller
+
+```text
+Logo: ~300 × 300
+Canvas: 512 × 512
+```
+
+##### Option C — quite small
+
+```text
+Logo: ~250 × 250
+Canvas: 512 × 512
+```
+
+---
+
+### Using Android Studio's image asset studio
+
+1. Right-click on the res folder.
+
+2. Select New > Image Asset.
+
+3. For Path, select your high-quality source image (the one in drawable or on your computer).
+
+4. Under the Foreground Layer tab, use the Scaling slider.
+   
+   ◦ Slide it to the left (e.g., to 60% or 70%) to make the logo look smaller.
+   ◦ Android Studio will show you a "Safe Zone" circle to make sure your logo doesn't get cut off.
+
+5. Click Next and then Finish.
 
 ---
