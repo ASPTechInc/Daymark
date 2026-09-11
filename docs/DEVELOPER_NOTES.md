@@ -7,6 +7,7 @@
     - [Code formatting](#code-formatting)
     - [Code analysis](#code-analysis)
     - [Gradle tools](#gradle-tools)
+- [Updating app version notes](#updating-app-version-notes)
 - [Releasing the application notes](#releasing-the-application-notes)
 - [Resizing app logo for Android compatibility](#resizing-app-logo-for-android-compatibility)
     - [Creating the adaptive icon structure](#create-adaptive-icon-structure)
@@ -145,6 +146,20 @@ Automatically fix formatting:
 
 ---
 
+## Updating app version notes
+
+To update the app to a higher version:
+
+1. Insert a new entry in the [CHANGELOG.md](/CHANGELOG.md) for the new app version.
+2. In [app's build.gradle](/app/build.gradle) file, increment `versionCode` to the next number
+   and update `versionName` with the new version of the app.
+3. Add a text file to the `changelogs` directory for the Fastlane metadata in
+   [fastlane/metadata/android/en-GB/changelogs](/fastlane/metadata/android/en-GB/changelogs). The
+   name of the text file should be a number higher than the current number of the existing text
+   file.
+
+---
+
 ## Releasing the application notes
 
 A keystore is used to store the signing key required for Android app releases.
@@ -193,9 +208,9 @@ KEYSTORE_PASSWORD
 
 ### Create app release
 
-Push a tag matching the pattern `v*` to the `main` branch. The GitHub workflow will then
-automatically build the release APK and bundle, sign them using the provided keystore
-and upload the artefacts.
+Push a tag matching the pattern `v*` to the `main` branch. The
+[release.yml](/.github/workflows/release.yml) GitHub workflow will then automatically build the
+release APK and bundle, sign them using the provided keystore and upload the artefacts.
 
 Example tag for a release:
 
@@ -205,13 +220,23 @@ git tag v1.0.0
 git push origin v1.0.0
 ```
 
+#### Rebuild an existing tag
+
+> Replace v1.0 with the actual tag version. Ensure that all commits has been pushed to GitHub
+> before running the command below so that the tag would include the latest changes
+
+```bash
+git tag -f v1.0 && git push origin v1.0 --force
+```
+
 ---
 
 ## Resizing app logo for Android compatibility
 
 ### Create adaptive icon structure
 
-The **`ic_launcher.xml` and `ic_launcher_round.xml` are the adaptive-icon definitions**, while the actual white background and padded logo live separately in your project.
+The **`ic_launcher.xml` and `ic_launcher_round.xml` are the adaptive-icon definitions**, while the
+actual white background and padded logo live separately in your project.
 
 A typical structure is:
 
@@ -273,7 +298,8 @@ Put the **same thing** inside it as the previous step:
 </adaptive-icon>
 ```
 
-The distinction is that Android may use `ic_launcher` for the normal icon and `ic_launcher_round` where a launcher specifically requests the round variant.
+The distinction is that Android may use `ic_launcher` for the normal icon and `ic_launcher_round`
+where a launcher specifically requests the round variant.
 
 ---
 
@@ -325,7 +351,8 @@ res/
 
 That PNG should contain **your logo with transparent space around it**.
 
-Refer to [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo) to properly size your logo within the 512 × 512 PNG.
+Refer to [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo) to properly size your logo
+within the 512 × 512 PNG.
 
 For example, imagine a PNG that is 512 × 512.
 
@@ -359,6 +386,7 @@ The transparent area is intentional.
 Then:
 
 ```xml
+
 <foreground android:drawable="@drawable/ic_launcher_foreground" />
 ```
 
@@ -402,7 +430,8 @@ mipmap-anydpi-v26
 
 For older Android versions, the PNGs are used.
 
-So if you want your application to look correct on **older Android versions too**, you should update the legacy PNGs as well.
+So if you want your application to look correct on **older Android versions too**, you should update
+the legacy PNGs as well.
 
 But you don't necessarily need to manually create five different logos.
 
@@ -411,7 +440,6 @@ You can generate the appropriate density PNGs from your source artwork.
 ---
 
 #### Step 6. Important note: Adaptive icons have a "safe zone"
-
 
 Android adaptive icons aren't simply:
 
@@ -450,14 +478,16 @@ The launcher can apply different masks:
 
 The launcher controls the final mask.
 
-Therefore, your logo needs sufficient padding so that it remains visually comfortable under different masks.
+Therefore, your logo needs sufficient padding so that it remains visually comfortable under
+different masks.
 
 ---
 
 ### Using GIMP to resize the logo
 
-A 512×512 size logo or of any other size can be resized with GIMP while keeping the canvas at 512×512 while making the actual logo smaller by adding transparent padding around it. It can be done using GIMP.
-
+A 512×512 size logo or of any other size can be resized with GIMP while keeping the canvas at
+512×512 while making the actual logo smaller by adding transparent padding around it. It can be done
+using GIMP.
 
 #### Expected result
 
@@ -492,7 +522,6 @@ Make it something like:
 The area around the logo remains **transparent**.
 
 Then Android puts that foreground over the white background.
-
 
 #### Step 1. Open your logo in GIMP
 
@@ -561,7 +590,7 @@ Select the logo layer and use:
 
 **Layer → Scale Layer**
 
-You'll get a dialog.
+You'll get a dialogue.
 
 If your current logo layer is 512×512, you can change it to something smaller.
 350 px x 350 px is the recommended resize option.
@@ -595,7 +624,7 @@ Then use:
 
 **Alignment Tool**
 
-or manually position the logo in the center.
+or manually position the logo in the centre.
 
 An easier method in recent GIMP versions is:
 
@@ -628,7 +657,6 @@ You want:
 
 #### Step 6. Alternatively, use GIMP's Scale Tool
 
-
 Select the **Scale Tool**:
 
 **Tools → Transform Tools → Scale**
@@ -653,7 +681,8 @@ and experiment with:
 
 until the visual size looks right.
 
-Remember: **the actual logo doesn't necessarily need to be a particular pixel size**. What matters is how large it appears once Android applies its launcher mask.
+Remember: **the actual logo doesn't necessarily need to be a particular pixel size**. What matters
+is how large it appears once Android applies its launcher mask.
 
 ---
 
@@ -695,6 +724,7 @@ ic_launcher_foreground.png
 The white comes from:
 
 ```xml
+
 <background android:drawable="@color/ic_launcher_background" />
 ```
 
@@ -764,14 +794,14 @@ Canvas: 512 × 512
 
 ### Using Android Studio's image asset studio
 
-1. Right-click on the res folder.
+1. Right-click on the `res` folder.
 
 2. Select New > Image Asset.
 
 3. For Path, select your high-quality source image (the one in drawable or on your computer).
 
 4. Under the Foreground Layer tab, use the Scaling slider.
-   
+
    ◦ Slide it to the left (e.g., to 60% or 70%) to make the logo look smaller.
    ◦ Android Studio will show you a "Safe Zone" circle to make sure your logo doesn't get cut off.
 

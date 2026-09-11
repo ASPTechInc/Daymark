@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentCompat
@@ -162,6 +163,16 @@ class NewActivity : AppCompatActivity() {
         // Save button
         val saveButton = findViewById<Button>(R.id.saveButton)
         saveButton.setOnClickListener {
+            if (endDateTime.isBefore(startDateTime)) {
+                Toast
+                    .makeText(
+                        this,
+                        R.string.calculator_error_end_before_start,
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                return@setOnClickListener
+            }
+
             val selectedCategoryIdValue =
                 categoryDropdown.text?.toString()?.let { categoryName ->
                     val index = availableCategoryNames.indexOf(categoryName)

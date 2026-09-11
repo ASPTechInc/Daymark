@@ -30,6 +30,19 @@
             app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
+    <!-- Reminders -->
+    <PreferenceCategory
+        android:key="@string/settings_key_notifications_category"
+        android:layout="@layout/view_settings_category"
+        android:title="@string/settings_category_notifications_reminders">
+        <Preference
+            android:icon="@drawable/ic_clock"
+            android:key="@string/settings_key_activity_start_notification"
+            android:summary="@string/summary_activity_start_notification"
+            android:title="@string/settings_label_activity_start_notification"
+            app:iconTint="?attr/colorOnMenuContainer" />
+    </PreferenceCategory>
+
     <!-- Date calculators -->
     <PreferenceCategory
         android:layout="@layout/view_settings_category"

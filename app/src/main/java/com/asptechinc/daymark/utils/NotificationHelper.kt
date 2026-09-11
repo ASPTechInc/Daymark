@@ -11,6 +11,7 @@ import com.asptechinc.daymark.R
 
 object NotificationHelper {
     private const val CHANNEL_ID = "activity_end_channel"
+    private const val START_NOTIFICATION_ID_OFFSET = 100000
 
     fun createNotificationChannel(context: Context) {
         val importance = NotificationManager.IMPORTANCE_DEFAULT
@@ -47,8 +48,8 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_info)
-                .setContentTitle(context.getString(R.string.notification_title))
-                .setContentText(context.getString(R.string.notification_content, activityName))
+                .setContentTitle(context.getString(R.string.notification_title_end))
+                .setContentText(context.getString(R.string.notification_content_end, activityName))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
@@ -56,5 +57,52 @@ object NotificationHelper {
         val notificationManager: NotificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(activityId, builder.build())
+    }
+
+    fun showActivityStartNotification(
+        context: Context,
+        activityId: Int,
+        activityName: String,
+        notificationIndex: Int,
+    ) {
+        val intent =
+            Intent(context, MainActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        val pendingIntent: PendingIntent =
+            PendingIntent.getActivity(
+                context,
+                activityId + START_NOTIFICATION_ID_OFFSET, // Use a different ID to avoid collision with end notification
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+
+        val periodText =
+            when (notificationIndex) {
+                1 -> context.getString(R.string.notification_period_week)
+                2 -> context.getString(R.string.notification_period_tomorrow)
+                3 -> context.getString(R.string.notification_period_today)
+                else -> ""
+            }
+
+        val builder =
+            NotificationCompat
+                .Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_info)
+                .setContentTitle(context.getString(R.string.notification_title_start))
+                .setContentText(
+                    context.getString(
+                        R.string.notification_content_start,
+                        activityName,
+                        periodText
+                    )
+                )
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true)
+
+        val notificationManager: NotificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(activityId + START_NOTIFICATION_ID_OFFSET, builder.build())
     }
 }

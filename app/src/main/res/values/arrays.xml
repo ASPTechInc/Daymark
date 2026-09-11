@@ -19,4 +19,11 @@
         <item>Week only</item>
         <item>Day only</item>
     </string-array>
+
+    <string-array name="activity_start_time_notification">
+        <item>None</item>
+        <item>1 week before</item>
+        <item>1 day before</item>
+        <item>On day of event</item>
+    </string-array>
 </resources>

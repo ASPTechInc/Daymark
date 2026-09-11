@@ -44,7 +44,7 @@ fun initialActivities(context: Context): MutableList<Activity> {
         Activity(
             activityName = context.i18n(R.string.default_entry_title5),
             notes = context.i18n(R.string.default_entry_note5),
-            startDateTime = now.minusDays(1),
+            startDateTime = now.plusDays(1),
             position = 4,
         ),
         Activity(

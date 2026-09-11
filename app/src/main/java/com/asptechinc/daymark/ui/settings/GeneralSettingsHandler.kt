@@ -2,6 +2,7 @@ package com.asptechinc.daymark.ui.settings
 
 import androidx.preference.PreferenceFragmentCompat
 import com.asptechinc.daymark.R
+import com.asptechinc.daymark.utils.ActivityNotificationManager
 import com.asptechinc.daymark.utils.AlarmHelper
 import com.asptechinc.daymark.utils.LayoutManager
 import com.asptechinc.daymark.utils.ThemeManager
@@ -53,6 +54,21 @@ class GeneralSettingsHandler(
                 TimeUnitManager.setTimeUnitByIndex(context, which)
                 dialogue.dismiss()
                 fragment.requireActivity().recreate()
+            }.setNegativeButton(R.string.btn_cancel, null)
+            .showStyled()
+    }
+
+    fun showActivityNotificationSelectionDialogue() {
+        val context = fragment.requireContext()
+        val options = context.resources.getStringArray(R.array.activity_start_time_notification)
+        val selected = ActivityNotificationManager.getSavedNotificationIndex(context)
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(R.string.settings_label_activity_start_notification)
+            .setSingleChoiceItems(options, selected) { dialogue, which ->
+                ActivityNotificationManager.setNotificationIndex(context, which)
+                dialogue.dismiss()
+                AlarmHelper.rescheduleAllAlarms(context)
             }.setNegativeButton(R.string.btn_cancel, null)
             .showStyled()
     }

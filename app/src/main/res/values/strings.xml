@@ -50,6 +50,7 @@
 
     <!-- Screen: Settings -->
     <string name="settings_category_general">General</string>
+    <string name="settings_category_notifications_reminders">Reminders</string>
     <string name="settings_category_date_calculators">Date calculators</string>
     <string name="settings_category_data_management">Data management</string>
     <string name="settings_category_security">Security</string>
@@ -62,10 +63,13 @@
     <string name="settings_key_theme_config">set_theme</string>
     <string name="settings_key_layout_mode">set_layout</string>
     <string name="settings_key_time_unit">set_time_unit</string>
+    <string name="settings_key_activity_start_notification">activity_start_notification</string>
     <string name="settings_key_notifications">enable_notifications</string>
+    <string name="settings_key_notifications_category">notifications_category</string>
     <string name="settings_label_theme">Theme</string>
     <string name="settings_label_app_layout">Layout mode</string>
     <string name="settings_label_time_unit">Time unit</string>
+    <string name="settings_label_activity_start_notification">Activity start notification</string>
     <string name="settings_label_notifications">Notifications</string>
 
     <!-- Security: App lock -->
@@ -126,6 +130,7 @@
     <string name="summary_app_layout">Choose either a list or grid layout for the activities created.</string>
     <string name="summary_time_unit">Set the time unit for an activity\'s duration</string>
     <string name="summary_notifications">Enable or disable notifications for completed activities</string>
+    <string name="summary_activity_start_notification">Choose when to be notified before an activity starts</string>
     <string name="summary_days_calculator">How many days, months and years are there between two days?</string>
     <string name="summary_date_calculator">Enter a start date and add or subtract any number of days, months or years from it.</string>
     <string name="summary_clear_all">Remove all activities.</string>
@@ -284,9 +289,14 @@
 
     <!-- Feedback: Toast -->
     <string name="notification_channel_name">Activity Reminders</string>
-    <string name="notification_channel_description">Notifications for ended activities</string>
-    <string name="notification_title">Activity Ended</string>
-    <string name="notification_content">The activity \"%1$s\" has ended.</string>
+    <string name="notification_channel_description">Notifications for upcoming and completed activities</string>
+    <string name="notification_title_end">Activity Ended</string>
+    <string name="notification_title_start">Activity Starting</string>
+    <string name="notification_content_end">The activity \"%1$s\" has ended.</string>
+    <string name="notification_content_start">The activity \"%1$s\" will start %2$s.</string>
+    <string name="notification_period_week">in one week</string>
+    <string name="notification_period_tomorrow">tomorrow</string>
+    <string name="notification_period_today">today</string>
     <string name="toast_item_saved">Saved.</string>
     <string name="toast_item_deleted">Deleted.</string>
     <string name="toast_settings_imported">App data has been restored</string>

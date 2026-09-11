@@ -1,0 +1,5 @@
+Added activity start reminders with customisable lead times.
+- New Reminders category in Settings.
+- Added end date validation when saving activities.
+- Dynamic notification text for upcoming events.
+- Improved reliability for same-day reminders.

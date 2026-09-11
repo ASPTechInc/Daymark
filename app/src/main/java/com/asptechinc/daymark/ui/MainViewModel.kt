@@ -202,6 +202,12 @@ class MainViewModel(
     fun addActivity(activity: Activity) =
         viewModelScope.launch {
             val id = repository.add(activity)
+            AlarmHelper.scheduleActivityStartAlarm(
+                getApplication(),
+                id,
+                activity.activityName,
+                activity.startDateTime,
+            )
             activity.endDateTime?.let { endTime ->
                 AlarmHelper.scheduleActivityEndAlarm(
                     getApplication(),
@@ -216,7 +222,14 @@ class MainViewModel(
     fun updateActivity(activity: Activity) =
         viewModelScope.launch {
             repository.update(activity)
+            AlarmHelper.cancelActivityStartAlarm(getApplication(), activity.id)
             AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
+            AlarmHelper.scheduleActivityStartAlarm(
+                getApplication(),
+                activity.id,
+                activity.activityName,
+                activity.startDateTime,
+            )
             activity.endDateTime?.let { endTime ->
                 AlarmHelper.scheduleActivityEndAlarm(
                     getApplication(),
@@ -231,6 +244,7 @@ class MainViewModel(
     fun deleteActivity(activity: Activity) =
         viewModelScope.launch {
             repository.remove(activity)
+            AlarmHelper.cancelActivityStartAlarm(getApplication(), activity.id)
             AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
             WidgetUtils.updateAllWidgets(getApplication())
         }
@@ -238,6 +252,7 @@ class MainViewModel(
     fun archiveActivity(activity: Activity) =
         viewModelScope.launch {
             repository.archive(activity)
+            AlarmHelper.cancelActivityStartAlarm(getApplication(), activity.id)
             AlarmHelper.cancelActivityEndAlarm(getApplication(), activity.id)
             WidgetUtils.updateAllWidgets(getApplication())
         }

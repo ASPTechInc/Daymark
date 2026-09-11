@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.asptechinc.daymark.config.AppConfig
@@ -194,11 +195,22 @@ class SettingsActivity : AppCompatActivity() {
                     generalHandler.showTimeUnitSelectionDialogue()
                     true
                 }
-            findPreference<SwitchPreferenceCompat>(getString(R.string.settings_key_notifications))
-                ?.setOnPreferenceChangeListener { _, newValue ->
-                    generalHandler.toggleNotifications(newValue as Boolean)
+            findPreference<Preference>(getString(R.string.settings_key_activity_start_notification))
+                ?.setOnPreferenceClickListener {
+                    generalHandler.showActivityNotificationSelectionDialogue()
                     true
                 }
+            val notificationsPref = findPreference<SwitchPreferenceCompat>(getString(R.string.settings_key_notifications))
+            val notificationsCategory = findPreference<PreferenceCategory>(getString(R.string.settings_key_notifications_category))
+
+            notificationsCategory?.isVisible = notificationsPref?.isChecked == true
+
+            notificationsPref?.setOnPreferenceChangeListener { _, newValue ->
+                val isEnabled = newValue as Boolean
+                generalHandler.toggleNotifications(isEnabled)
+                notificationsCategory?.isVisible = isEnabled
+                true
+            }
 
             // Calculators
             findPreference<Preference>(getString(R.string.settings_key_days_calculator))

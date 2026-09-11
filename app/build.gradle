@@ -27,8 +27,8 @@ android {
         applicationId = "com.asptechinc.daymark"
         minSdk = 26
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         def buildTime = providers.of(BuildTimeValueSource.class) {}.get()
         buildConfigField 'String', 'BUILD_TIME', "\"$buildTime\""

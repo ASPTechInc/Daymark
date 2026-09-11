@@ -1,3 +1,23 @@
+# [v1.1](https://github.com/ASPTechInc/Daymark/tree/v1.1) (2026-10-27)
+
+### Features
+
+* **Activity start reminders**: Added notifications for the start of an activity with
+  customisable lead times (None, 1 week before, 1 day before, or On day of event).
+* **Settings organisation**: Added a dynamic "Reminders" category in General Settings that
+  only appears when notifications are enabled.
+* **Input validation**: Added a check to prevent saving activities with an end date that occurs
+  before the start date, preventing invalid data entry.
+
+### Improvements
+
+* **Dynamic notification content**: Updated start-of-activity notifications to include human-readable
+  time periods (e.g., "will start in one week", "tomorrow").
+* **Reliable reminders**: Improved alarm scheduling to immediately trigger notifications if the
+  scheduled reminder time has already passed but the activity is still in the future.
+* **UI enhancements**: Updated the activity start notification icon to a clock icon for better
+  visual distinction.
+
 # [v1.0](https://github.com/ASPTechInc/Daymark/tree/v1.0) (2026-08-24)
 
 Full stable release of Daymark, a privacy-first day-counter application for Android.
