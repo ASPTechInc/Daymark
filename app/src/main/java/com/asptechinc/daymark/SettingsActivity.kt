@@ -254,12 +254,7 @@ class SettingsActivity : AppCompatActivity() {
             // Security
             val appPinPreference =
                 findPreference<SwitchPreferenceCompat>(getString(R.string.settings_key_manage_app_pin))
-
-            appPinPreference
-                ?.setOnPreferenceClickListener {
-                    securityHandler.handleAppLock(appPinPreference)
-                    true
-                }
+            securityHandler.setupAppLock(appPinPreference)
 
             // Backup
             findPreference<Preference>(getString(R.string.settings_key_import_backup))

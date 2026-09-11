@@ -158,57 +158,47 @@ class SecuritySettingsHandler(
         dialogue.show()
     }
 
-    fun handleAppLock(appPinPreference: SwitchPreferenceCompat?) {
+    fun setupAppLock(appPinPreference: SwitchPreferenceCompat?) {
         val context = fragment.requireContext()
         val prefs = context.getSharedPreferences(AppConfig.SETTINGS_PREFS, Context.MODE_PRIVATE)
-        val currentPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
 
-        appPinPreference?.isChecked = !currentPin.isNullOrBlank()
-        appPinPreference?.title =
-            if (currentPin.isNullOrBlank()) {
-                context.i18n(R.string.settings_label_set_app_pin)
-            } else {
+        fun updatePreferenceState() {
+            val currentPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
+            val hasPin = !currentPin.isNullOrBlank()
+            appPinPreference?.isChecked = hasPin
+            appPinPreference?.title = if (hasPin) {
                 context.i18n(R.string.settings_label_change_app_pin)
+            } else {
+                context.i18n(R.string.settings_label_set_app_pin)
             }
+        }
+
+        updatePreferenceState()
 
         appPinPreference?.setOnPreferenceChangeListener { _, newValue ->
-            val enablePin = newValue as Boolean
-            if (enablePin) {
-                showAppLockSetupDialogue(allowRemove = false) { pinSet ->
-                    appPinPreference.isChecked = pinSet
-                    val updatedPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
-                    appPinPreference.title =
-                        if (updatedPin.isNullOrBlank()) {
-                            context.i18n(R.string.settings_label_set_app_pin)
-                        } else {
-                            context.i18n(R.string.settings_label_change_app_pin)
-                        }
+            val isEnabling = newValue as Boolean
+            if (isEnabling) {
+                showAppLockSetupDialogue(allowRemove = false) { _ ->
+                    updatePreferenceState()
                 }
-                false
+                false // Don't toggle yet, wait for dialogue
             } else {
                 prefs.edit { remove(context.i18n(R.string.app_lock_pin_key)) }
-                Toast
-                    .makeText(
-                        context,
-                        context.i18n(R.string.toast_app_lock_pin_removal),
-                        Toast.LENGTH_LONG,
-                    ).show()
-                appPinPreference.title = context.i18n(R.string.settings_label_set_app_pin)
+                Toast.makeText(
+                    context,
+                    context.i18n(R.string.toast_app_lock_pin_removal),
+                    Toast.LENGTH_LONG
+                ).show()
+                updatePreferenceState()
                 true
             }
         }
 
         appPinPreference?.setOnPreferenceClickListener {
             if (appPinPreference.isChecked) {
-                showAppLockSetupDialogue(allowRemove = false) { pinSet ->
-                    appPinPreference.isChecked = pinSet
-                    val updatedPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
-                    appPinPreference.title =
-                        if (updatedPin.isNullOrBlank()) {
-                            context.i18n(R.string.settings_label_set_app_pin)
-                        } else {
-                            context.i18n(R.string.settings_label_change_app_pin)
-                        }
+                // If already checked, treat click as "Change PIN"
+                showAppLockSetupDialogue(allowRemove = false) {
+                    updatePreferenceState()
                 }
             }
             true
