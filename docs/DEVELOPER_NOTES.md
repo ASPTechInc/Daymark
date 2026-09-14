@@ -12,6 +12,7 @@
 - [Resizing app logo for Android compatibility](#resizing-app-logo-for-android-compatibility)
     - [Creating the adaptive icon structure](#create-adaptive-icon-structure)
     - [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo)
+- [Test GitHub workflows locally](#testing-github-workflows-locally)
 
 ---
 
@@ -79,8 +80,8 @@ This is the most user-friendly way to see real-time results and navigate to issu
 
 2. Select the scope (e.g., Whole project or Module 'app').
 
-3. Click OK. Android Studio will run its internal inspections and display a list of warnings, errors
-   and suggestions in the "Problems" or "Inspection Results" tool window.
+3. Click OK. Android Studio will run its internal inspections and display a list of warnings,
+   errors and suggestions in the "Problems" or "Inspection Results" tool window.
 
 #### Using Gradle (Command Line)
 
@@ -430,8 +431,8 @@ mipmap-anydpi-v26
 
 For older Android versions, the PNGs are used.
 
-So if you want your application to look correct on **older Android versions too**, you should update
-the legacy PNGs as well.
+So if you want your application to look correct on **older Android versions too**, you should
+update the legacy PNGs as well.
 
 But you don't necessarily need to manually create five different logos.
 
@@ -808,3 +809,75 @@ Canvas: 512 × 512
 5. Click Next and then Finish.
 
 ---
+
+## Testing GitHub workflows locally
+
+[**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to
+GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them
+locally inside Docker containers. It provides a full emulation of GitHub Actions runner
+environments right on your computer.
+
+### Installation:
+
+- **macOS (Homebrew):**
+  ```bash
+  brew install act
+  ```
+- **Linux:**
+  ```bash
+  curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
+  ```
+- **Windows (Chocolatey / Scoop):**
+  ```bash
+  choco install act
+  # or
+  scoop install act
+  ```
+
+### Add to path
+
+  ```bash
+  echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+  source ~/.bashrc
+  ```
+
+### Add your user to the docker group
+
+  ```bash
+  # Add your user to the docker group
+  sudo usermod -aG docker $USER
+  
+  # Install 'newgrp' command
+  sudo apt install util-linux-extra
+  
+  # Apply the group changes
+  newgrp docker
+  
+  # Verify the fix
+  docker ps
+  ````
+
+> If changes do not take effect, log out and log back in
+
+### Common commands:
+
+1. **List all available actions/jobs in your workspace:**
+   ```bash
+   act -l
+   ```
+2. **Run the entire workflow (simulating a `push` event):**
+   ```bash
+   act
+   ```
+3. **Run a specific job only (e.g., the `check` job from your `rust.yml`):**
+   ```bash
+   act -j check
+   ```
+4. **Dry run (to see what steps would run without executing them):**
+   ```bash
+   act -n
+   ```
+
+> [!NOTE]
+> Since `act` uses Docker containers to run workflows, you will need to have **Docker**
+> (or an alternative like Podman) installed and running on your machine.
