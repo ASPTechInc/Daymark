@@ -13,6 +13,7 @@
     - [Creating the adaptive icon structure](#create-adaptive-icon-structure)
     - [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo)
 - [Test GitHub workflows locally](#testing-github-workflows-locally)
+- [Stop tracking files in Git](#stop-tracking-files-in-git)
 
 ---
 
@@ -812,34 +813,53 @@ Canvas: 512 × 512
 
 ## Testing GitHub workflows locally
 
-[**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to
-GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them
-locally inside Docker containers. It provides a full emulation of GitHub Actions runner
+[**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to 
+GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them 
+locally inside Docker containers. It provides a full emulation of GitHub Actions runner 
 environments right on your computer.
 
-### Installation:
-
-- **macOS (Homebrew):**
+### Installation
+- **macOS (Homebrew)**
   ```bash
   brew install act
   ```
-- **Linux:**
+- **Linux**
   ```bash
   curl -s https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
   ```
-- **Windows (Chocolatey / Scoop):**
+- **Windows (Chocolatey / Scoop)**
   ```bash
   choco install act
   # or
   scoop install act
   ```
-
 ### Add to path
-
   ```bash
   echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
   source ~/.bashrc
   ```
+
+### Create hidden files
+
+Create these files in the project root directory.
+
+.env
+```bash
+# Contents of .env
+ANDROID_HOME=/<path-to-directory>/Android/Sdk
+```
+
+.secrets
+```bash
+# Contents of .secrets
+GITHUB_TOKEN=<github-personal-access-token>
+```
+
+.vars
+```bash
+# Contents of .vars
+ANDROID_HOME=/<path-to-directory>/Android/Sdk
+```
 
 ### Add your user to the docker group
 
@@ -859,7 +879,9 @@ environments right on your computer.
 
 > If changes do not take effect, log out and log back in
 
-### Common commands:
+### Common commands
+
+>Alternatively, the `act` command can be executed as `~/bin/act`
 
 1. **List all available actions/jobs in your workspace:**
    ```bash
@@ -869,15 +891,66 @@ environments right on your computer.
    ```bash
    act
    ```
+   
 3. **Run a specific job only (e.g., the `check` job from your `rust.yml`):**
+
    ```bash
-   act -j check
+   # Run 'check' job from 'rust.yml' workflow
+   act -j check -W .github/workflows/rust.yml
+   
+   # Run 'build' job from 'ci.yml' workflow
+   act -j build -W .github/workflows/ci.yml
+   # OR (Recommended for Android builds)
+   # Map your host SDK to a neutral internal path to avoid permission/path issues
+   act --env-file .env --container-options "-v /<path-to-directory>/Android/Sdk:/opt/android-sdk" --env ANDROID_HOME=/opt/android-sdk -j build -W .github/workflows/ci.yml
+   
+   # Run 'test' job from 'ci.yml' workflow
+   act -j test -W .github/workflows/ci.yml
+   # OR
+   act -s GITHUB_TOKEN=your_token_here -j test -W .github/workflows/ci.yml
+   # OR (Recommended for Android tests)
+   act --env-file .env --container-options "-v /<path-to-directory>/Android/Sdk:/opt/android-sdk" --env ANDROID_HOME=/opt/android-sdk -j test -W .github/workflows/ci.yml
+   
+   # Run 'fmt' job from 'ci.yml' workflow
+   act -j fmt -W .github/workflows/rust.yml
+   
+   # Run 'lint' job from 'ci.yml' workflow
+   act -j trunk -W .github/workflows/rust.yml --rm
+   
+   # NOTE: If you get "DNS error" or "Name resolution failure", you may need to 
+   # configure your Docker daemon's DNS or use a different network mode.
+   # act -j trunk -W .github/workflows/rust.yml --rm --network host
+   
+   # Run 'release' job from 'release.yml' workflow
+   act -j build -W .github/workflows/release.yml
    ```
+   
 4. **Dry run (to see what steps would run without executing them):**
    ```bash
    act -n
    ```
 
 > [!NOTE]
-> Since `act` uses Docker containers to run workflows, you will need to have **Docker**
+> Given that `act` uses Docker containers to run workflows, you will need to have **Docker** 
 > (or an alternative like Podman) installed and running on your machine.
+
+---
+
+## Stop tracking files in Git
+
+The command, `git rm -r --cached <name-of-file-or-directory>` will remove the specified file or 
+folder from Git's index (the staging area) without deleting the actual files from your computer.
+
+>The commands must be executed in the project root directory
+
+```bash
+# e.g. This command will stop tracking the build/ folder 
+# since it is already being tracked
+
+git rm -r --cached build/
+# OR, if there are other build/ folders (like app/build/) that are also being tracked, run:
+# git rm -r --cached **/build/
+
+# Commit the change
+git commit -m "Stop tracking build/ directory"
+```

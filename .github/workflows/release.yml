@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ !env.ACT && github.actor != 'dependabot[bot]' }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN and skip Dependabot pull requests
 
     steps:
       - name: Checkout repository
@@ -88,6 +89,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
     needs: build
     permissions:
       contents: write

@@ -1,4 +1,4 @@
-name: Continuous integration
+name: Android continuous integration
 
 on:
   pull_request:
@@ -8,6 +8,7 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
 
     steps:
       - name: Checkout repository
@@ -27,6 +28,7 @@ jobs:
         run: ./gradlew assembleDebug
 
       - name: Upload Debug APK
+        if: ${{ !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: app-debug
@@ -35,6 +37,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -53,7 +57,7 @@ jobs:
         run: ./gradlew testDebugUnitTest
 
       - name: Upload Test Report
-        if: failure()
+        if: ${{ failure() && !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: unit-test-report
@@ -62,6 +66,8 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -83,7 +89,7 @@ jobs:
         run: ./gradlew ktlintCheck
 
       - name: Upload Lint Report
-        if: failure()
+        if: ${{ failure() && !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: lint-report
