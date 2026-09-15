@@ -20,11 +20,22 @@ class DateUtilsTest {
     fun testRelativeDateText_Future() {
         // Use a fixed date to avoid month-end boundary issues (e.g., Aug 31st -> Nov 30th)
         val now = LocalDateTime.of(2026, 1, 1, 12, 0)
+        val then = LocalDateTime.of(2028, 8, 11, 12, 0)
 
-        assertEquals("In 1 day", relativeDateText(now.plusDays(1), now))
-        assertEquals("In 2 weeks", relativeDateText(now.plusWeeks(2), now))
-        assertEquals("In 3 months", relativeDateText(now.plusMonths(3), now))
-        assertEquals("In 1 year", relativeDateText(now.plusYears(1), now))
+        assertEquals("in 1 day", relativeDateText(now.plusDays(1), now))
+        assertEquals("in 2 weeks", relativeDateText(now.plusWeeks(2), now))
+        assertEquals("in 3 months", relativeDateText(now.plusMonths(3), now))
+        assertEquals("in 1 year", relativeDateText(now.plusYears(1), now))
+
+        assertEquals("Starts in 1 day", getActivityRelativeText(now.plusDays(1), null, now, 0))
+        assertEquals("Starts in 2 weeks", getActivityRelativeText(now.plusWeeks(2), null, now, 0))
+        assertEquals("Starts in 3 months", getActivityRelativeText(now.plusMonths(3), null, now, 0))
+        assertEquals("Starts in 1 year", getActivityRelativeText(now.plusYears(1), null, now, 0))
+        assertEquals(
+            "Starts in 2 years, 7 months, 1 week, 3 days",
+            getActivityRelativeText(then, null, now, 0),
+        )
+        assertEquals("Starts in 5 days", getActivityRelativeText(now.plusDays(5), null, now, 0))
     }
 
     @Test
@@ -37,7 +48,17 @@ class DateUtilsTest {
         // 2026-08-17 to 2027-08-17 is 1 year
         // 2027-08-17 to 2027-10-17 is 2 months
         // 2027-10-17 to 2027-10-20 is 3 days
-        assertEquals("In 1 year, 2 months, 3 days", relativeDateText(then, now))
+        assertEquals("in 1 year, 2 months, 3 days", relativeDateText(then, now))
+
+        assertEquals("Started 5 days ago", getActivityRelativeText(now.minusDays(5), null, now, 0))
+        assertEquals(
+            "Ends in 2 weeks, 6 days",
+            getActivityRelativeText(now.minusDays(2), now.plusDays(20), now, 0),
+        )
+        assertEquals(
+            "Starts in 3 days",
+            getActivityRelativeText(now.plusDays(3), now.plusDays(25), now, 0),
+        )
     }
 
     @Test

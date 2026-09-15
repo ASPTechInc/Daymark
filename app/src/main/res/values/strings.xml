@@ -39,7 +39,6 @@
     <string name="activity_category_label">Category:</string>
     <string name="activity_category_hint">Choose a category</string>
     <string name="activity_tags_label">Tags:</string>
-    <string name="activity_tags_example">New tag</string>
     <string name="activity_tags_hint">Select or add keywords for the activity</string>
     <string name="activity_completed_label">Completed:</string>
     <string name="activity_start_date_label">Start date:</string>
@@ -93,7 +92,6 @@
     <string name="keypad_num_9">9</string>
     <string name="keypad_clear_btn">C</string>
     <string name="keypad_confirm_btn">✓</string>
-    <string name="no_data_image_alt">No data image</string>
 
     <!-- Settings: Backup -->
     <string name="settings_key_import_backup">import_backup</string>

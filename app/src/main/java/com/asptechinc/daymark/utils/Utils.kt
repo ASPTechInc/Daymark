@@ -85,7 +85,7 @@ fun relativeDateText(
         }
 
     if (text == "Today") return text
-    return if (isFuture) "In $text" else "$text ago"
+    return if (isFuture) "in $text" else "$text ago"
 }
 
 fun getActivityRelativeText(
@@ -93,16 +93,38 @@ fun getActivityRelativeText(
     endDateTime: LocalDateTime?,
     currentDate: LocalDateTime,
     timeUnitIndex: Int,
-): String =
-    endDateTime?.let {
-        val relativeText = relativeDateText(it, currentDate, timeUnitIndex)
-        val formattedRelativeText = relativeText.replaceFirstChar { char -> char.lowercase() }
-        if (it.isAfter(currentDate)) {
-            "Ends $formattedRelativeText"
-        } else {
-            "Ended $formattedRelativeText"
+): String {
+    val (date, prefix) =
+        when {
+            // Activity hasn't started yet
+            // i.e. start > now
+            startDateTime.isAfter(currentDate) ->
+                startDateTime to "Starts"
+
+            // Activity has started and has no end date
+            // i.e. start <= now && end == null
+            // 'it' means 'endDateTime'
+            endDateTime == null ->
+                startDateTime to "Started"
+
+            // Activity has started but hasn't ended
+            // i.e. start <= now
+            //         end > now
+            endDateTime.isAfter(currentDate) ->
+                endDateTime to "Ends"
+
+            else ->
+                // Activity has ended
+                // i.e. end <= now
+                endDateTime to "Ended"
         }
-    } ?: relativeDateText(startDateTime, currentDate, timeUnitIndex)
+
+    val relativeText =
+        relativeDateText(date, currentDate, timeUnitIndex)
+            .replaceFirstChar { it.lowercase() }
+
+    return "$prefix $relativeText"
+}
 
 fun LocalDateTime.toOrdinalDateString(): String {
     val day = dayOfMonth

@@ -312,12 +312,18 @@ class CalculatorSettingsHandler(
         var current = startDate
         while (current.isBefore(endDate)) {
             val dayOfWeek = current.dayOfWeek
-            if (dayOfWeek == DayOfWeek.SATURDAY) {
-                saturdays++
-            } else if (dayOfWeek == DayOfWeek.SUNDAY) {
-                sundays++
-            } else {
-                businessDays++
+            when (dayOfWeek) {
+                DayOfWeek.SATURDAY -> {
+                    saturdays++
+                }
+
+                DayOfWeek.SUNDAY -> {
+                    sundays++
+                }
+
+                else -> {
+                    businessDays++
+                }
             }
             current = current.plusDays(1)
         }

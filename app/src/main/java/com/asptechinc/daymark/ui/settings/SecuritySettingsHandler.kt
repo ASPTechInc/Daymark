@@ -166,11 +166,12 @@ class SecuritySettingsHandler(
             val currentPin = prefs.getString(context.i18n(R.string.app_lock_pin_key), null)
             val hasPin = !currentPin.isNullOrBlank()
             appPinPreference?.isChecked = hasPin
-            appPinPreference?.title = if (hasPin) {
-                context.i18n(R.string.settings_label_change_app_pin)
-            } else {
-                context.i18n(R.string.settings_label_set_app_pin)
-            }
+            appPinPreference?.title =
+                if (hasPin) {
+                    context.i18n(R.string.settings_label_change_app_pin)
+                } else {
+                    context.i18n(R.string.settings_label_set_app_pin)
+                }
         }
 
         updatePreferenceState()
@@ -184,11 +185,12 @@ class SecuritySettingsHandler(
                 false // Don't toggle yet, wait for dialogue
             } else {
                 prefs.edit { remove(context.i18n(R.string.app_lock_pin_key)) }
-                Toast.makeText(
-                    context,
-                    context.i18n(R.string.toast_app_lock_pin_removal),
-                    Toast.LENGTH_LONG
-                ).show()
+                Toast
+                    .makeText(
+                        context,
+                        context.i18n(R.string.toast_app_lock_pin_removal),
+                        Toast.LENGTH_LONG,
+                    ).show()
                 updatePreferenceState()
                 true
             }

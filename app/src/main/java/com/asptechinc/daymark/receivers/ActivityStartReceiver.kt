@@ -15,7 +15,10 @@ class ActivityStartReceiver : BroadcastReceiver() {
         val activityName = intent.getStringExtra("ACTIVITY_NAME") ?: "An activity"
         val notificationIndex = intent.getIntExtra("NOTIFICATION_INDEX", 0)
 
-        Log.i("ActivityStartReceiver", "Received start notification for activity: $activityName (ID: $activityId, Index: $notificationIndex)")
+        Log.i(
+            "ActivityStartReceiver",
+            "Received start notification for activity: $activityName (ID: $activityId, Index: $notificationIndex)",
+        )
 
         if (activityId != -1) {
             NotificationHelper.createNotificationChannel(context)

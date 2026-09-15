@@ -132,14 +132,15 @@ object AlarmHelper {
                 triggerTime.toLocalDate().isEqual(LocalDateTime.now().toLocalDate())
 
             if (triggerAtMillis > now || isSameDayAsTrigger) {
-                // If the trigger time is in the past but it's still the same day, trigger in 1 second
+                // If the trigger time is in the past, but it's still the same day, trigger in 1 second
                 val finalTriggerMillis = if (triggerAtMillis > now) triggerAtMillis else now + 1000
 
                 Log.i(
                     "AlarmHelper",
                     "Scheduling start alarm for activity: $activityName at $triggerTime (Actual trigger: ${
                         LocalDateTime.ofInstant(
-                            Instant.ofEpochMilli(finalTriggerMillis), ZoneId.systemDefault()
+                            Instant.ofEpochMilli(finalTriggerMillis),
+                            ZoneId.systemDefault(),
                         )
                     })",
                 )

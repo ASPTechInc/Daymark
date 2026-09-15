@@ -1,4 +1,4 @@
-# [v1.1](https://github.com/ASPTechInc/Daymark/tree/v1.1) (2026-10-27)
+# [v1.1](https://github.com/ASPTechInc/Daymark/tree/v1.1) (2026-09-11)
 
 ### Features
 
@@ -11,8 +11,8 @@
 
 ### Improvements
 
-* **Dynamic notification content**: Updated start-of-activity notifications to include human-readable
-  time periods (e.g., "will start in one week", "tomorrow").
+* **Dynamic notification content**: Updated start-of-activity notifications to include
+  human-readable time periods (e.g., "will start in one week", "tomorrow").
 * **Reliable reminders**: Improved alarm scheduling to immediately trigger notifications if the
   scheduled reminder time has already passed but the activity is still in the future.
 * **UI enhancements**: Updated the activity start notification icon to a clock icon for better

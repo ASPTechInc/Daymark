@@ -77,7 +77,7 @@ Enable:
 
 This is the most user-friendly way to see real-time results and navigate to issues:
 
-1. Go to the top menu and select Analyze > Inspect Code....
+1. Go to the top menu and select Code > Inspect Code....
 
 2. Select the scope (e.g., Whole project or Module 'app').
 
@@ -813,12 +813,13 @@ Canvas: 512 × 512
 
 ## Testing GitHub workflows locally
 
-[**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to 
-GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them 
-locally inside Docker containers. It provides a full emulation of GitHub Actions runner 
+[**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to
+GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them
+locally inside Docker containers. It provides a full emulation of GitHub Actions runner
 environments right on your computer.
 
 ### Installation
+
 - **macOS (Homebrew)**
   ```bash
   brew install act
@@ -833,7 +834,9 @@ environments right on your computer.
   # or
   scoop install act
   ```
+
 ### Add to path
+
   ```bash
   echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
   source ~/.bashrc
@@ -844,18 +847,21 @@ environments right on your computer.
 Create these files in the project root directory.
 
 .env
+
 ```bash
 # Contents of .env
 ANDROID_HOME=/<path-to-directory>/Android/Sdk
 ```
 
 .secrets
+
 ```bash
 # Contents of .secrets
 GITHUB_TOKEN=<github-personal-access-token>
 ```
 
 .vars
+
 ```bash
 # Contents of .vars
 ANDROID_HOME=/<path-to-directory>/Android/Sdk
@@ -881,7 +887,7 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
 
 ### Common commands
 
->Alternatively, the `act` command can be executed as `~/bin/act`
+> Alternatively, the `act` command can be executed as `~/bin/act`
 
 1. **List all available actions/jobs in your workspace:**
    ```bash
@@ -891,7 +897,7 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    ```bash
    act
    ```
-   
+
 3. **Run a specific job only (e.g., the `build` job from your `ci.yml`):**
 
    ```bash
@@ -914,24 +920,24 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    # Run 'build' job from 'release.yml' workflow
    act -j build -W .github/workflows/release.yml
    ```
-   
+
 4. **Dry run (to see what steps would run without executing them):**
    ```bash
    act -n
    ```
 
 > [!NOTE]
-> Given that `act` uses Docker containers to run workflows, you will need to have **Docker** 
+> Given that `act` uses Docker containers to run workflows, you will need to have **Docker**
 > (or an alternative like Podman) installed and running on your machine.
 
 ---
 
 ## Stop tracking files in Git
 
-The command, `git rm -r --cached <name-of-file-or-directory>` will remove the specified file or 
+The command, `git rm -r --cached <name-of-file-or-directory>` will remove the specified file or
 folder from Git's index (the staging area) without deleting the actual files from your computer.
 
->The commands must be executed in the project root directory
+> The commands must be executed in the project root directory
 
 ```bash
 # e.g. This command will stop tracking the build/ folder 

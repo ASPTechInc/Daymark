@@ -94,10 +94,9 @@ object NotificationHelper {
                     context.getString(
                         R.string.notification_content_start,
                         activityName,
-                        periodText
-                    )
-                )
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        periodText,
+                    ),
+                ).setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
 

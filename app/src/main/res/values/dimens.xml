@@ -27,5 +27,4 @@
     <dimen name="layout_dimension_50">50dp</dimen>
     <dimen name="layout_dimension_72">72dp</dimen>
     <dimen name="layout_dimension_90">90dp</dimen>
-    <dimen name="layout_dimension_180">180dp</dimen>
 </resources>
