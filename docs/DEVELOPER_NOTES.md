@@ -892,12 +892,9 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    act
    ```
    
-3. **Run a specific job only (e.g., the `check` job from your `rust.yml`):**
+3. **Run a specific job only (e.g., the `build` job from your `ci.yml`):**
 
    ```bash
-   # Run 'check' job from 'rust.yml' workflow
-   act -j check -W .github/workflows/rust.yml
-   
    # Run 'build' job from 'ci.yml' workflow
    act -j build -W .github/workflows/ci.yml
    # OR (Recommended for Android builds)
@@ -910,18 +907,11 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    act -s GITHUB_TOKEN=your_token_here -j test -W .github/workflows/ci.yml
    # OR (Recommended for Android tests)
    act --env-file .env --container-options "-v /<path-to-directory>/Android/Sdk:/opt/android-sdk" --env ANDROID_HOME=/opt/android-sdk -j test -W .github/workflows/ci.yml
-   
-   # Run 'fmt' job from 'ci.yml' workflow
-   act -j fmt -W .github/workflows/rust.yml
-   
+      
    # Run 'lint' job from 'ci.yml' workflow
-   act -j trunk -W .github/workflows/rust.yml --rm
+   act -j lint -W .github/workflows/ci.yml
    
-   # NOTE: If you get "DNS error" or "Name resolution failure", you may need to 
-   # configure your Docker daemon's DNS or use a different network mode.
-   # act -j trunk -W .github/workflows/rust.yml --rm --network host
-   
-   # Run 'release' job from 'release.yml' workflow
+   # Run 'build' job from 'release.yml' workflow
    act -j build -W .github/workflows/release.yml
    ```
    

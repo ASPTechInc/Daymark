@@ -14,3 +14,8 @@ local.properties
 keystore.properties
 *.jks
 *.keystore
+
+# 'act' files (a local GitHub workflow test tool)
+.vars
+.secrets
+.env
