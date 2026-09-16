@@ -78,8 +78,8 @@ notifications.
 |:-------------------------------------------------------------------------:|:-------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|:--------------------------------------------------------------------------:|
 | <img src="assets/screenshots/dark-theme/new-activity-screen1-dark.png" /> | <img src="assets/screenshots/dark-theme/new-activity-screen2-dark.png" /> | <img src="assets/screenshots/dark-theme/edit-activity-screen1-dark.png" /> | <img src="assets/screenshots/dark-theme/edit-activity-screen2-dark.png" /> |
 
-|                        **Search activities**                         |                        **Filter activities**                         |                          **Sort by dialogue**                          |                              **Manage categories**                              |                              **Manage tags**                              |
-|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:----------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------:|
+|                        **Search activities**                         |                        **Filter activities**                         |                         **Sort by dialogue**                          |                              **Manage categories**                              |                              **Manage tags**                              |
+|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:---------------------------------------------------------------------:|:-------------------------------------------------------------------------------:|:-------------------------------------------------------------------------:|
 | <img src="assets/screenshots/dark-theme/search-dialogue-dark.png" /> | <img src="assets/screenshots/dark-theme/filter-dialogue-dark.png" /> | <img src="assets/screenshots/dark-theme/sort-by-dialogue-dark.png" /> | <img src="assets/screenshots/dark-theme/manage-categories-dialogue-dark.png" /> | <img src="assets/screenshots/dark-theme/manage-tags-dialogue-dark.png" /> |
 
 |                              **Date calculator**                              |                              **Days calculator**                              |                                **Time unit dialogue**                                |                         **Device notification**                          |
@@ -112,8 +112,8 @@ notifications.
 |:---------------------------------------------------------------------------:|:---------------------------------------------------------------------------:|:----------------------------------------------------------------------------:|:----------------------------------------------------------------------------:|
 | <img src="assets/screenshots/light-theme/new-activity-screen1-light.png" /> | <img src="assets/screenshots/light-theme/new-activity-screen2-light.png" /> | <img src="assets/screenshots/light-theme/edit-activity-screen1-light.png" /> | <img src="assets/screenshots/light-theme/edit-activity-screen2-light.png" /> |
 
-|                         **Search activities**                          |                         **Filter activities**                          |                           **Sort by dialogue**                           |                               **Manage categories**                               |                               **Manage tags**                               |
-|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:------------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
+|                         **Search activities**                          |                         **Filter activities**                          |                          **Sort by dialogue**                           |                               **Manage categories**                               |                               **Manage tags**                               |
+|:----------------------------------------------------------------------:|:----------------------------------------------------------------------:|:-----------------------------------------------------------------------:|:---------------------------------------------------------------------------------:|:---------------------------------------------------------------------------:|
 | <img src="assets/screenshots/light-theme/search-dialogue-light.png" /> | <img src="assets/screenshots/light-theme/filter-dialogue-light.png" /> | <img src="assets/screenshots/light-theme/sort-by-dialogue-light.png" /> | <img src="assets/screenshots/light-theme/manage-categories-dialogue-light.png" /> | <img src="assets/screenshots/light-theme/manage-tags-dialogue-light.png" /> |
 
 |                               **Date calculator**                               |                               **Days calculator**                               |                          **Time unit dialogue**                           |                          **Device notification**                           |
@@ -348,7 +348,7 @@ The project is open-source under the [MIT Licence](LICENSE).
 
 ## Other projects
 
-View the [other projects by ASPTechnologies Incorporation](./FOSS_PROJECTS.md) on GitHub.
+View the [other projects by ASPTechnologies Incorporation](docs/FOSS_PROJECTS.md) on GitHub.
 
 ---
 

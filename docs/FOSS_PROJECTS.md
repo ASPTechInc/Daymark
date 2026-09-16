@@ -14,15 +14,18 @@ of interest.
 
 - [GoodBudget](https://github.com/ASPTechInc/GoodBudget) - A cross-platform application that serves
   as a budget monitor and expense tracker.  
-  It persists data to a Hive NoSQL database and was built using the Flutter framework and written in
-  Dart for Android and iOS platforms.
+  It persists data to a Hive NoSQL database and was built using the Flutter framework and written
+  in Dart for Android and iOS platforms.
 
 - [iCare](https://github.com/ASPTechInc/iCare) - An open-source hospital management website written
   in Python.
+
 - [Lexivo](https://github.com/ASPTechInc/Lexivo) - A cross-platform word puzzle game built with
   Rust and [egui/eframe](https://github.com/emilk/egui/) that challenges players to solve linguistic
   puzzles by transforming words through single-letter, double-letter or triple-letter changes and
   anagrams.
+
+  *GitHub page*: https://asptechinc.github.io/Lexivo
 
 - [LITUK_quiz](https://github.com/ASPTechInc/LITUK_quiz) - The Life in the United Kingdom (LITUK)
   quiz application prepares applicants for the LITUK test which is a requirement for the Indefinite
