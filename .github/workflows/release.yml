@@ -56,7 +56,7 @@ jobs:
 
       - name: Decode and write keystore file
         run: |
-          echo "${{ secrets.KEYSTORE_CONTENT }}" | base64 --decode > app/keystore.jks
+          echo "${{ secrets.KEYSTORE_CONTENT }}" | base64 --decode > app/${{ secrets.KEYSTORE_FILE_NAME }}
 
       - name: Build release APK and bundle
         run: |
