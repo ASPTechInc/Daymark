@@ -1,7 +1,10 @@
-# This workflow creates a Daymark release 
-# when a tag matching 'v*' is pushed to the 'main' branch
+# This workflow manages production build and deployment to GitHub Releases
+#  when a version tag (e.g. v1.0) is pushed to the main branch. It is triggered
+#  by the 'push' event for tags matching 'v*' to the 'main' GitHub branch.
+#
 # e.g. git tag v1.0
 #      git push origin v1.0
+#
 name: Create Daymark release
 
 on:
@@ -12,7 +15,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]' && !github.event.act # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN and skip Dependabot pull requests
+    environment: release
+    if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
 
     steps:
       - name: Checkout repository
@@ -28,7 +32,7 @@ jobs:
             exit 1
           fi
 
-      # Build/release steps go here
+      # Build/release steps
       - name: Set up JDK 17
         uses: actions/setup-java@v6
         with:
@@ -47,27 +51,84 @@ jobs:
           echo "$VERSION" > version.txt
           echo "Extracted Version: $VERSION"
 
-      - name: Create and populate keystore.properties
+      - name: Prepare Android signing
+        shell: bash
+        env:
+          KEYSTORE_FILE_NAME: ${{ secrets.KEYSTORE_FILE_NAME }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          KEYSTORE_CONTENT: ${{ secrets.KEYSTORE_CONTENT }}
         run: |
-          echo "storeFile=${{ secrets.KEYSTORE_FILE_NAME }}" > app/keystore.properties
-          echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" >> app/keystore.properties
-          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> app/keystore.properties
-          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> app/keystore.properties
-
-      - name: Decode and write keystore file
-        run: |
-          echo "${{ secrets.KEYSTORE_CONTENT }}" | base64 --decode > app/${{ secrets.KEYSTORE_FILE_NAME }}
+          set -euo pipefail
+          
+          # Validate that GitHub injected the secrets.
+          for name in \
+            KEYSTORE_FILE_NAME \
+            KEYSTORE_PASSWORD \
+            KEY_ALIAS \
+            KEY_PASSWORD \
+            KEYSTORE_CONTENT
+          do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::$name was not provided by GitHub Actions"
+              exit 1
+            fi
+          done
+          
+          echo "Signing secrets are available."
+          
+          # Decode keystore
+          KEYSTORE_PATH="app/$KEYSTORE_FILE_NAME"
+          
+          printf '%s' "$KEYSTORE_CONTENT" \
+            | base64 --decode \
+            > "$KEYSTORE_PATH"
+          
+          if [[ ! -s "$KEYSTORE_PATH" ]]; then
+            echo "::error::Decoded keystore is empty"
+            exit 1
+          fi
+          
+          # Create signing configuration.
+          cat > app/keystore.properties <<EOF
+          storeFile=$KEYSTORE_FILE_NAME
+          storePassword=$KEYSTORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+          
+          chmod 600 app/keystore.properties
+          
+          echo "Android signing configuration prepared."
 
       - name: Build release APK and bundle
         run: |
+          set -euo pipefail
+          
           ./gradlew :app:assembleRelease :app:bundleRelease
+          
+          APK="app/build/outputs/apk/release/app-release.apk"
+          AAB="app/build/outputs/bundle/release/app-release.aab"
+          
+          if [[ ! -f "$APK" ]]; then
+            echo "::error::Release APK was not created"
+            exit 1
+          fi
+          
+          if [[ ! -f "$AAB" ]]; then
+            echo "::error::Release AAB was not created"
+            exit 1
+          fi
+          
           # Rename outputs to match what the upload steps expect
-          cp app/build/outputs/apk/release/app-release.apk app/build/outputs/apk/release/Daymark.apk || cp app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/Daymark.apk
-          cp app/build/outputs/bundle/release/app-release.aab app/build/outputs/bundle/release/Daymark.aab || cp app/build/outputs/bundle/release/app-release-unsigned.aab app/build/outputs/bundle/release/Daymark.aab
+          cp "$APK" app/build/outputs/apk/release/Daymark.apk || cp app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/Daymark.apk
+          cp "$AAB" app/build/outputs/bundle/release/Daymark.aab || cp app/build/outputs/bundle/release/app-release-unsigned.aab app/build/outputs/bundle/release/Daymark.aab
         env:
           GITHUB_TOKEN: ${{ secrets.APP_GITHUB_TOKEN }}
 
       - name: Upload APK artefact
+        if: ${{ !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: Daymark-apk
@@ -75,6 +136,7 @@ jobs:
           retention-days: 1
 
       - name: Upload bundle artefact
+        if: ${{ !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: Daymark-bundle
@@ -82,6 +144,7 @@ jobs:
           retention-days: 1
 
       - name: Upload version artefact
+        if: ${{ !env.ACT }} # Accounts for 'act' not having a ACTIONS_RUNTIME_TOKEN
         uses: actions/upload-artifact@v7
         with:
           name: version-file
@@ -120,6 +183,12 @@ jobs:
         id: get_version
         run: |
           VERSION=$(cat version.txt)
+          
+          if [[ -z "$VERSION" ]]; then 
+            echo "::error::version.txt is empty"
+            exit 1
+          fi
+          
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           mv Daymark.apk Daymark-v$VERSION.apk
           mv Daymark.aab Daymark-v$VERSION.aab

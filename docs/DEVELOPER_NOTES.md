@@ -37,8 +37,8 @@ Data is stored using both SharedPreferences and Room database.
 Room is a robust SQLite abstraction provided by Android that is used for the application's primary,
 structured data entities.
 
-SharedPreferences is a key-value storage used for application
-settings and user preferences like storing and retrieving theme mode index and storing app lock
+SharedPreferences is a key-value storage used for application settings and user preferences like
+storing and retrieving theme mode index and storing app lock
 
 ---
 
@@ -81,8 +81,8 @@ This is the most user-friendly way to see real-time results and navigate to issu
 
 2. Select the scope (e.g., Whole project or Module 'app').
 
-3. Click OK. Android Studio will run its internal inspections and display a list of warnings,
-   errors and suggestions in the "Problems" or "Inspection Results" tool window.
+3. Click OK. Android Studio will run its internal inspections and display a list of warnings, errors
+   and suggestions in the "Problems" or "Inspection Results" tool window.
 
 #### Using Gradle (Command Line)
 
@@ -153,8 +153,8 @@ Automatically fix formatting:
 To update the app to a higher version:
 
 1. Insert a new entry in the [CHANGELOG.md](/CHANGELOG.md) for the new app version.
-2. In [app's build.gradle](/app/build.gradle) file, increment `versionCode` to the next number
-   and update `versionName` with the new version of the app.
+2. In [app's build.gradle](/app/build.gradle) file, increment `versionCode` to the next number and
+   update `versionName` with the new version of the app.
 3. Add a text file to the `changelogs` directory for the Fastlane metadata in
    [fastlane/metadata/android/en-GB/changelogs](/fastlane/metadata/android/en-GB/changelogs). The
    name of the text file should be a number higher than the current number of the existing text
@@ -432,8 +432,8 @@ mipmap-anydpi-v26
 
 For older Android versions, the PNGs are used.
 
-So if you want your application to look correct on **older Android versions too**, you should
-update the legacy PNGs as well.
+So if you want your application to look correct on **older Android versions too**, you should update
+the legacy PNGs as well.
 
 But you don't necessarily need to manually create five different logos.
 
@@ -594,8 +594,8 @@ Select the logo layer and use:
 
 You'll get a dialogue.
 
-If your current logo layer is 512×512, you can change it to something smaller.
-350 px x 350 px is the recommended resize option.
+If your current logo layer is 512×512, you can change it to something smaller. 350 px x 350 px is
+the recommended resize option.
 
 For example:
 
@@ -804,8 +804,8 @@ Canvas: 512 × 512
 
 4. Under the Foreground Layer tab, use the Scaling slider.
 
-   ◦ Slide it to the left (e.g., to 60% or 70%) to make the logo look smaller.
-   ◦ Android Studio will show you a "Safe Zone" circle to make sure your logo doesn't get cut off.
+   ◦ Slide it to the left (e.g., to 60% or 70%) to make the logo look smaller. ◦ Android Studio will
+   show you a "Safe Zone" circle to make sure your logo doesn't get cut off.
 
 5. Click Next and then Finish.
 
@@ -815,8 +815,8 @@ Canvas: 512 × 512
 
 [**`act`**](https://github.com/nektos/act) is used to test workflows locally without pushing to
 GitHub or using any actions runner credits. It reads your `.github/workflows/` files and runs them
-locally inside Docker containers. It provides a full emulation of GitHub Actions runner
-environments right on your computer.
+locally inside Docker containers. It provides a full emulation of GitHub Actions runner environments
+right on your computer.
 
 ### Installation
 
@@ -919,6 +919,8 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    
    # Run 'build' job from 'release.yml' workflow
    act -j build -W .github/workflows/release.yml
+   # OR
+   act --secret-file .secrets -j build -W .github/workflows/release.yml
    ```
 
 4. **Dry run (to see what steps would run without executing them):**
