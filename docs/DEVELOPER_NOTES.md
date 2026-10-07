@@ -14,6 +14,7 @@
     - [Using GIMP to resize the logo](#using-gimp-to-resize-the-logo)
 - [Test GitHub workflows locally](#testing-github-workflows-locally)
 - [Stop tracking files in Git](#stop-tracking-files-in-git)
+- [Update or regenerate gradle-daemon-jvm properties](#update-or-regenerate-gradle-daemon-jvm-properties)
 
 ---
 
@@ -920,7 +921,7 @@ ANDROID_HOME=/<path-to-directory>/Android/Sdk
    # Run 'build' job from 'release.yml' workflow
    act -j build -W .github/workflows/release.yml
    # OR
-   act --secret-file .secrets -j build -W .github/workflows/release.yml
+   act --secret-file .secrets --container-options "-v /<path-to-directory>/Android/Sdk:/opt/android-sdk" --env ANDROID_HOME=/opt/android-sdk -j build -W .github/workflows/release.yml
    ```
 
 4. **Dry run (to see what steps would run without executing them):**
@@ -951,4 +952,12 @@ git rm -r --cached build/
 
 # Commit the change
 git commit -m "Stop tracking build/ directory"
+```
+
+---
+
+## Update or regenerate gradle-daemon-jvm properties
+
+```bash
+./gradlew updateDaemonJvm --jvm-version 17
 ```

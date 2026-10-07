@@ -40,6 +40,12 @@ jobs:
           java-version: '17'
           cache: 'gradle'
 
+      - name: Create local.properties
+        run: |
+          if [ -n "${ANDROID_HOME:-$ANDROID_SDK_ROOT}" ]; then
+            printf 'sdk.dir=%s\n' "${ANDROID_HOME:-$ANDROID_SDK_ROOT}" > app/local.properties
+          fi
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
