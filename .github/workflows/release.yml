@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     if: github.actor != 'dependabot[bot]' # Skip the entire workflow for Dependabot pull requests
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
